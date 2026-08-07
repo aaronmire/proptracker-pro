@@ -247,9 +247,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <h3 class="font-bold text-white text-base drop-shadow-sm">Activity Calendar</h3>
  <p class="text-[11px] text-purple-300 opacity-80">Daily overview of evaluations purchased & payouts logged</p>
  </div>
- <div class="flex items-center gap-2">
+ <div class="flex items-center gap-1.5 sm:gap-2">
  <button onclick="changeCalendarMonth(-1)" class="px-2.5 py-1 rounded-lg liquid-glass-btn text-xs font-bold text-purple-200 hover:text-white transition active:scale-95">◀</button>
- <span id="calMonthYearLabel" class="text-xs font-bold text-white min-w-[110px] text-center"></span>
+ 
+ <!-- Selectable Month & Year Controls -->
+ <select id="calSelectMonth" onchange="onCalendarSelectChange()" class="px-2 py-1 rounded-lg liquid-glass-input text-xs font-bold text-white cursor-pointer"></select>
+ <select id="calSelectYear" onchange="onCalendarSelectChange()" class="px-2 py-1 rounded-lg liquid-glass-input text-xs font-bold text-white cursor-pointer"></select>
+ 
  <button onclick="changeCalendarMonth(1)" class="px-2.5 py-1 rounded-lg liquid-glass-btn text-xs font-bold text-purple-200 hover:text-white transition active:scale-95">▶</button>
  <button onclick="jumpCalendarToday()" class="px-3 py-1 rounded-lg liquid-glass-btn text-xs font-semibold text-purple-300 hover:text-white transition active:scale-95 ml-1">Today</button>
  </div>
@@ -798,6 +802,31 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  renderDashboardCalendar();
  }
 
+ function onCalendarSelectChange() {
+ const m = parseInt(document.getElementById('calSelectMonth').value);
+ const y = parseInt(document.getElementById('calSelectYear').value);
+ calCurrentDate.setFullYear(y, m, 1);
+ renderDashboardCalendar();
+ }
+
+ function updateCalendarControls(year, month) {
+ const monthSelect = document.getElementById('calSelectMonth');
+ const yearSelect = document.getElementById('calSelectYear');
+ if (!monthSelect || !yearSelect) return;
+
+ const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+ monthSelect.innerHTML = monthNames.map((name, idx) => `<option value="${idx}" ${idx === month ? 'selected' : ''}>${name}</option>`).join('');
+
+ const years = new Set();
+ const currentYr = new Date().getFullYear();
+ for (let y = currentYr - 5; y <= currentYr + 5; y++) years.add(y);
+ evaluations.forEach(e => { if (e.date) years.add(new Date(e.date + 'T00:00:00').getFullYear()); });
+ payouts.forEach(p => { if (p.date) years.add(new Date(p.date + 'T00:00:00').getFullYear()); });
+
+ const sortedYears = Array.from(years).sort((a,b) => a - b);
+ yearSelect.innerHTML = sortedYears.map(y => `<option value="${y}" ${y === year ? 'selected' : ''}>${y}</option>`).join('');
+ }
+
  function renderDashboardCalendar() {
  const grid = document.getElementById('dashboardCalendarGrid');
  if (!grid) return;
@@ -806,8 +835,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  const year = calCurrentDate.getFullYear();
  const month = calCurrentDate.getMonth();
 
- const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
- document.getElementById('calMonthYearLabel').innerText = `${monthNames[month]} ${year}`;
+ updateCalendarControls(year, month);
 
  const firstDay = new Date(year, month, 1).getDay();
  const daysInMonth = new Date(year, month + 1, 0).getDate();
