@@ -18,6 +18,10 @@
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
 
+ <!-- Google Identity Services & Picker API -->
+ <script src="https://accounts.google.com/gsi/client" async defer></script>
+ <script src="https://apis.google.com/js/api.js" async defer></script>
+
  <style>
  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
  body {
@@ -54,7 +58,7 @@
  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.05);
  }
  .liquid-glass-header {
- background: rgba(15, 7, 30, 0.65);
+ background: rgba(15, 7, 30, 0.75);
  backdrop-filter: blur(24px);
  -webkit-backdrop-filter: blur(24px);
  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -87,15 +91,15 @@
  background: rgba(255, 255, 255, 0.09);
  }
  .liquid-glass-btn-primary {
- background: linear-gradient(135deg, rgba(16,185,129,0.8), rgba(5,150,105,0.8));
+ background: linear-gradient(135deg, rgba(147, 51, 234, 0.8), rgba(126, 34, 206, 0.8));
  backdrop-filter: blur(12px);
  border: 1px solid rgba(255,255,255,0.2);
  border-top: 1px solid rgba(255,255,255,0.4);
- box-shadow: 0 8px 20px rgba(16,185,129,0.25), inset 0 1px 1px rgba(255,255,255,0.3);
+ box-shadow: 0 8px 20px rgba(147, 51, 234, 0.25), inset 0 1px 1px rgba(255,255,255,0.3);
  }
  .liquid-glass-btn-primary:hover {
- background: linear-gradient(135deg, rgba(16,185,129,0.9), rgba(5,150,105,0.9));
- box-shadow: 0 8px 25px rgba(16,185,129,0.35), inset 0 1px 1px rgba(255,255,255,0.4);
+ background: linear-gradient(135deg, rgba(147, 51, 234, 0.9), rgba(126, 34, 206, 0.9));
+ box-shadow: 0 8px 25px rgba(147, 51, 234, 0.35), inset 0 1px 1px rgba(255,255,255,0.4);
  }
 
  .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -103,7 +107,7 @@
  .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 9999px; }
  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
  
-input[type="date"]::-webkit-calendar-picker-indicator {
+ input[type="date"]::-webkit-calendar-picker-indicator {
  filter: invert(1);
  cursor: pointer;
  opacity: 0.5;
@@ -143,40 +147,55 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <div class="ambient-blob-2"></div>
  </div>
 
- <!-- STICKY HEADER WRAPPER (Keeps both Header and Navigation Bar static on scroll) -->
+ <!-- STICKY HEADER WRAPPER -->
  <div class="sticky top-0 z-40">
  <!-- TOP HEADER -->
  <header class="liquid-glass-header px-4 py-3 sm:px-6">
- <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
- <div class="flex items-center gap-3">
- <div class="p-2 bg-purple-900/30 rounded-xl border border-purple-500/30 shadow-inner backdrop-blur-md flex items-center justify-center">
- <svg class="w-6 h-6" viewBox="0 0 100 100">
+ <div class="max-w-7xl mx-auto flex flex-row items-center justify-between gap-4">
+ <!-- Brand Logo & Title -->
+ <div class="flex items-center gap-2.5">
+ <div class="p-1.5 bg-purple-900/30 rounded-xl border border-purple-500/30 shadow-inner backdrop-blur-md flex items-center justify-center">
+ <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 100 100">
  <circle cx="50" cy="50" r="48" fill="#0b0314"/>
  <path d="M50 12 C58 28 80 38 80 62 C80 78 66 88 50 88 C34 88 20 78 20 62 C20 38 42 28 50 12 Z" fill="#9333ea"/>
- <path d="M50 32 C56 44 70 52 70 68 C70 79 61 85 50 85 C39 85 30 79 30 68 C30 52 44 44 50 32 Z" fill="#ec4899"/>
+ <path d="M50 32 C56 44 70 52 70 68 C70 79 61 85 50 85 C30 52 44 44 50 32 Z" fill="#ec4899"/>
  <path d="M50 48 C53 56 62 62 62 72 C62 79 56 83 50 83 C44 83 38 79 38 72 C38 62 47 56 50 48 Z" fill="#f472b6"/>
  <path d="M50 60 C51 65 56 68 56 74 C56 78 53 80 50 80 C47 80 44 78 44 74 C44 68 49 65 50 60 Z" fill="#fbcfe8"/>
  </svg>
  </div>
- <div>
- <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2 drop-shadow-md">
- PropTracker <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm">PRO</span><span style="font-size: 0.75rem; opacity: 0.5; margin-top: 2px;"><i>v1.1</i></span>
- </h1> 
- </div>
+ <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-2 drop-shadow-md">
+ PropTracker <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm">PRO</span><span style="font-size: 0.75rem; opacity: 0.5; margin-top: 2px;"><i>v2.0</i></span>
+ </h1>
  </div>
 
- <!-- Backup Controls -->
- <div class="flex items-center gap-2.5">
- <button onclick="document.getElementById('fileBackup').click()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl liquid-glass-btn text-[11px] font-semibold text-purple-100 transition active:scale-95">
- Import Data
+ <!-- Header Action Controls -->
+ <div class="flex items-center gap-2 sm:gap-2.5">
+ <!-- Live Sync Indicator -->
+ <div id="syncIndicator" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-black/30 border border-white/5 text-[11px] font-semibold text-purple-200" title="Cloud Sync Status">
+ <span id="syncDot" class="w-2 h-2 rounded-full bg-slate-500"></span>
+ <span id="syncText" class="hidden sm:inline opacity-90">Local Only</span>
+ </div>
+
+ <!-- Google Connect/Login Button -->
+ <button id="btnHeaderAuthDrive" onclick="handleAuthDrive()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl liquid-glass-btn text-[11px] font-semibold text-purple-100 transition active:scale-95">
+ <svg class="w-3.5 h-3.5 text-purple-300" fill="currentColor" viewBox="0 0 24 24">
+ <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C6.721,2,2,6.721,2,12.545s4.721,10.545,10.545,10.545c6.191,0,10.309-4.355,10.309-10.486c0-0.705-0.076-1.39-0.185-2.065H12.545z"/>
+ </svg>
+ <span id="btnHeaderAuthText" class="whitespace-nowrap">Google Sync</span>
  </button>
- <input type="file" id="fileBackup" accept=".json" class="hidden" onchange="handleImportBackup(event)">
- <button onclick="handleExportBackup()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl liquid-glass-btn text-[11px] font-semibold text-purple-100 transition active:scale-95">
- Export Backup
- </button>
- <button onclick="openCpaModal()" class="flex items-center gap-1.5 px-4 py-1.5 rounded-xl liquid-glass-btn-primary text-white font-bold text-[11px] transition active:scale-95">
+
+ <!-- Tax Export Button -->
+ <button onclick="openCpaModal()" class="flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-xl liquid-glass-btn-primary text-white font-bold text-[11px] transition active:scale-95">
  <svg class="w-3.5 h-3.5 drop-shadow-sm" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
- Tax Export
+ <span class="hidden sm:inline">Tax Export</span>
+ </button>
+
+ <!-- Settings Gear Icon -->
+ <button onclick="openSettingsModal()" class="w-8 h-8 rounded-full bg-purple-600/30 border border-purple-500/40 text-purple-200 hover:text-white flex items-center justify-center transition active:scale-95 shadow-sm" title="Settings & Sync">
+ <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+ <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+ <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+ </svg>
  </button>
  </div>
  </div>
@@ -615,6 +634,62 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
  </main>
 
+ <!-- SETTINGS & GOOGLE DRIVE MODAL -->
+ <div id="settingsModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-lg flex items-center justify-center p-4 hidden">
+ <div class="liquid-glass w-full max-w-md rounded-3xl p-7 relative shadow-2xl space-y-5">
+ <button onclick="closeSettingsModal()" class="absolute top-5 right-5 text-purple-300 hover:text-white transition">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+ </button>
+
+ <div>
+ <h3 class="text-lg font-bold text-white drop-shadow-sm flex items-center gap-2">
+ Cloud Sync Settings
+ </h3>
+ <p class="text-[11px] text-purple-200 opacity-80 mt-0.5">Manage Google Drive folder destination and offline backup controls.</p>
+ </div>
+
+ <div class="space-y-4 border-t border-white/10 pt-4">
+ <div class="bg-black/30 p-3.5 rounded-2xl border border-white/5 space-y-2">
+ <div class="flex items-center justify-between text-xs">
+ <span class="font-semibold text-purple-200">Account Status:</span>
+ <span id="gdriveAccountStatus" class="font-bold text-rose-400">Not Connected</span>
+ </div>
+ <div class="flex items-center justify-between text-xs">
+ <span class="font-semibold text-purple-200">Sync Destination:</span>
+ <span id="gdriveFolderName" class="font-bold text-purple-300 truncate max-w-[160px]">Auto-Detecting...</span>
+ </div>
+ </div>
+
+ <div class="pt-1">
+ <button id="btnPickFolder" onclick="openDrivePicker()" disabled class="w-full py-2.5 rounded-xl liquid-glass-btn text-purple-200 font-bold text-xs hover:text-white transition active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed">
+ Select Drive Folder
+ </button>
+ </div>
+
+ <!-- Local Backup Actions (Moved from header to keep desktop UI clean) -->
+ <div class="border-t border-white/10 pt-4 space-y-2">
+ <h4 class="text-xs font-bold uppercase tracking-wider text-purple-300">Local Offline Backups</h4>
+ <div class="grid grid-cols-2 gap-2.5">
+ <button onclick="document.getElementById('fileBackup').click()" class="py-2.5 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-xs hover:text-white transition active:scale-95">
+ Import Backup
+ </button>
+ <input type="file" id="fileBackup" accept=".json" class="hidden" onchange="handleImportBackup(event)">
+ 
+ <button onclick="handleExportBackup()" class="py-2.5 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-xs hover:text-white transition active:scale-95">
+ Export Backup
+ </button>
+ </div>
+ </div>
+ </div>
+
+ <div class="border-t border-white/10 pt-4 flex justify-end">
+ <button onclick="closeSettingsModal()" class="px-5 py-2 rounded-xl liquid-glass-btn-primary text-white font-bold text-xs transition active:scale-95">
+ Close
+ </button>
+ </div>
+ </div>
+ </div>
+
  <!-- TAX EXPORT MODAL -->
  <div id="cpaModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-lg flex items-center justify-center p-4 hidden">
  <div class="liquid-glass w-full max-w-lg rounded-3xl p-7 relative shadow-2xl">
@@ -703,6 +778,30 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
  let calCurrentDate = new Date();
 
+ // Google Drive Sync States & Token Caching
+ const driveClientId = '473412055368-1kmi3j378bccjcgc1j28r1hpluhscbnh.apps.googleusercontent.com';
+ let driveAccessToken = sessionStorage.getItem('proptracker_gdrive_access_token') || null;
+ let driveFolderId = localStorage.getItem('proptracker_gdrive_folder_id') || null;
+ let driveFolderName = localStorage.getItem('proptracker_gdrive_folder_name') || null;
+ let driveFileId = localStorage.getItem('proptracker_gdrive_file_id') || null;
+
+ function updateSyncIndicator(status) {
+ const dot = document.getElementById('syncDot');
+ const text = document.getElementById('syncText');
+ if (!dot || !text) return;
+
+ if (status === 'synced') {
+ dot.className = "w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]";
+ text.innerText = "Synced";
+ } else if (status === 'syncing') {
+ dot.className = "w-2 h-2 rounded-full bg-amber-400 animate-pulse shadow-[0_0_8px_rgba(251,191,36,0.8)]";
+ text.innerText = "Syncing...";
+ } else {
+ dot.className = "w-2 h-2 rounded-full bg-slate-500";
+ text.innerText = "Local Only";
+ }
+ }
+
  function showToast(title, text, type = 'emerald') {
  const id = Date.now();
  const borderTheme = type === 'rose' ? 'border-rose-500/40 text-rose-300 bg-[rgba(30,15,55,0.8)]' : 'border-emerald-500/40 text-emerald-300 bg-[rgba(30,15,55,0.8)]';
@@ -764,6 +863,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  runProgressTrackerCalc();
  runSimpleTargetCalc();
  rebuildGraphs();
+ syncToGoogleDrive();
  }
 
  function updateSummaryMetrics() {
@@ -1536,7 +1636,229 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  onDataChanged();
  }
 
- window.addEventListener('load', () => { loadFromLocalStorage(); });
+ /* ================= GOOGLE DRIVE API & PICKER INTEGRATION ================= */
+ function openSettingsModal() {
+ updateSettingsModalUI();
+ document.getElementById('settingsModal').classList.remove('hidden');
+ }
+
+ function closeSettingsModal() {
+ document.getElementById('settingsModal').classList.add('hidden');
+ }
+
+ function updateSettingsModalUI() {
+ const statusEl = document.getElementById('gdriveAccountStatus');
+ const folderEl = document.getElementById('gdriveFolderName');
+ const btnPicker = document.getElementById('btnPickFolder');
+ const authBtnText = document.getElementById('btnHeaderAuthText');
+
+ if (driveAccessToken) {
+ statusEl.innerText = "Connected";
+ statusEl.className = "font-bold text-emerald-400";
+ btnPicker.disabled = false;
+ if (authBtnText) authBtnText.innerText = "Connected";
+ updateSyncIndicator('synced');
+ } else {
+ statusEl.innerText = "Not Connected";
+ statusEl.className = "font-bold text-rose-400";
+ btnPicker.disabled = true;
+ if (authBtnText) authBtnText.innerText = "Google Sync";
+ updateSyncIndicator('local');
+ }
+
+ folderEl.innerText = driveFolderName || "Auto-Detecting...";
+ }
+
+ function handleAuthDrive(isSilent = false) {
+ if (typeof google === 'undefined' || !google.accounts) {
+ if (!isSilent) showToast("API Loading", "Google Identity Services script loading... try again in a moment.", "rose");
+ return;
+ }
+
+ updateSyncIndicator('syncing');
+
+ const client = google.accounts.oauth2.initTokenClient({
+ client_id: driveClientId,
+ scope: 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata.readonly',
+ callback: (response) => {
+ if (response.access_token) {
+ driveAccessToken = response.access_token;
+ sessionStorage.setItem('proptracker_gdrive_access_token', driveAccessToken);
+ updateSettingsModalUI();
+ if (!isSilent) showToast("Connected", "Google Drive authenticated.");
+ fetchRemoteDriveData();
+ } else {
+ updateSyncIndicator('local');
+ }
+ },
+ });
+
+ if (isSilent) {
+ client.requestAccessToken({ prompt: '' });
+ } else {
+ client.requestAccessToken();
+ }
+ }
+
+ function openDrivePicker() {
+ if (!driveAccessToken) return;
+ gapi.load('picker', () => {
+ const view = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
+ .setSelectFolderEnabled(true)
+ .setMimeTypes('application/vnd.google-apps.folder');
+
+ const picker = new google.picker.PickerBuilder()
+ .addView(view)
+ .setOAuthToken(driveAccessToken)
+ .setCallback((data) => {
+ if (data.action === google.picker.Action.PICKED) {
+ const doc = data.docs[0];
+ driveFolderId = doc.id;
+ driveFolderName = doc.name;
+ localStorage.setItem('proptracker_gdrive_folder_id', driveFolderId);
+ localStorage.setItem('proptracker_gdrive_folder_name', driveFolderName);
+ updateSettingsModalUI();
+ showToast("Folder Picked", `Selected "${driveFolderName}" as cloud target.`);
+ syncToGoogleDrive();
+ }
+ })
+ .build();
+ picker.setVisible(true);
+ });
+ }
+
+ async function syncToGoogleDrive() {
+ if (!driveAccessToken) {
+ updateSyncIndicator('local');
+ return;
+ }
+
+ updateSyncIndicator('syncing');
+
+ const payload = JSON.stringify({ evaluations, payouts, lastUpdated: new Date().toISOString() }, null, 2);
+ 
+ try {
+ if (!driveFileId) {
+ const query = encodeURIComponent(`name = 'proptracker_data.json' and trashed = false`);
+ const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,parents)`, {
+ headers: { Authorization: `Bearer ${driveAccessToken}` }
+ });
+ const searchData = await res.json();
+ if (searchData.files && searchData.files.length > 0) {
+ driveFileId = searchData.files[0].id;
+ if (searchData.files[0].parents && searchData.files[0].parents.length > 0) {
+ driveFolderId = searchData.files[0].parents[0];
+ localStorage.setItem('proptracker_gdrive_folder_id', driveFolderId);
+ }
+ localStorage.setItem('proptracker_gdrive_file_id', driveFileId);
+ }
+ }
+
+ if (driveFileId) {
+ await fetch(`https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=media`, {
+ method: 'PATCH',
+ headers: {
+ Authorization: `Bearer ${driveAccessToken}`,
+ 'Content-Type': 'application/json'
+ },
+ body: payload
+ });
+ } else if (driveFolderId) {
+ const metadata = {
+ name: 'proptracker_data.json',
+ parents: [driveFolderId],
+ mimeType: 'application/json'
+ };
+ const form = new FormData();
+ form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+ form.append('file', new Blob([payload], { type: 'application/json' }));
+
+ const createRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+ method: 'POST',
+ headers: { Authorization: `Bearer ${driveAccessToken}` },
+ body: form
+ });
+ const newFile = await createRes.json();
+ if (newFile.id) {
+ driveFileId = newFile.id;
+ localStorage.setItem('proptracker_gdrive_file_id', driveFileId);
+ }
+ }
+ updateSyncIndicator('synced');
+ } catch (e) {
+ console.error("Google Drive sync error:", e);
+ updateSyncIndicator('local');
+ }
+ }
+
+ async function fetchRemoteDriveData() {
+ if (!driveAccessToken) return;
+ updateSyncIndicator('syncing');
+ try {
+ if (!driveFileId) {
+ const query = encodeURIComponent(`name = 'proptracker_data.json' and trashed = false`);
+ const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,parents)`, {
+ headers: { Authorization: `Bearer ${driveAccessToken}` }
+ });
+ const searchData = await res.json();
+ if (searchData.files && searchData.files.length > 0) {
+ driveFileId = searchData.files[0].id;
+ if (searchData.files[0].parents && searchData.files[0].parents.length > 0) {
+ driveFolderId = searchData.files[0].parents[0];
+ localStorage.setItem('proptracker_gdrive_folder_id', driveFolderId);
+ fetchFolderName(driveFolderId);
+ }
+ localStorage.setItem('proptracker_gdrive_file_id', driveFileId);
+ }
+ }
+
+ if (driveFileId) {
+ const fileRes = await fetch(`https://www.googleapis.com/drive/v3/files/${driveFileId}?alt=media`, {
+ headers: { Authorization: `Bearer ${driveAccessToken}` }
+ });
+ const data = await fileRes.json();
+ if (Array.isArray(data.evaluations) || Array.isArray(data.payouts)) {
+ evaluations = data.evaluations || [];
+ payouts = data.payouts || [];
+ saveToLocalStorage();
+ updateSummaryMetrics();
+ renderDashboardCalendar();
+ renderEvaluationsTable();
+ renderPayoutsTable();
+ showToast("Cloud Loaded", "Data auto-synced from Google Drive.");
+ }
+ }
+ updateSyncIndicator('synced');
+ } catch(e) {
+ console.error("Error fetching Google Drive remote file:", e);
+ updateSyncIndicator('local');
+ }
+ }
+
+ async function fetchFolderName(folderId) {
+ try {
+ const res = await fetch(`https://www.googleapis.com/drive/v3/files/${folderId}?fields=name`, {
+ headers: { Authorization: `Bearer ${driveAccessToken}` }
+ });
+ const data = await res.json();
+ if (data.name) {
+ driveFolderName = data.name;
+ localStorage.setItem('proptracker_gdrive_folder_name', driveFolderName);
+ updateSettingsModalUI();
+ }
+ } catch(e){}
+ }
+
+ window.addEventListener('load', () => { 
+ loadFromLocalStorage();
+ if (driveAccessToken) {
+ updateSettingsModalUI();
+ fetchRemoteDriveData();
+ } else {
+ // Attempt silent background token refresh on refresh
+ setTimeout(() => handleAuthDrive(true), 1000);
+ }
+ });
  </script>
 </body>
 </html>
