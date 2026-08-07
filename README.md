@@ -26,3 +26,4 @@
 - Rename Dashboard Overview to Dashboard
 - Replaced calendar month/year picker with a popup modal
 - Modernized Google Drive folder picker
+- Moved Google account connection to the settings menu
