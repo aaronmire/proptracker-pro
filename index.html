@@ -151,10 +151,10 @@
  <div class="sticky top-0 z-40">
  <!-- TOP HEADER -->
  <header class="liquid-glass-header px-4 py-3 sm:px-6">
- <div class="max-w-7xl mx-auto flex flex-row items-center justify-between gap-4">
+ <div class="max-w-7xl mx-auto flex flex-row items-center justify-between gap-2 sm:gap-4">
  <!-- Brand Logo & Title -->
- <div class="flex items-center gap-2.5">
- <div class="p-1.5 bg-purple-900/30 rounded-xl border border-purple-500/30 shadow-inner backdrop-blur-md flex items-center justify-center">
+ <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
+ <div class="p-1.5 bg-purple-900/30 rounded-xl border border-purple-500/30 shadow-inner backdrop-blur-md flex items-center justify-center shrink-0">
  <svg class="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 100 100">
  <circle cx="50" cy="50" r="48" fill="#0b0314"/>
  <path d="M50 12 C58 28 80 38 80 62 C80 78 66 88 50 88 C34 88 20 78 20 62 C20 38 42 28 50 12 Z" fill="#9333ea"/>
@@ -163,13 +163,13 @@
  <path d="M50 60 C51 65 56 68 56 74 C56 78 53 80 50 80 C47 80 44 78 44 74 C44 68 49 65 50 60 Z" fill="#fbcfe8"/>
  </svg>
  </div>
- <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-2 drop-shadow-md">
- PropTracker <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm">PRO</span><span style="font-size: 0.75rem; opacity: 0.5; margin-top: 2px;"><i>v2.2</i></span>
+ <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5 sm:gap-2 drop-shadow-md truncate">
+ PropTracker <span class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm shrink-0">PRO</span><span style="font-size: 0.75rem; opacity: 0.5; margin-top: 2px;"><i>v2.2</i></span>
  </h1>
  </div>
 
  <!-- Header Action Controls -->
- <div class="flex items-center gap-2 sm:gap-2.5">
+ <div class="flex items-center gap-2 shrink-0">
  <!-- Live Sync Indicator -->
  <div id="syncIndicator" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-black/30 border border-white/5 text-[11px] font-semibold text-purple-200" title="Cloud Sync Status">
  <span id="syncDot" class="w-2 h-2 rounded-full bg-slate-500"></span>
@@ -181,14 +181,6 @@
  <svg id="manualSyncIcon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
  <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
  </svg>
- </button>
-
- <!-- Google Connect/Login Button -->
- <button id="btnHeaderAuthDrive" onclick="handleAuthDrive()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl liquid-glass-btn text-[11px] font-semibold text-purple-100 transition active:scale-95">
- <svg class="w-3.5 h-3.5 text-purple-300" fill="currentColor" viewBox="0 0 24 24">
- <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C6.721,2,2,6.721,2,12.545s4.721,10.545,10.545,10.545c6.191,0,10.309-4.355,10.309-10.486c0-0.705-0.076-1.39-0.185-2.065H12.545z"/>
- </svg>
- <span id="btnHeaderAuthText" class="whitespace-nowrap">Sync</span>
  </button>
 
  <!-- Hamburger Menu Icon -->
@@ -793,7 +785,15 @@
  </div>
  </div>
 
- <div class="pt-1">
+ <div class="space-y-2 pt-1">
+ <!-- Google Connect/Sync Button Moved Here -->
+ <button id="btnHeaderAuthDrive" onclick="handleAuthDrive()" class="w-full py-2.5 rounded-xl liquid-glass-btn-primary text-white font-bold text-xs transition active:scale-95 flex items-center justify-center gap-2">
+ <svg class="w-4 h-4 text-purple-200" fill="currentColor" viewBox="0 0 24 24">
+ <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C6.721,2,2,6.721,2,12.545s4.721,10.545,10.545,10.545c6.191,0,10.309-4.355,10.309-10.486c0-0.705-0.076-1.39-0.185-2.065H12.545z"/>
+ </svg>
+ <span id="btnHeaderAuthText" class="whitespace-nowrap">Connect Google Drive</span>
+ </button>
+
  <button id="btnPickFolder" onclick="openDrivePicker()" disabled class="w-full py-2.5 rounded-xl liquid-glass-btn text-purple-200 font-bold text-xs hover:text-white transition active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed">
  Select Drive Folder
  </button>
@@ -953,8 +953,8 @@
 
  function triggerManualSync() {
  if (!driveAccessToken) {
- showToast("Not Connected", "Connecting to Google Drive...", "rose");
- handleAuthDrive();
+ showToast("Not Connected", "Opening workspace options...", "rose");
+ openSettingsModal();
  return;
  }
  showToast("Sync Triggered", "Syncing data to proptracker_data.json...");
@@ -1744,7 +1744,7 @@
  };
  evaluations.forEach(e => { if (filter(e.date)) records.push({ date: e.date, type: 'Expense', category: 'Evaluation Fee', firm: e.firm, reference: e.reference || 'N/A', amount: -parseFloat(e.cost) }); });
  payouts.forEach(p => { if (filter(p.date)) records.push({ date: p.date, type: 'Income', category: 'Payout Split', firm: p.firm, reference: p.accountDetails || p.details || 'N/A', amount: parseFloat(p.net !== undefined ? p.net : p.amount) }); });
- records.sort((a,b) => new Date(a.date) - new Date(b.date));
+ records.sort((a,b) => new Date(a.date) - new Date(a.date));
  let income = 0, expense = 0; records.forEach(r => r.type === 'Income' ? income += r.amount : expense += Math.abs(r.amount));
  const title = `Tax_Report_${timeframe}_${Date.now()}`;
  if (format === 'csv') compileCsv(records, income, expense, `${title}.csv`);
@@ -1878,7 +1878,7 @@
  statusEl.innerText = "Not Connected";
  statusEl.className = "font-bold text-rose-400";
  btnPicker.disabled = true;
- if (authBtnText) authBtnText.innerText = "Google Sync";
+ if (authBtnText) authBtnText.innerText = "Connect Google Drive";
  updateSyncIndicator('local');
  }
 
