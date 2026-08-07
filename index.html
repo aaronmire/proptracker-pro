@@ -6,7 +6,7 @@
  <title>PropTracker Pro</title>
  
  <!-- Custom Purple Flame Favicon -->
- <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230b0314'/><path d='M50 12 C58 28 80 38 80 62 C80 78 66 88 50 88 C34 88 20 78 20 62 C20 38 42 28 50 12 Z' fill='%239333ea'/><path d='M50 32 C56 44 70 52 70 68 C70 79 61 85 50 85 C39 85 30 79 30 68 C30 52 44 44 50 32 Z' fill='%23ec4899'/><path d='M50 48 C53 56 62 62 62 72 C62 79 56 83 50 83 C44 83 38 79 38 72 C38 62 47 56 50 48 Z' fill='%23f472b6'/><path d='M50 60 C51 65 56 68 56 74 C56 78 53 80 50 80 C47 80 44 78 44 74 C44 68 49 65 50 60 Z' fill='%23fbcfe8'/></svg>">
+ <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230b0314'/><path d='M50 12 C58 28 80 38 80 62 C80 78 66 88 50 88 C34 88 20 78 20 62 C20 38 42 28 50 12 Z' fill='%239333ea'/><path d='M50 32 C56 44 70 52 70 68 C70 79 61 85 50 85 C30 52 44 44 50 32 Z' fill='%23ec4899'/><path d='M50 48 C53 56 62 62 62 72 C62 79 56 83 50 83 C44 83 38 79 38 72 C38 62 47 56 50 48 Z' fill='%23f472b6'/><path d='M50 60 C51 65 56 68 56 74 C56 78 53 80 50 80 C47 80 44 78 44 74 C44 68 49 65 50 60 Z' fill='%23fbcfe8'/></svg>">
 
  <!-- Tailwind CSS -->
  <script src="https://cdn.tailwindcss.com"></script>
@@ -164,7 +164,7 @@
  </svg>
  </div>
  <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-2 drop-shadow-md">
- PropTracker <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm">PRO</span><span style="font-size: 0.75rem; opacity: 0.5; margin-top: 2px;"><i>v2.0</i></span>
+ PropTracker <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm">PRO</span><span style="font-size: 0.75rem; opacity: 0.5; margin-top: 2px;"><i>v2.1</i></span>
  </h1>
  </div>
 
@@ -184,17 +184,10 @@
  <span id="btnHeaderAuthText" class="whitespace-nowrap">Google Sync</span>
  </button>
 
- <!-- Tax Export Button -->
- <button onclick="openCpaModal()" class="flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-xl liquid-glass-btn-primary text-white font-bold text-[11px] transition active:scale-95">
- <svg class="w-3.5 h-3.5 drop-shadow-sm" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
- <span class="hidden sm:inline">Tax Export</span>
- </button>
-
- <!-- Settings Gear Icon -->
- <button onclick="openSettingsModal()" class="w-8 h-8 rounded-full bg-purple-600/30 border border-purple-500/40 text-purple-200 hover:text-white flex items-center justify-center transition active:scale-95 shadow-sm" title="Settings & Sync">
- <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
- <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
- <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+ <!-- 3-Line Hamburger Menu Icon (Circular styling retained) -->
+ <button onclick="openSettingsModal()" class="w-8 h-8 rounded-full bg-purple-600/30 border border-purple-500/40 text-purple-200 hover:text-white flex items-center justify-center transition active:scale-95 shadow-sm" title="Menu & Options">
+ <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+ <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
  </svg>
  </button>
  </div>
@@ -643,12 +636,13 @@
 
  <div>
  <h3 class="text-lg font-bold text-white drop-shadow-sm flex items-center gap-2">
- Cloud Sync Settings
+ Workspace Options
  </h3>
- <p class="text-[11px] text-purple-200 opacity-80 mt-0.5">Manage Google Drive folder destination and offline backup controls.</p>
+ <p class="text-[11px] text-purple-200 opacity-80 mt-0.5">Manage cloud destination folder, reports, and offline backups.</p>
  </div>
 
  <div class="space-y-4 border-t border-white/10 pt-4">
+ <!-- Cloud Settings -->
  <div class="bg-black/30 p-3.5 rounded-2xl border border-white/5 space-y-2">
  <div class="flex items-center justify-between text-xs">
  <span class="font-semibold text-purple-200">Account Status:</span>
@@ -666,7 +660,16 @@
  </button>
  </div>
 
- <!-- Local Backup Actions (Moved from header to keep desktop UI clean) -->
+ <!-- Tax Compliance Export Button -->
+ <div class="border-t border-white/10 pt-4 space-y-2">
+ <h4 class="text-xs font-bold uppercase tracking-wider text-purple-300">Reporting &amp; Statements</h4>
+ <button onclick="closeSettingsModal(); openCpaModal();" class="w-full py-2.5 rounded-xl liquid-glass-btn-primary text-white font-bold text-xs transition active:scale-95 flex items-center justify-center gap-2">
+ <svg class="w-4 h-4 drop-shadow-sm" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+ Tax Export Statement
+ </button>
+ </div>
+
+ <!-- Local Backup Actions -->
  <div class="border-t border-white/10 pt-4 space-y-2">
  <h4 class="text-xs font-bold uppercase tracking-wider text-purple-300">Local Offline Backups</h4>
  <div class="grid grid-cols-2 gap-2.5">
@@ -1855,7 +1858,6 @@
  updateSettingsModalUI();
  fetchRemoteDriveData();
  } else {
- // Attempt silent background token refresh on refresh
  setTimeout(() => handleAuthDrive(true), 1000);
  }
  });
