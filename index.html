@@ -54,7 +54,7 @@
  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.05);
  }
  .liquid-glass-header {
- background: rgba(15, 7, 30, 0.6);
+ background: rgba(15, 7, 30, 0.65);
  backdrop-filter: blur(24px);
  -webkit-backdrop-filter: blur(24px);
  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -143,8 +143,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <div class="ambient-blob-2"></div>
  </div>
 
+ <!-- STICKY HEADER WRAPPER (Keeps both Header and Navigation Bar static on scroll) -->
+ <div class="sticky top-0 z-40">
  <!-- TOP HEADER -->
- <header class="liquid-glass-header sticky top-0 z-40 px-4 py-3 sm:px-6">
+ <header class="liquid-glass-header px-4 py-3 sm:px-6">
  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
  <div class="flex items-center gap-3">
  <div class="p-2 bg-purple-900/30 rounded-xl border border-purple-500/30 shadow-inner backdrop-blur-md flex items-center justify-center">
@@ -180,8 +182,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  </div>
  </header>
 
- <!-- NAVIGATION TABS -->
- <div class="border-b border-white/5 px-4 sm:px-6 bg-[#1a0b2e]/40 backdrop-blur-md">
+ <!-- NAVIGATION TABS BAR -->
+ <div class="border-b border-white/10 px-4 sm:px-6 bg-[#120624]/90 backdrop-blur-xl">
  <div class="max-w-7xl mx-auto flex gap-2.5 overflow-x-auto py-3 custom-scrollbar">
  <button onclick="switchTab('dashboard')" id="tabBtn-dashboard" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap liquid-glass-btn shadow-sm active:scale-95">
  Dashboard Overview
@@ -198,6 +200,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <button onclick="switchTab('target')" id="tabBtn-target" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
  Target Calculator
  </button>
+ </div>
  </div>
  </div>
 
@@ -250,7 +253,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <div class="flex items-center gap-1.5 sm:gap-2">
  <button onclick="changeCalendarMonth(-1)" class="px-2.5 py-1 rounded-lg liquid-glass-btn text-xs font-bold text-purple-200 hover:text-white transition active:scale-95">◀</button>
  
- <!-- Selectable Month & Year Controls -->
  <select id="calSelectMonth" onchange="onCalendarSelectChange()" class="px-2 py-1 rounded-lg liquid-glass-input text-xs font-bold text-white cursor-pointer"></select>
  <select id="calSelectYear" onchange="onCalendarSelectChange()" class="px-2 py-1 rounded-lg liquid-glass-input text-xs font-bold text-white cursor-pointer"></select>
  
