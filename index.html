@@ -1,1309 +1,1527 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PropTracker Pro</title>
-  
-  <!-- Custom Purple Flame Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230b0314'/><path d='M50 12 C58 28 80 38 80 62 C80 78 66 88 50 88 C34 88 20 78 20 62 C20 38 42 28 50 12 Z' fill='%239333ea'/><path d='M50 32 C56 44 70 52 70 68 C70 79 61 85 50 85 C39 85 30 79 30 68 C30 52 44 44 50 32 Z' fill='%23ec4899'/><path d='M50 48 C53 56 62 62 62 72 C62 79 56 83 50 83 C44 83 38 79 38 72 C38 62 47 56 50 48 Z' fill='%23f472b6'/><path d='M50 60 C51 65 56 68 56 74 C56 78 53 80 50 80 C47 80 44 78 44 74 C44 68 49 65 50 60 Z' fill='%23fbcfe8'/></svg>">
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>PropTracker Pro</title>
+ 
+ <!-- Custom Purple Flame Favicon -->
+ <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230b0314'/><path d='M50 12 C58 28 80 38 80 62 C80 78 66 88 50 88 C34 88 20 78 20 62 C20 38 42 28 50 12 Z' fill='%239333ea'/><path d='M50 32 C56 44 70 52 70 68 C70 79 61 85 50 85 C39 85 30 79 30 68 C30 52 44 44 50 32 Z' fill='%23ec4899'/><path d='M50 48 C53 56 62 62 62 72 C62 79 56 83 50 83 C44 83 38 79 38 72 C38 62 47 56 50 48 Z' fill='%23f472b6'/><path d='M50 60 C51 65 56 68 56 74 C56 78 53 80 50 80 C47 80 44 78 44 74 C44 68 49 65 50 60 Z' fill='%23fbcfe8'/></svg>">
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- SheetJS for Excel Exports -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <!-- jsPDF & AutoTable for PDF Exports -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+ <!-- Tailwind CSS -->
+ <script src="https://cdn.tailwindcss.com"></script>
+ <!-- Chart.js -->
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <!-- SheetJS for Excel Exports -->
+ <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+ <!-- jsPDF & AutoTable for PDF Exports -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #0b0314;
-      color: #f8fafc;
-    }
-    
-    .ambient-bg {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      z-index: -1;
-      overflow: hidden;
-      background: #0b0314;
-    }
-    .ambient-blob-1 {
-      position: absolute; top: -15%; left: -10%; width: 50vw; height: 50vw;
-      background: radial-gradient(circle, rgba(16,185,129,0.12) 0%, rgba(0,0,0,0) 70%);
-      filter: blur(80px);
-    }
-    .ambient-blob-2 {
-      position: absolute; bottom: -20%; right: -10%; width: 60vw; height: 60vw;
-      background: radial-gradient(circle, rgba(168,85,247,0.15) 0%, rgba(0,0,0,0) 70%);
-      filter: blur(100px);
-    }
+ <style>
+ @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+ body {
+ font-family: 'Inter', sans-serif;
+ background-color: #0b0314;
+ color: #f8fafc;
+ }
+ 
+.ambient-bg {
+ position: fixed;
+ top: 0; left: 0; width: 100vw; height: 100vh;
+ z-index: -1;
+ overflow: hidden;
+ background: #0b0314;
+ }
+ .ambient-blob-1 {
+ position: absolute; top: -15%; left: -10%; width: 50vw; height: 50vw;
+ background: radial-gradient(circle, rgba(16,185,129,0.12) 0%, rgba(0,0,0,0) 70%);
+ filter: blur(80px);
+ }
+ .ambient-blob-2 {
+ position: absolute; bottom: -20%; right: -10%; width: 60vw; height: 60vw;
+ background: radial-gradient(circle, rgba(168,85,247,0.15) 0%, rgba(0,0,0,0) 70%);
+ filter: blur(100px);
+ }
 
-    .liquid-glass {
-      background: rgba(30, 15, 55, 0.35);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
-      border-left: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.05);
-    }
-    .liquid-glass-header {
-      background: rgba(15, 7, 30, 0.6);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: inset 0 -1px 0 rgba(255,255,255,0.02);
-    }
-    .liquid-glass-input {
-      background: rgba(0, 0, 0, 0.25);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-top: 1px solid rgba(0,0,0,0.5);
-      color: #f8fafc;
-      transition: all 0.3s ease;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-    }
-    .liquid-glass-input:focus {
-      border-color: rgba(168, 85, 247, 0.5);
-      background: rgba(30, 15, 55, 0.45);
-      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15), inset 0 2px 4px rgba(0,0,0,0.2);
-      outline: none;
-    }
-    .liquid-glass-btn {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .liquid-glass-btn:hover {
-      background: rgba(255, 255, 255, 0.09);
-    }
-    .liquid-glass-btn-primary {
-      background: linear-gradient(135deg, rgba(16,185,129,0.8), rgba(5,150,105,0.8));
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.2);
-      border-top: 1px solid rgba(255,255,255,0.4);
-      box-shadow: 0 8px 20px rgba(16,185,129,0.25), inset 0 1px 1px rgba(255,255,255,0.3);
-    }
-    .liquid-glass-btn-primary:hover {
-      background: linear-gradient(135deg, rgba(16,185,129,0.9), rgba(5,150,105,0.9));
-      box-shadow: 0 8px 25px rgba(16,185,129,0.35), inset 0 1px 1px rgba(255,255,255,0.4);
-    }
+ .liquid-glass {
+ background: rgba(30, 15, 55, 0.35);
+ backdrop-filter: blur(16px);
+ -webkit-backdrop-filter: blur(16px);
+ border: 1px solid rgba(255, 255, 255, 0.05);
+ border-top: 1px solid rgba(255, 255, 255, 0.15);
+ border-left: 1px solid rgba(255, 255, 255, 0.1);
+ box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.05);
+ }
+ .liquid-glass-header {
+ background: rgba(15, 7, 30, 0.6);
+ backdrop-filter: blur(24px);
+ -webkit-backdrop-filter: blur(24px);
+ border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+ box-shadow: inset 0 -1px 0 rgba(255,255,255,0.02);
+ }
+ .liquid-glass-input {
+ background: rgba(0, 0, 0, 0.25);
+ backdrop-filter: blur(8px);
+ -webkit-backdrop-filter: blur(8px);
+ border: 1px solid rgba(255, 255, 255, 0.08);
+ border-top: 1px solid rgba(0,0,0,0.5);
+ color: #f8fafc;
+ transition: all 0.3s ease;
+ box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+ }
+ .liquid-glass-input:focus {
+ border-color: rgba(168, 85, 247, 0.5);
+ background: rgba(30, 15, 55, 0.45);
+ box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15), inset 0 2px 4px rgba(0,0,0,0.2);
+ outline: none;
+ }
+ .liquid-glass-btn {
+ background: rgba(255, 255, 255, 0.03);
+ backdrop-filter: blur(8px);
+ border: 1px solid rgba(255, 255, 255, 0.08);
+ border-top: 1px solid rgba(255, 255, 255, 0.15);
+ box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+ }
+ .liquid-glass-btn:hover {
+ background: rgba(255, 255, 255, 0.09);
+ }
+ .liquid-glass-btn-primary {
+ background: linear-gradient(135deg, rgba(16,185,129,0.8), rgba(5,150,105,0.8));
+ backdrop-filter: blur(12px);
+ border: 1px solid rgba(255,255,255,0.2);
+ border-top: 1px solid rgba(255,255,255,0.4);
+ box-shadow: 0 8px 20px rgba(16,185,129,0.25), inset 0 1px 1px rgba(255,255,255,0.3);
+ }
+ .liquid-glass-btn-primary:hover {
+ background: linear-gradient(135deg, rgba(16,185,129,0.9), rgba(5,150,105,0.9));
+ box-shadow: 0 8px 25px rgba(16,185,129,0.35), inset 0 1px 1px rgba(255,255,255,0.4);
+ }
 
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 9999px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
-    
-    input[type="date"]::-webkit-calendar-picker-indicator {
-      filter: invert(1);
-      cursor: pointer;
-      opacity: 0.5;
-      transition: opacity 0.2s;
-    }
-    input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+ .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+ .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+ .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 9999px; }
+ .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+ 
+input[type="date"]::-webkit-calendar-picker-indicator {
+ filter: invert(1);
+ cursor: pointer;
+ opacity: 0.5;
+ transition: opacity 0.2s;
+ }
+ input[type="date"]::-webkit-calendar-picker-indicator:hover { opacity: 1; }
 
-    .page-btn {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #e2e8f0;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      transition: all 0.2s;
-    }
-    .page-btn:hover { background: rgba(255, 255, 255, 0.15); }
-    .page-btn.active {
-      background: #9333ea;
-      border-color: #a855f7;
-      color: white;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
-    }
-    .page-btn:disabled { opacity: 0.25; cursor: not-allowed; }
-  </style>
+ .page-btn {
+ background: rgba(0, 0, 0, 0.4);
+ border: 1px solid rgba(255, 255, 255, 0.15);
+ color: #e2e8f0;
+ padding: 6px 12px;
+ border-radius: 8px;
+ font-size: 12px;
+ font-weight: 700;
+ transition: all 0.2s;
+ }
+ .page-btn:hover { background: rgba(255, 255, 255, 0.15); }
+ .page-btn.active {
+ background: #9333ea;
+ border-color: #a855f7;
+ color: white;
+ box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+ }
+ .page-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+ input[type="checkbox"] {
+ accent-color: #9333ea;
+ cursor: pointer;
+ }
+ </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased custom-scrollbar">
 
-  <div class="ambient-bg">
-    <div class="ambient-blob-1"></div>
-    <div class="ambient-blob-2"></div>
-  </div>
-
-  <!-- TOP HEADER -->
-  <header class="liquid-glass-header sticky top-0 z-40 px-4 py-3 sm:px-6">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20 shadow-inner backdrop-blur-md">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <div>
-          <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2 drop-shadow-md">
-            PropTracker <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 tracking-wider shadow-sm">PRO</span><span style="font-size: 0.75rem; opacity: 0.5; margin-top: 2px;"><i>v1.0</i></span>
-          </h1> 
-        </div>
-      </div>
-
-      <!-- Backup Controls -->
-      <div class="flex items-center gap-2.5">
-        <button onclick="document.getElementById('fileBackup').click()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl liquid-glass-btn text-[11px] font-semibold text-purple-100 transition active:scale-95">
-          Import Data
-        </button>
-        <input type="file" id="fileBackup" accept=".json" class="hidden" onchange="handleImportBackup(event)">
-        <button onclick="handleExportBackup()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl liquid-glass-btn text-[11px] font-semibold text-purple-100 transition active:scale-95">
-          Export Backup
-        </button>
-        <button onclick="openCpaModal()" class="flex items-center gap-1.5 px-4 py-1.5 rounded-xl liquid-glass-btn-primary text-white font-bold text-[11px] transition active:scale-95">
-          <svg class="w-3.5 h-3.5 drop-shadow-sm" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          Tax Export
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- NAVIGATION TABS -->
-  <div class="border-b border-white/5 px-4 sm:px-6 bg-[#1a0b2e]/40 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto flex gap-2.5 overflow-x-auto py-3 custom-scrollbar">
-      <button onclick="switchTab('dashboard')" id="tabBtn-dashboard" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap liquid-glass-btn shadow-sm active:scale-95">
-        Dashboard Overview
-      </button>
-      <button onclick="switchTab('evaluations')" id="tabBtn-evaluations" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
-        Evaluation Accounts
-      </button>
-      <button onclick="switchTab('payouts')" id="tabBtn-payouts" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
-        Payout Logs
-      </button>
-      <button onclick="switchTab('consistency')" id="tabBtn-consistency" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
-        Consistency Calculator
-      </button>
-      <button onclick="switchTab('target')" id="tabBtn-target" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
-        Target Calculator
-      </button>
-    </div>
-  </div>
-
-  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
-
-  <!-- MAIN CONTAINER -->
-  <main class="flex-grow p-4 sm:p-6 max-w-7xl mx-auto w-full">
-
-    <!-- ================= DASHBOARD TAB ================= -->
-    <section id="tabContent-dashboard" class="space-y-6 animate-fade-in">
-      <!-- ROW 1: TOP 3 METRICS -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Net Profit</p>
-          <p class="text-4xl font-black mt-2 text-white drop-shadow-md" id="statNetProfit">$0.00</p>
-        </div>
-        <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Total Payouts</p>
-          <p class="text-4xl font-black mt-2 text-emerald-400 drop-shadow-md" id="statTotalPayouts">$0.00</p>
-        </div>
-        <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Evaluation Costs</p>
-          <p class="text-4xl font-black mt-2 text-rose-400 drop-shadow-md" id="statTotalExpenses">$0.00</p>
-        </div>
-      </div>
-
-      <!-- ROW 2: BOTTOM 3 SPLIT STATS -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Return On Investment</p>
-          <p class="text-3xl font-black mt-2 text-emerald-400 drop-shadow-md" id="cardROI">0.0%</p>
-        </div>
-        <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Total Payouts Received</p>
-          <p class="text-3xl font-black mt-2 text-white drop-shadow-md" id="cardPayoutCount">0</p>
-        </div>
-        <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Evaluation Accounts</p>
-          <p class="text-3xl font-black mt-2 text-purple-300 drop-shadow-md" id="cardEvalCount">0</p>
-        </div>
-      </div>
-
-      <!-- CHART SECTION -->
-      <div class="liquid-glass p-6 rounded-3xl space-y-4">
-        <div class="flex items-center justify-between flex-wrap gap-3">
-          <div>
-            <h3 class="font-bold text-white text-base drop-shadow-sm">Monthly Purchases vs Payouts</h3>
-            <p class="text-[11px] text-purple-300 opacity-80">Monthly evaluation expenses compared to actual payouts</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <label class="text-[11px] text-purple-300 font-semibold">Time Horizon:</label>
-            <select id="chartFilter" onchange="rebuildGraphs()" class="px-3 py-1.5 rounded-xl liquid-glass-input text-xs font-semibold cursor-pointer">
-              <option value="all">All Time</option>
-              <option value="ytd">YTD</option>
-              <option value="6m">Last 6 Months</option>
-              <option value="3m">Last 3 Months</option>
-              <option value="1m">This Month</option>
-            </select>
-          </div>
-        </div>
-        <div class="h-64 relative w-full">
-          <canvas id="financialChart"></canvas>
-        </div>
-      </div>
-
-      <!-- DASHBOARD LOG TABLES -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="liquid-glass p-6 rounded-3xl space-y-4">
-          <div class="flex items-center justify-between border-b border-white/10 pb-3">
-            <h3 class="font-bold text-white text-sm drop-shadow-sm">Recent Evaluations</h3>
-            <button onclick="switchTab('evaluations')" class="text-[11px] text-emerald-400 font-bold hover:text-emerald-300 transition px-2 py-1 rounded-lg hover:bg-white/5">View All</button>
-          </div>
-          <div class="overflow-x-auto custom-scrollbar">
-            <table class="w-full text-left text-xs text-purple-100">
-              <thead>
-                <tr class="text-purple-300 font-bold opacity-80 text-[10px] uppercase tracking-wider">
-                  <th class="py-2 font-semibold">Date</th>
-                  <th class="py-2 font-semibold">Firm &amp; Details</th>
-                  <th class="py-2 font-semibold text-right">Cost</th>
-                </tr>
-              </thead>
-              <tbody id="tblActiveSummary" class="divide-y divide-white/5"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="liquid-glass p-6 rounded-3xl space-y-4">
-          <div class="flex items-center justify-between border-b border-white/10 pb-3">
-            <h3 class="font-bold text-white text-sm drop-shadow-sm">Recent Payouts</h3>
-            <button onclick="switchTab('payouts')" class="text-[11px] text-emerald-400 font-bold hover:text-emerald-300 transition px-2 py-1 rounded-lg hover:bg-white/5">View All</button>
-          </div>
-          <div class="overflow-x-auto custom-scrollbar">
-            <table class="w-full text-left text-xs text-purple-100">
-              <thead>
-                <tr class="text-purple-300 font-bold opacity-80 text-[10px] uppercase tracking-wider">
-                  <th class="py-2 font-semibold">Date</th>
-                  <th class="py-2 font-semibold">Firm &amp; Details</th>
-                  <th class="py-2 font-semibold text-right">Amount</th>
-                </tr>
-              </thead>
-              <tbody id="tblPendingSummary" class="divide-y divide-white/5"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= EVALUATION ACCOUNTS TAB ================= -->
-    <section id="tabContent-evaluations" class="hidden space-y-6">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="liquid-glass p-6 rounded-3xl h-fit space-y-5">
-          <h3 id="evalFormTitle" class="font-bold text-white text-base border-b border-white/10 pb-3 drop-shadow-sm">Add Evaluation</h3>
-          <form id="frmEvaluation" onsubmit="handleEvalSubmit(event)" class="space-y-4">
-            <input type="hidden" id="evalEditId">
-            <div>
-              <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
-              <input type="text" id="evalFirm" required placeholder="e.g. Apex, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size ($)</label>
-                <input type="number" id="evalSize" required placeholder="50000" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-              </div>
-              <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Type</label>
-                <input type="text" id="evalType" placeholder="e.g. Pro, Flex" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Cost ($)</label>
-                <input type="number" step="0.01" id="evalCost" required placeholder="120.00" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-              </div>
-              <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Purchase Date</label>
-                <input type="date" id="evalDate" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-              </div>
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Reference/ID (Optional)</label>
-              <input type="text" id="evalRef" placeholder="e.g. 123456" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-            </div>
-            <div class="flex gap-3 pt-3">
-              <button type="submit" class="flex-grow py-3 rounded-xl liquid-glass-btn-primary text-white font-bold text-[13px] transition active:scale-95">Save Challenge</button>
-              <button type="button" onclick="cancelEvalEdit()" id="btnCancelEvalEdit" class="hidden px-5 py-3 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-[13px] transition active:scale-95">Cancel</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="liquid-glass p-6 rounded-3xl lg:col-span-2 space-y-4">
-          <div class="flex items-center justify-between border-b border-white/10 pb-3">
-            <h3 class="font-bold text-white text-base drop-shadow-sm">Evaluations History</h3>
-            <div class="flex items-center gap-2">
-              <label class="text-[11px] text-purple-300 font-semibold">Show:</label>
-              <select id="evalPageSize" onchange="changePageSize('evals', this.value)" class="px-2 py-1 rounded-lg liquid-glass-input text-xs font-semibold cursor-pointer">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="all">ALL</option>
-              </select>
-            </div>
-          </div>
-          <div class="overflow-x-auto custom-scrollbar pb-2">
-            <table class="w-full text-left text-[13px] text-purple-100 min-w-[500px]">
-              <thead>
-                <tr class="text-purple-300 opacity-80 text-[10px] uppercase tracking-wider select-none border-b border-white/10">
-                  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'date')">Date <span id="sort-evals-date"></span></th>
-                  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'firm')">Firm <span id="sort-evals-firm"></span></th>
-                  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'type')">Type <span id="sort-evals-type"></span></th>
-                  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'size')">Size <span id="sort-evals-size"></span></th>
-                  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'reference')">Ref/ID <span id="sort-evals-reference"></span></th>
-                  <th class="py-3 px-3 text-right cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'cost')">Cost <span id="sort-evals-cost"></span></th>
-                  <th class="py-3 px-3 text-right font-semibold">Action</th>
-                </tr>
-              </thead>
-              <tbody id="tblEvaluationsList" class="divide-y divide-white/5"></tbody>
-            </table>
-          </div>
-          <div class="flex items-center justify-end gap-1.5 pt-4 border-t border-white/10" id="evalsPagination"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= PAYOUT LOGS TAB ================= -->
-    <section id="tabContent-payouts" class="hidden space-y-6">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="liquid-glass p-6 rounded-3xl h-fit space-y-5">
-          <h3 id="payoutFormTitle" class="font-bold text-white text-base border-b border-white/10 pb-3 drop-shadow-sm">Log Payout</h3>
-          <form id="frmPayout" onsubmit="handlePayoutSubmit(event)" class="space-y-4">
-            <input type="hidden" id="payoutEditId">
-            <div>
-              <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
-              <input type="text" id="payoutFirm" required placeholder="e.g. Topstep, Apex" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size/Type</label>
-              <input type="text" id="payoutAccountDetails" required placeholder="e.g. 50k PA, 100k Master" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Date Logged</label>
-              <input type="date" id="payoutDate" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-            </div>
-            <div class="grid grid-cols-1 gap-4">
-              <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Amount ($)</label>
-                <input type="number" step="0.01" id="payoutNet" required placeholder="Bank Net" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-              </div>
-            </div>
-            <div class="flex gap-3 pt-3">
-              <button type="submit" class="flex-grow py-3 rounded-xl liquid-glass-btn-primary text-white font-bold text-[13px] transition active:scale-95">Save Payout</button>
-              <button type="button" onclick="cancelPayoutEdit()" id="btnCancelPayoutEdit" class="hidden px-5 py-3 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-[13px] transition active:scale-95">Cancel</button>
-            </div>
-          </form>
-        </div>
-
-        <div class="liquid-glass p-6 rounded-3xl lg:col-span-2 space-y-4">
-          <div class="flex items-center justify-between border-b border-white/10 pb-3">
-            <h3 class="font-bold text-white text-base drop-shadow-sm">Payout Records</h3>
-            <div class="flex items-center gap-2">
-              <label class="text-[11px] text-purple-300 font-semibold">Show:</label>
-              <select id="payoutPageSize" onchange="changePageSize('payouts', this.value)" class="px-2 py-1 rounded-lg liquid-glass-input text-xs font-semibold cursor-pointer">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="all">ALL</option>
-              </select>
-            </div>
-          </div>
-          <div class="overflow-x-auto custom-scrollbar pb-2">
-            <table class="w-full text-left text-[13px] text-purple-100 min-w-[500px]">
-              <thead>
-                <tr class="text-purple-300 opacity-80 text-[10px] uppercase tracking-wider select-none border-b border-white/10">
-                  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('payouts', 'date')">Date <span id="sort-payouts-date"></span></th>
-                  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('payouts', 'firm')">Firm <span id="sort-payouts-firm"></span></th>
-                  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('payouts', 'accountDetails')">Size/Type <span id="sort-payouts-accountDetails"></span></th>
-                  <th class="py-3 px-3 text-right cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('payouts', 'net')">Amount <span id="sort-payouts-net"></span></th>
-                  <th class="py-3 px-3 text-right font-semibold">Action</th>
-                </tr>
-              </thead>
-              <tbody id="tblPayoutsList" class="divide-y divide-white/5"></tbody>
-            </table>
-          </div>
-          <div class="flex items-center justify-end gap-1.5 pt-4 border-t border-white/10" id="payoutsPagination"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= CONSISTENCY CALCULATOR TAB ================= -->
-    <section id="tabContent-consistency" class="hidden space-y-6">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Card 1: Target Projection Calculator -->
-        <div class="liquid-glass p-6 rounded-3xl space-y-5">
-          <div class="flex items-center justify-between border-b border-white/10 pb-3">
-            <h3 class="font-bold text-white text-base drop-shadow-sm">Target Projection Calculator</h3>
-            <div class="flex gap-2">
-              <button onclick="saveProjCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn-primary text-white text-xs font-bold transition active:scale-95">Save</button>
-              <button onclick="resetProjCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn text-purple-200 hover:text-white text-xs font-semibold transition active:scale-95">Reset</button>
-            </div>
-          </div>
-          <div class="space-y-4">
-            <div>
-              <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Target Profit ($)</label>
-              <input type="number" id="consTargetProfit" oninput="runConsistencySolver()" placeholder="3000" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Rule Cap (%)</label>
-                <input type="number" id="consCapPct" oninput="runConsistencySolver()" placeholder="50" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-              </div>
-              <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Min Days</label>
-                <input type="number" id="consMinDays" oninput="runConsistencySolver()" placeholder="2" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
-              <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
-                <span class="text-[9px] font-bold uppercase text-purple-300">Max Allowed Best Day</span>
-                <div id="projMaxBestDay" class="text-xl font-extrabold text-purple-300 mt-1">$0.00</div>
-              </div>
-              <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
-                <span class="text-[9px] font-bold uppercase text-purple-300">Min Avg Daily Profit</span>
-                <div id="projMinAvg" class="text-xl font-extrabold text-emerald-400 mt-1">$0.00</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 2: Current Progress Calculator (Independent) -->
-        <div class="liquid-glass p-6 rounded-3xl space-y-5">
-          <div class="flex items-center justify-between border-b border-white/10 pb-3">
-            <h3 class="font-bold text-white text-base drop-shadow-sm">Current Progress Calculator</h3>
-            <div class="flex gap-2">
-              <button onclick="saveProgCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn-primary text-white text-xs font-bold transition active:scale-95">Save</button>
-              <button onclick="resetProgCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn text-purple-200 hover:text-white text-xs font-semibold transition active:scale-95">Reset</button>
-            </div>
-          </div>
-          <p class="text-xs text-purple-200 opacity-80">Enter your rules &amp; daily profits to check compliance.</p>
-
-          <!-- Independent Rule Inputs for Progress Tracker -->
-          <div class="space-y-4 border-b border-white/10 pb-4">
-            <div>
-              <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Target Profit ($)</label>
-              <input type="number" id="progTargetProfit" oninput="runProgressTrackerCalc()" placeholder="3000" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Rule Cap (%)</label>
-                <input type="number" id="progCapPct" oninput="runProgressTrackerCalc()" placeholder="50" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-              </div>
-              <div>
-                <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Min Days</label>
-                <input type="number" id="progMinDays" oninput="runProgressTrackerCalc()" placeholder="2" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-              </div>
-            </div>
-          </div>
-          
-          <div id="dailyInputsContainer" class="space-y-2"></div>
-
-          <button onclick="addDailyInputRow()" class="w-full py-2.5 liquid-glass-btn text-purple-200 rounded-xl text-xs font-bold transition active:scale-95">
-            + Add Trading Day
-          </button>
-
-          <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
-            <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
-              <span class="text-[9px] font-bold uppercase text-purple-300">Total Profit To Date</span>
-              <div id="trackTotalProfit" class="text-xl font-extrabold text-white mt-1">$0.00</div>
-            </div>
-            <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
-              <span class="text-[9px] font-bold uppercase text-purple-300">Current Best Day %</span>
-              <div id="trackBestDayPct" class="text-xl font-extrabold text-emerald-400 mt-1">0%</div>
-            </div>
-          </div>
-          <div id="trackStatusMsg" class="text-xs text-center font-semibold pt-1"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= TARGET CALCULATOR TAB ================= -->
-    <section id="tabContent-target" class="hidden space-y-6">
-      <div class="liquid-glass p-6 rounded-3xl max-w-xl mx-auto space-y-5">
-        <div class="flex items-center justify-between border-b border-white/10 pb-3">
-          <h3 class="font-bold text-white text-base drop-shadow-sm">Target Calculator</h3>
-          <div class="flex gap-2">
-            <button onclick="saveSimpleCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn-primary text-white text-xs font-bold transition active:scale-95">Save</button>
-            <button onclick="resetSimpleCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn text-purple-200 hover:text-white text-xs font-semibold transition active:scale-95">Reset</button>
-          </div>
-        </div>
-        
-        <div class="space-y-4">
-          <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Target Profit ($)</label>
-            <input type="number" id="simpleTarget" placeholder="3000" step="0.01" oninput="runSimpleTargetCalc()" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Realized P&L ($)</label>
-            <input type="number" id="simpleRPL" placeholder="500" step="0.01" oninput="runSimpleTargetCalc()" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
-          </div>
-
-          <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
-            <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
-              <span class="text-[9px] font-bold uppercase text-purple-300">Remaining Profit Needed</span>
-              <div id="simpleRemaining" class="text-2xl font-extrabold text-purple-300 mt-1">$0.00</div>
-            </div>
-            <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
-              <span class="text-[9px] font-bold uppercase text-purple-300">Target Progress</span>
-              <div id="simplePct" class="text-2xl font-extrabold text-emerald-400 mt-1">0%</div>
-            </div>
-          </div>
-
-          <div class="w-full bg-black/40 h-3 rounded-full overflow-hidden border border-white/10 mt-3">
-            <div id="simpleProgressBar" class="h-full bg-gradient-to-r from-purple-500 to-emerald-400 transition-all duration-300" style="width: 0%;"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- TAX EXPORT MODAL -->
-  <div id="cpaModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-lg flex items-center justify-center p-4 hidden">
-    <div class="liquid-glass w-full max-w-lg rounded-3xl p-7 relative shadow-2xl">
-      <button onclick="closeCpaModal()" class="absolute top-5 right-5 text-purple-300 hover:text-white transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
-
-      <div class="space-y-5">
-        <div>
-          <h3 class="text-lg font-bold text-white drop-shadow-sm">Tax Export Settings</h3>
-          <p class="text-[11px] text-purple-200 opacity-80 mt-1">Configure compliance outputs. Status markers are automatically omitted.</p>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300 mb-1.5 ml-1">Timeframe</label>
-            <select id="exportTimeframe" onchange="toggleCpaTimeframeDropdowns()" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm cursor-pointer">
-              <option value="all">All Logs</option>
-              <option value="yearly">Yearly Aggregate</option>
-              <option value="quarterly">Quarterly Breakdown</option>
-              <option value="monthly">Monthly Snapshot</option>
-            </select>
-          </div>
-          <div id="exportYearDiv" class="hidden">
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300 mb-1.5 ml-1">Tax Year</label>
-            <select id="exportYear" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm cursor-pointer"></select>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-          <div id="exportQuarterDiv" class="hidden">
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300 mb-1.5 ml-1">Quarter</label>
-            <select id="exportQuarter" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm cursor-pointer">
-              <option value="1">Q1 (Jan - Mar)</option>
-              <option value="2">Q2 (Apr - Jun)</option>
-              <option value="3">Q3 (Jul - Sep)</option>
-              <option value="4">Q4 (Oct - Dec)</option>
-            </select>
-          </div>
-          <div id="exportMonthDiv" class="hidden">
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300 mb-1.5 ml-1">Month</label>
-            <select id="exportMonth" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm cursor-pointer">
-              <option value="01">January</option><option value="02">February</option><option value="03">March</option>
-              <option value="04">April</option><option value="05">May</option><option value="06">June</option>
-              <option value="07">July</option><option value="08">August</option><option value="09">September</option>
-              <option value="10">October</option><option value="11">November</option><option value="12">December</option>
-            </select>
-          </div>
-        </div>
-        <div class="grid grid-cols-3 gap-3 pt-3 border-t border-white/10">
-          <button onclick="downloadReport('csv')" class="py-3 rounded-xl liquid-glass-btn text-white font-bold text-[11px] transition active:scale-95">CSV Spread</button>
-          <button onclick="downloadReport('excel')" class="py-3 rounded-xl bg-blue-600/80 backdrop-blur-md hover:bg-blue-500 border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] text-white font-bold text-[11px] transition active:scale-95">Excel Book</button>
-          <button onclick="downloadReport('pdf')" class="py-3 rounded-xl bg-rose-600/80 backdrop-blur-md hover:bg-rose-500 border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] text-white font-bold text-[11px] transition active:scale-95">PDF Report</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- REMOVAL MODAL -->
-  <div id="confirmModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-lg flex items-center justify-center p-4 hidden">
-    <div class="liquid-glass w-full max-w-sm rounded-3xl p-7 space-y-4 shadow-2xl">
-      <h3 class="text-base font-bold text-white drop-shadow-sm">Confirm Deletion</h3>
-      <p id="confirmModalText" class="text-[13px] text-purple-200 opacity-90">Are you sure you want to permanently erase this log?</p>
-      <div class="flex justify-end gap-3 pt-3">
-        <button id="btnConfirmCancel" class="px-5 py-2.5 liquid-glass-btn text-white rounded-xl font-bold transition active:scale-95 text-xs">Cancel</button>
-        <button id="btnConfirmProceed" class="px-5 py-2.5 bg-rose-600/90 backdrop-blur border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] text-white rounded-xl font-bold transition active:scale-95 text-xs">Delete</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CORE SCRIPT -->
-  <script>
-    let evaluations = [];
-    let payouts = [];
-    let financeChart = null;
-    let dailyProfits = ['', '', ''];
-
-    let pageSizes = { evals: 10, payouts: 10 };
-    let currentPage = { evals: 1, payouts: 1 };
-    
-    let sortConfig = {
-      evals: { column: 'date', direction: 'desc' },
-      payouts: { column: 'date', direction: 'desc' }
-    };
-
-    function showToast(title, text, type = 'emerald') {
-      const id = Date.now();
-      const borderTheme = type === 'rose' ? 'border-rose-500/40 text-rose-300 bg-[rgba(30,15,55,0.8)]' : 'border-emerald-500/40 text-emerald-300 bg-[rgba(30,15,55,0.8)]';
-      const toastHtml = `
-        <div id="toast-${id}" class="p-4 rounded-2xl border ${borderTheme} backdrop-blur-xl shadow-2xl pointer-events-auto flex items-start gap-3 transition-all duration-300 transform translate-y-2 opacity-0">
-          <div class="mt-0.5 font-bold text-[13px] drop-shadow-sm">
-            ${title}: <span class="font-medium text-white">${text}</span>
-          </div>
-        </div>
-      `;
-      document.getElementById('toastContainer').insertAdjacentHTML('beforeend', toastHtml);
-      setTimeout(() => { const item = document.getElementById(`toast-${id}`); if(item) item.classList.remove('translate-y-2', 'opacity-0'); }, 50);
-      setTimeout(() => { const item = document.getElementById(`toast-${id}`); if (item) { item.classList.add('translate-y-2', 'opacity-0'); setTimeout(() => item.remove(), 300); } }, 3500);
-    }
-
-    function askConfirmation(message, onConfirm) {
-      const modal = document.getElementById('confirmModal');
-      document.getElementById('confirmModalText').innerText = message;
-      modal.classList.remove('hidden');
-
-      const btnCancel = document.getElementById('btnConfirmCancel');
-      const btnProceed = document.getElementById('btnConfirmProceed');
-
-      const close = () => { modal.classList.add('hidden'); btnCancel.onclick = null; btnProceed.onclick = null; };
-      btnCancel.onclick = close;
-      btnProceed.onclick = () => { onConfirm(); close(); };
-    }
-
-    function formatCurrency(val) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val || 0); }
-
-    function switchTab(tabName) {
-      const tabs = ['dashboard', 'evaluations', 'payouts', 'consistency', 'target'];
-      tabs.forEach(t => {
-        const btn = document.getElementById(`tabBtn-${t}`);
-        const cnt = document.getElementById(`tabContent-${t}`);
-        if (t === tabName) {
-          btn.className = "px-4 py-2 rounded-xl text-[13px] font-bold transition whitespace-nowrap liquid-glass-btn shadow-sm active:scale-95 text-white";
-          cnt.classList.remove('hidden');
-          cnt.classList.add('animate-fade-in');
-        } else {
-          btn.className = "px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent";
-          cnt.classList.add('hidden');
-          cnt.classList.remove('animate-fade-in');
-        }
-      });
-      if (tabName === 'dashboard') setTimeout(rebuildGraphs, 50);
-    }
-
-    function onDataChanged() {
-      saveToLocalStorage();
-      updateSummaryMetrics();
-      renderEvaluationsTable();
-      renderPayoutsTable();
-      runConsistencySolver();
-      runProgressTrackerCalc();
-      runSimpleTargetCalc();
-      rebuildGraphs();
-    }
-
-    function updateSummaryMetrics() {
-      let totalExpense = 0, totalIncome = 0;
-      evaluations.forEach(e => totalExpense += parseFloat(e.cost) || 0);
-      payouts.forEach(p => totalIncome += parseFloat(p.net !== undefined ? p.net : (p.amount || 0)));
-
-      const netProfit = totalIncome - totalExpense;
-      const roiPercent = totalExpense > 0 ? ((netProfit / totalExpense) * 100).toFixed(1) : '0.0';
-
-      document.getElementById('statNetProfit').innerText = formatCurrency(netProfit);
-      document.getElementById('statTotalPayouts').innerText = formatCurrency(totalIncome);
-      document.getElementById('statTotalExpenses').innerText = formatCurrency(totalExpense);
-
-      document.getElementById('cardROI').innerText = `${roiPercent}%`;
-      document.getElementById('cardROI').className = netProfit >= 0 ? "text-3xl font-black mt-2 text-emerald-400 drop-shadow-md" : "text-3xl font-black mt-2 text-rose-400 drop-shadow-md";
-      document.getElementById('cardPayoutCount').innerText = payouts.length;
-      document.getElementById('cardEvalCount').innerText = evaluations.length;
-
-      const sortedEvals = [...evaluations].sort((a,b) => new Date(b.date) - new Date(a.date));
-      const activeBody = document.getElementById('tblActiveSummary');
-      if (sortedEvals.length === 0) activeBody.innerHTML = `<tr><td colspan="3" class="py-5 text-center text-xs text-purple-300">No evaluations tracked.</td></tr>`;
-      else activeBody.innerHTML = sortedEvals.slice(0, 5).map(e => `<tr class="text-xs hover:bg-white/[0.04] transition"><td class="py-3 px-2 text-purple-200 font-mono">${e.date}</td><td class="py-3 font-semibold text-white">${e.firm} <span class="opacity-70 text-[11px] font-normal ml-1">(${e.type || ''} ${e.size ? (e.size/1000)+'k' : ''})</span></td><td class="py-3 px-2 text-right text-rose-400 font-bold drop-shadow-sm">${formatCurrency(e.cost)}</td></tr>`).join('');
-
-      const sortedPayouts = [...payouts].sort((a,b) => new Date(b.date) - new Date(a.date));
-      const pendingBody = document.getElementById('tblPendingSummary');
-      if (sortedPayouts.length === 0) pendingBody.innerHTML = `<tr><td colspan="3" class="py-5 text-center text-xs text-purple-300">No payouts logged.</td></tr>`;
-      else pendingBody.innerHTML = sortedPayouts.slice(0, 5).map(p => `<tr class="text-xs hover:bg-white/[0.04] transition"><td class="py-3 px-2 text-purple-200 font-mono">${p.date}</td><td class="py-3 font-semibold text-white">${p.firm} <span class="opacity-70 text-[11px] font-normal ml-1">(${p.accountDetails || p.details || 'N/A'})</span></td><td class="py-3 px-2 text-right text-emerald-400 font-bold drop-shadow-sm">${formatCurrency(p.net !== undefined ? p.net : p.amount)}</td></tr>`).join('');
-    }
-
-    function changePageSize(type, size) {
-      pageSizes[type] = size === 'all' ? 999999 : parseInt(size);
-      currentPage[type] = 1;
-      type === 'evals' ? renderEvaluationsTable() : renderPayoutsTable();
-    }
-
-    function setPage(type, page) {
-      currentPage[type] = page;
-      type === 'evals' ? renderEvaluationsTable() : renderPayoutsTable();
-    }
-
-    function renderPaginationControls(type, totalItems) {
-      const containerId = type === 'evals' ? 'evalsPagination' : 'payoutsPagination';
-      const container = document.getElementById(containerId);
-      if(!container) return;
-      container.innerHTML = '';
-      
-      const limit = pageSizes[type];
-      if (limit >= 999999 || totalItems === 0) return;
-
-      const totalPages = Math.ceil(totalItems / limit) || 1;
-      const curr = currentPage[type];
-
-      const prevBtn = document.createElement('button');
-      prevBtn.className = 'page-btn';
-      prevBtn.innerText = 'Prev';
-      prevBtn.disabled = curr === 1;
-      prevBtn.onclick = () => setPage(type, curr - 1);
-      container.appendChild(prevBtn);
-
-      for(let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement('button');
-        btn.className = `page-btn ${i === curr ? 'active' : ''}`;
-        btn.innerText = i;
-        btn.onclick = () => setPage(type, i);
-        container.appendChild(btn);
-      }
-
-      const nextBtn = document.createElement('button');
-      nextBtn.className = 'page-btn';
-      nextBtn.innerText = 'Next';
-      nextBtn.disabled = curr === totalPages;
-      nextBtn.onclick = () => setPage(type, curr + 1);
-      container.appendChild(nextBtn);
-    }
-
-    function sortDataset(data, config) {
-      if (!config.column) return data;
-      return [...data].sort((a, b) => {
-        let valA = a[config.column], valB = b[config.column];
-        if (config.column === 'date') return config.direction === 'asc' ? new Date(valA) - new Date(valB) : new Date(valB) - new Date(valA);
-        if (typeof valA === 'number') return config.direction === 'asc' ? valA - valB : valB - valA;
-        valA = String(valA || '').toLowerCase(); valB = String(valB || '').toLowerCase();
-        if (valA < valB) return config.direction === 'asc' ? -1 : 1;
-        if (valA > valB) return config.direction === 'asc' ? 1 : -1;
-        return 0;
-      });
-    }
-
-    function toggleSort(tableType, columnName) {
-      const cfg = sortConfig[tableType];
-      if (cfg.column === columnName) cfg.direction = cfg.direction === 'asc' ? 'desc' : 'asc';
-      else { cfg.column = columnName; cfg.direction = 'asc'; }
-      tableType === 'evals' ? renderEvaluationsTable() : renderPayoutsTable();
-    }
-
-    function updateSortIndicators(tableType) {
-      const columns = tableType === 'evals' ? ['date', 'firm', 'type', 'size', 'reference', 'cost'] : ['date', 'firm', 'accountDetails', 'net'];
-      const cfg = sortConfig[tableType];
-      columns.forEach(col => {
-        const el = document.getElementById(`sort-${tableType}-${col}`);
-        if (!el) return;
-        if (cfg.column === col) { el.innerText = cfg.direction === 'asc' ? ' ▲' : ' ▼'; el.className = "text-emerald-400 text-[9px] drop-shadow-sm"; } 
-        else { el.innerText = ' ↕'; el.className = "text-purple-400 text-[9px]"; }
-      });
-    }
-
-    function renderEvaluationsTable() {
-      const tbody = document.getElementById('tblEvaluationsList');
-      if (!tbody) return; updateSortIndicators('evals');
-      const items = sortDataset(evaluations, sortConfig.evals);
-      
-      if (items.length === 0) { 
-        tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">No logs saved in workspace.</td></tr>`; 
-        renderPaginationControls('evals', 0);
-        return; 
-      }
-
-      const size = pageSizes.evals;
-      const page = currentPage.evals;
-      const start = (page - 1) * size;
-      const paginated = items.slice(start, start + size);
-
-      tbody.innerHTML = paginated.map(e => `
-        <tr class="hover:bg-white/[0.04] transition-colors text-[13px]">
-          <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px]">${e.date}</td>
-          <td class="py-3.5 px-3 font-bold text-white">${e.firm}</td>
-          <td class="py-3.5 px-3 text-purple-100 font-semibold">${e.type || e.accountType || 'N/A'}</td>
-          <td class="py-3.5 px-3 text-purple-100">${formatCurrency(e.size)}</td>
-          <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px] opacity-80">${e.reference || 'N/A'}</td>
-          <td class="py-3.5 px-3 text-right font-black text-rose-400 drop-shadow-sm">${formatCurrency(e.cost)}</td>
-          <td class="py-3.5 px-3 text-right">
-            <div class="flex items-center justify-end gap-3 text-[11px]">
-              <button onclick="editEvaluation('${e.id}')" class="text-purple-300 hover:text-white font-bold transition px-2 py-1 rounded hover:bg-white/5 active:scale-95">Edit</button>
-              <button onclick="deleteEvaluation('${e.id}')" class="text-rose-400/80 hover:text-rose-400 font-bold transition px-2 py-1 rounded hover:bg-rose-500/10 active:scale-95">Del</button>
-            </div>
-          </td>
-        </tr>`).join('');
-
-      renderPaginationControls('evals', items.length);
-    }
-
-    function renderPayoutsTable() {
-      const tbody = document.getElementById('tblPayoutsList');
-      if (!tbody) return; updateSortIndicators('payouts');
-      const items = sortDataset(payouts, sortConfig.payouts);
-
-      if (items.length === 0) { 
-        tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-sm text-purple-300">No payouts logged yet.</td></tr>`; 
-        renderPaginationControls('payouts', 0);
-        return; 
-      }
-
-      const size = pageSizes.payouts;
-      const page = currentPage.payouts;
-      const start = (page - 1) * size;
-      const paginated = items.slice(start, start + size);
-
-      tbody.innerHTML = paginated.map(p => {
-        const details = p.accountDetails || p.details || 'N/A';
-        const amount = p.net !== undefined ? p.net : p.amount;
-        return `
-        <tr class="hover:bg-white/[0.04] transition-colors text-[13px]">
-          <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px]">${p.date}</td>
-          <td class="py-3.5 px-3 font-bold text-white">${p.firm}</td>
-          <td class="py-3.5 px-3 text-purple-100 font-mono text-[12px] opacity-90">${details}</td>
-          <td class="py-3.5 px-3 text-right font-black text-emerald-400 drop-shadow-sm">${formatCurrency(amount)}</td>
-          <td class="py-3.5 px-3 text-right">
-            <div class="flex items-center justify-end gap-3 text-[11px]">
-              <button onclick="editPayout('${p.id}')" class="text-purple-300 hover:text-white font-bold transition px-2 py-1 rounded hover:bg-white/5 active:scale-95">Edit</button>
-              <button onclick="deletePayout('${p.id}')" class="text-rose-400/80 hover:text-rose-400 font-bold transition px-2 py-1 rounded hover:bg-rose-500/10 active:scale-95">Del</button>
-            </div>
-          </td>
-        </tr>`;
-      }).join('');
-
-      renderPaginationControls('payouts', items.length);
-    }
-
-    function handleEvalSubmit(e) {
-      e.preventDefault();
-      const id = document.getElementById('evalEditId').value;
-      const data = {
-        firm: document.getElementById('evalFirm').value, size: parseFloat(document.getElementById('evalSize').value) || 0,
-        type: document.getElementById('evalType').value, cost: parseFloat(document.getElementById('evalCost').value) || 0,
-        date: document.getElementById('evalDate').value, reference: document.getElementById('evalRef').value || 'N/A'
-      };
-      if (id) { const idx = evaluations.findIndex(item => item.id === id); if (idx !== -1) { data.id = id; evaluations[idx] = data; } showToast("Success", "Evaluation record updated."); } 
-      else { data.id = Date.now().toString(); evaluations.push(data); showToast("Created", "Evaluation added to ledger."); }
-      cancelEvalEdit(); onDataChanged();
-    }
-
-    function editEvaluation(id) {
-      const item = evaluations.find(e => e.id === id); if (!item) return;
-      document.getElementById('evalEditId').value = item.id; document.getElementById('evalFirm').value = item.firm;
-      document.getElementById('evalSize').value = item.size; document.getElementById('evalType').value = item.type || '';
-      document.getElementById('evalCost').value = item.cost; document.getElementById('evalDate').value = item.date;
-      document.getElementById('evalRef').value = item.reference === 'N/A' ? '' : item.reference;
-      document.getElementById('evalFormTitle').innerText = "Edit Evaluation Form"; document.getElementById('btnCancelEvalEdit').classList.remove('hidden');
-    }
-
-    function cancelEvalEdit() { document.getElementById('frmEvaluation').reset(); document.getElementById('evalEditId').value = ''; document.getElementById('evalFormTitle').innerText = "Add Evaluation"; document.getElementById('btnCancelEvalEdit').classList.add('hidden'); }
-    function deleteEvaluation(id) { askConfirmation("Permanently erase this challenge expense item?", () => { evaluations = evaluations.filter(e => e.id !== id); onDataChanged(); showToast("Removed", "Ledger log deleted.", "rose"); }); }
-
-    function handlePayoutSubmit(e) {
-      e.preventDefault();
-      const id = document.getElementById('payoutEditId').value;
-      const data = { firm: document.getElementById('payoutFirm').value, accountDetails: document.getElementById('payoutAccountDetails').value, date: document.getElementById('payoutDate').value, net: parseFloat(document.getElementById('payoutNet').value) || 0 };
-      if (id) { const idx = payouts.findIndex(p => p.id === id); if (idx !== -1) { data.id = id; payouts[idx] = data; } showToast("Success", "Payout updated."); } 
-      else { data.id = Date.now().toString(); payouts.push(data); showToast("Logged", "Income payout recorded."); }
-      cancelPayoutEdit(); onDataChanged();
-    }
-
-    function editPayout(id) {
-      const item = payouts.find(p => p.id === id); if (!item) return;
-      document.getElementById('payoutEditId').value = item.id; document.getElementById('payoutFirm').value = item.firm;
-      document.getElementById('payoutAccountDetails').value = item.accountDetails || item.details || ''; document.getElementById('payoutDate').value = item.date;
-      document.getElementById('payoutNet').value = item.net !== undefined ? item.net : item.amount;
-      document.getElementById('payoutFormTitle').innerText = "Edit Payout Form"; document.getElementById('btnCancelPayoutEdit').classList.remove('hidden');
-    }
-
-    function cancelPayoutEdit() { document.getElementById('frmPayout').reset(); document.getElementById('payoutEditId').value = ''; document.getElementById('payoutFormTitle').innerText = "Log Payout"; document.getElementById('btnCancelPayoutEdit').classList.add('hidden'); }
-    function deletePayout(id) { askConfirmation("Erase this cash-out distribution entry?", () => { payouts = payouts.filter(p => p.id !== id); onDataChanged(); showToast("Removed", "Payout log deleted.", "rose"); }); }
-
-    function runConsistencySolver() {
-      const targetVal = document.getElementById('consTargetProfit').value;
-      const capVal = document.getElementById('consCapPct').value;
-      const minDaysVal = document.getElementById('consMinDays').value;
-
-      const target = targetVal !== '' ? parseFloat(targetVal) : 3000;
-      const capPct = capVal !== '' ? parseFloat(capVal) : 50;
-      const minDays = minDaysVal !== '' ? parseFloat(minDaysVal) : 2;
-
-      const maxBestDay = capPct > 0 ? target * (capPct / 100) : 0;
-      const minAvg = minDays > 0 ? target / minDays : 0;
-
-      document.getElementById('projMaxBestDay').innerText = formatCurrency(maxBestDay);
-      document.getElementById('projMinAvg').innerText = formatCurrency(minAvg);
-    }
-
-    function saveProjCalc() {
-      const projState = {
-        target: document.getElementById('consTargetProfit').value,
-        cap: document.getElementById('consCapPct').value,
-        minDays: document.getElementById('consMinDays').value
-      };
-      localStorage.setItem('proptracker_calc_proj', JSON.stringify(projState));
-      showToast("Saved", "Target Projection state saved.");
-    }
-
-    function resetProjCalc() {
-      document.getElementById('consTargetProfit').value = '';
-      document.getElementById('consCapPct').value = '';
-      document.getElementById('consMinDays').value = '';
-      localStorage.removeItem('proptracker_calc_proj');
-      runConsistencySolver();
-      showToast("Reset", "Target Projection restored to defaults.");
-    }
-
-    function initDailyInputs() {
-      const container = document.getElementById('dailyInputsContainer');
-      container.innerHTML = '';
-      dailyProfits.forEach((val, idx) => {
-        const div = document.createElement('div');
-        div.className = 'flex gap-2 items-center';
-        div.innerHTML = `
-          <input type="number" value="${val}" step="0.01" oninput="updateDailyVal(${idx}, this.value)" placeholder="1000" class="w-full px-3 py-2 rounded-xl liquid-glass-input text-xs font-semibold">
-          <button type="button" onclick="removeDailyInputRow(${idx})" class="px-3 py-2 rounded-xl bg-rose-500/20 text-rose-400 font-bold text-xs hover:bg-rose-500/30">✕</button>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function updateDailyVal(idx, val) {
-      dailyProfits[idx] = val;
-      runProgressTrackerCalc();
-    }
-
-    function addDailyInputRow() {
-      dailyProfits.push('');
-      initDailyInputs();
-      runProgressTrackerCalc();
-    }
-
-    function removeDailyInputRow(idx) {
-      dailyProfits.splice(idx, 1);
-      initDailyInputs();
-      runProgressTrackerCalc();
-    }
-
-    function runProgressTrackerCalc() {
-      const parsedProfits = dailyProfits.map(v => (v === '' || v === null || isNaN(parseFloat(v))) ? 1000 : parseFloat(v));
-      const total = parsedProfits.reduce((a, b) => a + b, 0);
-      const best = parsedProfits.length ? Math.max(...parsedProfits) : 0;
-      const bestPct = total > 0 ? (best / total) * 100 : 0;
-
-      const capVal = document.getElementById('progCapPct').value;
-      const capPct = capVal !== '' ? parseFloat(capVal) : 50;
-
-      document.getElementById('trackTotalProfit').innerText = formatCurrency(total);
-      
-      const pctEl = document.getElementById('trackBestDayPct');
-      pctEl.innerText = bestPct.toFixed(1) + '%';
-      
-      const msgEl = document.getElementById('trackStatusMsg');
-
-      if(bestPct > capPct) {
-        pctEl.className = 'text-xl font-extrabold text-rose-400 mt-1';
-        msgEl.innerHTML = `<span class="text-rose-400">⚠️ Best day exceeds the ${capPct}% rule cap!</span>`;
-      } else {
-        pctEl.className = 'text-xl font-extrabold text-emerald-400 mt-1';
-        msgEl.innerHTML = `<span class="text-emerald-400">✓ Compliant! Best day is under the ${capPct}% limit.</span>`;
-      }
-    }
-
-    function saveProgCalc() {
-      const progState = {
-        target: document.getElementById('progTargetProfit').value,
-        cap: document.getElementById('progCapPct').value,
-        minDays: document.getElementById('progMinDays').value,
-        dailyProfits: dailyProfits
-      };
-      localStorage.setItem('proptracker_calc_prog', JSON.stringify(progState));
-      showToast("Saved", "Current Progress state saved.");
-    }
-
-    function resetProgCalc() {
-      document.getElementById('progTargetProfit').value = '';
-      document.getElementById('progCapPct').value = '';
-      document.getElementById('progMinDays').value = '';
-      dailyProfits = ['', '', ''];
-      localStorage.removeItem('proptracker_calc_prog');
-      initDailyInputs();
-      runProgressTrackerCalc();
-      showToast("Reset", "Current Progress restored to defaults.");
-    }
-
-    function runSimpleTargetCalc() {
-      const targetVal = document.getElementById('simpleTarget').value;
-      const rplVal = document.getElementById('simpleRPL').value;
-
-      const target = targetVal !== '' ? parseFloat(targetVal) : 3000;
-      const rpl = rplVal !== '' ? parseFloat(rplVal) : 500;
-
-      const remaining = target - rpl;
-      const rawPct = target > 0 ? (rpl / target) * 100 : 0;
-
-      document.getElementById('simpleRemaining').innerText = formatCurrency(remaining);
-      
-      const pctEl = document.getElementById('simplePct');
-      const barEl = document.getElementById('simpleProgressBar');
-
-      pctEl.innerText = rawPct.toFixed(1) + '%';
-
-      if (rawPct < 0) {
-        pctEl.className = 'text-2xl font-extrabold text-rose-400 mt-1';
-        barEl.className = 'h-full bg-gradient-to-r from-rose-600 to-rose-400 transition-all duration-300';
-        barEl.style.width = Math.min(Math.abs(rawPct), 100) + '%';
-      } else {
-        pctEl.className = 'text-2xl font-extrabold text-emerald-400 mt-1';
-        barEl.className = 'h-full bg-gradient-to-r from-purple-500 to-emerald-400 transition-all duration-300';
-        barEl.style.width = Math.min(rawPct, 100) + '%';
-      }
-    }
-
-    function saveSimpleCalc() {
-      const simpleState = {
-        target: document.getElementById('simpleTarget').value,
-        rpl: document.getElementById('simpleRPL').value
-      };
-      localStorage.setItem('proptracker_calc_simple', JSON.stringify(simpleState));
-      showToast("Saved", "Target Calculator state saved.");
-    }
-
-    function resetSimpleCalc() {
-      document.getElementById('simpleTarget').value = '';
-      document.getElementById('simpleRPL').value = '';
-      localStorage.removeItem('proptracker_calc_simple');
-      runSimpleTargetCalc();
-      showToast("Reset", "Target Calculator restored to defaults.");
-    }
-
-    function rebuildGraphs() {
-      const canvas = document.getElementById('financialChart'); if (!canvas) return;
-      if (financeChart) financeChart.destroy();
-
-      const filterMode = document.getElementById('chartFilter').value;
-      const now = new Date();
-      const currentYear = now.getFullYear();
-      const currentMonthStr = now.toISOString().substring(0, 7);
-
-      const monthlyData = {};
-
-      const isDateAllowed = (dateStr) => {
-        if (!dateStr) return true;
-        const date = new Date(dateStr + 'T00:00:00');
-        if (filterMode === 'ytd') return date.getFullYear() === currentYear;
-        if (filterMode === '6m') {
-          const cutoff = new Date(); cutoff.setMonth(now.getMonth() - 6);
-          return date >= cutoff;
-        }
-        if (filterMode === '3m') {
-          const cutoff = new Date(); cutoff.setMonth(now.getMonth() - 3);
-          return date >= cutoff;
-        }
-        if (filterMode === '1m') return dateStr.substring(0, 7) === currentMonthStr;
-        return true;
-      };
-
-      evaluations.forEach(e => {
-        if (isDateAllowed(e.date)) {
-          const m = e.date ? e.date.substring(0, 7) : 'Unknown';
-          monthlyData[m] = monthlyData[m] || { cost: 0, payouts: 0 };
-          monthlyData[m].cost += parseFloat(e.cost) || 0;
-        }
-      });
-
-      payouts.forEach(p => {
-        if (isDateAllowed(p.date)) {
-          const m = p.date ? p.date.substring(0, 7) : 'Unknown';
-          monthlyData[m] = monthlyData[m] || { cost: 0, payouts: 0 };
-          monthlyData[m].payouts += parseFloat(p.net !== undefined ? p.net : p.amount) || 0;
-        }
-      });
-
-      const labels = Object.keys(monthlyData).sort();
-      const costValues = labels.map(k => monthlyData[k].cost);
-      const payoutValues = labels.map(k => monthlyData[k].payouts);
-
-      financeChart = new Chart(canvas.getContext('2d'), {
-        type: 'bar',
-        data: {
-          labels: labels.length ? labels : ['No Data'],
-          datasets: [
-            {
-              label: 'Eval Spend ($)',
-              data: costValues.length ? costValues : [0],
-              backgroundColor: 'rgba(244, 63, 94, 0.7)',
-              borderColor: '#f43f5e',
-              borderWidth: 1
-            },
-            {
-              label: 'Payouts ($)',
-              data: payoutValues.length ? payoutValues : [0],
-              backgroundColor: 'rgba(16, 185, 129, 0.7)',
-              borderColor: '#10b981',
-              borderWidth: 1
-            }
-          ]
-        },
-        options: {
-          responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { labels: { color: '#e2e8f0', boxWidth: 10, font: { size: 10, family: 'Inter', weight: '600' } } } },
-          scales: {
-            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#cbd5e1', font: { size: 9 } } },
-            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#cbd5e1', font: { size: 9 } } }
-          }
-        }
-      });
-    }
-
-    function openCpaModal() {
-      const years = new Set(); evaluations.forEach(e => years.add(e.date.split('-')[0])); payouts.forEach(p => years.add(p.date.split('-')[0]));
-      if (years.size === 0) years.add(new Date().getFullYear().toString());
-      document.getElementById('exportYear').innerHTML = Array.from(years).sort((a,b)=>b-a).map(y => `<option value="${y}">${y}</option>`).join('');
-      document.getElementById('cpaModal').classList.remove('hidden'); toggleCpaTimeframeDropdowns();
-    }
-    function closeCpaModal() { document.getElementById('cpaModal').classList.add('hidden'); }
-    function toggleCpaTimeframeDropdowns() {
-      const t = document.getElementById('exportTimeframe').value;
-      document.getElementById('exportYearDiv').classList.toggle('hidden', t === 'all');
-      document.getElementById('exportQuarterDiv').classList.toggle('hidden', t !== 'quarterly');
-      document.getElementById('exportMonthDiv').classList.toggle('hidden', t !== 'monthly');
-    }
-
-    function downloadReport(format) {
-      const timeframe = document.getElementById('exportTimeframe').value, y = document.getElementById('exportYear').value, q = document.getElementById('exportQuarter').value, m = document.getElementById('exportMonth').value;
-      const records = [];
-      const filter = (dateStr) => {
-        if (timeframe === 'all') return true; const d = new Date(dateStr + 'T00:00:00'); if (d.getFullYear().toString() !== y) return false;
-        if (timeframe === 'yearly') return true; if (timeframe === 'quarterly') return (Math.floor(d.getMonth() / 3) + 1).toString() === q;
-        if (timeframe === 'monthly') return (d.getMonth() + 1).toString().padStart(2, '0') === m; return false;
-      };
-      evaluations.forEach(e => { if (filter(e.date)) records.push({ date: e.date, type: 'Expense', category: 'Evaluation Fee', firm: e.firm, reference: e.reference || 'N/A', amount: -parseFloat(e.cost) }); });
-      payouts.forEach(p => { if (filter(p.date)) records.push({ date: p.date, type: 'Income', category: 'Payout Split', firm: p.firm, reference: p.accountDetails || p.details || 'N/A', amount: parseFloat(p.net !== undefined ? p.net : p.amount) }); });
-      records.sort((a,b) => new Date(a.date) - new Date(b.date));
-      let income = 0, expense = 0; records.forEach(r => r.type === 'Income' ? income += r.amount : expense += Math.abs(r.amount));
-      const title = `Tax_Report_${timeframe}_${Date.now()}`;
-      if (format === 'csv') compileCsv(records, income, expense, `${title}.csv`);
-      if (format === 'excel') compileExcel(records, income, expense, `${title}.xlsx`);
-      if (format === 'pdf') compilePdf(records, income, expense, timeframe, y, q, m, `${title}.pdf`);
-      closeCpaModal();
-    }
-
-    function compileCsv(records, income, expense, filename) {
-      let csv = "Date,Type,Category,Prop Firm,Detail Reference,Amount ($)\n";
-      records.forEach(r => csv += `${r.date},${r.type},${r.category},"${r.firm}","${r.reference}",${r.amount}\n`);
-      csv += `\nSUMMARY,Total Income:,${income}\nSUMMARY,Total Expenses:,${expense}\nSUMMARY,Net Profit:,${income - expense}\n`;
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = filename; document.body.appendChild(link); link.click(); document.body.removeChild(link);
-      showToast("Report Exported", "CSV downloaded successfully.");
-    }
-    function compileExcel(records, income, expense, filename) {
-      const rows = [["Date", "Type", "Category", "Prop Firm", "Detail Reference", "Amount ($)"]];
-      records.forEach(r => rows.push([r.date, r.type, r.category, r.firm, r.reference, r.amount]));
-      rows.push([]), rows.push(["", "", "SUMMARY", "Total Income:", income]), rows.push(["", "", "SUMMARY", "Total Expenses:", -expense]), rows.push(["", "", "SUMMARY", "Net Profit:", income - expense]);
-      const wb = XLSX.utils.book_new(), ws = XLSX.utils.aoa_to_sheet(rows); XLSX.utils.book_append_sheet(wb, ws, "Tax Statement"); XLSX.writeFile(wb, filename);
-      showToast("Report Exported", "Excel file workbook saved.");
-    }
-    function compilePdf(records, income, expense, timeframe, y, q, m, filename) {
-      const { jsPDF } = window.jspdf; const doc = new jsPDF();
-      doc.setFont("Helvetica", "bold").setFontSize(18).setTextColor(15, 23, 42); doc.text("PropTracker Pro - Ledger Statement", 14, 20);
-      doc.setFont("Helvetica", "normal").setFontSize(9).setTextColor(100, 116, 139); doc.text(`Timeframe: ${timeframe.toUpperCase()} | Generated: ${new Date().toLocaleDateString()}`, 14, 26);
-      const body = records.map(r => [r.date, r.type, r.category, r.firm, r.reference, formatCurrency(r.amount)]);
-      doc.autoTable({ startY: 32, head: [["Date", "Type", "Category", "Prop Firm", "Detail Reference", "Amount ($)"]], body: body, theme: 'striped', headStyles: { fillColor: [15, 23, 42], fontSize: 8, fontStyle: 'bold' }, styles: { fontSize: 8 } });
-      const finalY = doc.lastAutoTable.finalY + 12;
-      doc.setFont("Helvetica", "bold").setFontSize(10).setTextColor(15, 23, 42); doc.text("TAXABLE SUMMARY", 14, finalY);
-      doc.setFont("Helvetica", "normal"); doc.text(`Total Income: ${formatCurrency(income)}`, 14, finalY + 6); doc.text(`Total Expenses: -${formatCurrency(expense)}`, 14, finalY + 12);
-      doc.setFont("Helvetica", "bold"); doc.text(`Net Profit: ${formatCurrency(income - expense)}`, 14, finalY + 20);
-      doc.save(filename); showToast("Report Exported", "PDF breakdown created cleanly.");
-    }
-
-    function handleExportBackup() {
-      const blob = new Blob([JSON.stringify({ evaluations, payouts }, null, 2)], { type: 'application/json' });
-      const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `proptracker_backup_${Date.now()}.json`; link.click();
-      showToast("Backup Saved", "JSON schema file downloaded successfully.");
-    }
-
-    function handleImportBackup(e) {
-      const file = e.target.files[0]; if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        try { 
-          const parsed = JSON.parse(evt.target.result);
-          
-          if (Array.isArray(parsed.evaluations) || Array.isArray(parsed.payouts) || Array.isArray(parsed.evals)) {
-            evaluations = parsed.evaluations || parsed.evals || [];
-            payouts = parsed.payouts || [];
-            onDataChanged(); 
-            showToast("Success", "Workspace metrics populated from backup.");
-          } else {
-            showToast("Import Failed", "Invalid JSON template layout.", "rose");
-          }
-        } 
-        catch (err) { showToast("Import Failed", "Invalid JSON template layout.", "rose"); }
-      }; reader.readAsText(file);
-    }
-
-    function saveToLocalStorage() { 
-      localStorage.setItem('proptracker_evaluations', JSON.stringify(evaluations)); 
-      localStorage.setItem('proptracker_payouts', JSON.stringify(payouts)); 
-    }
-
-    function loadCalculatorsFromLocalStorage() {
-      // 1. Target Projection
-      const savedProj = localStorage.getItem('proptracker_calc_proj');
-      if (savedProj) {
-        try {
-          const p = JSON.parse(savedProj);
-          if (p.target !== undefined) document.getElementById('consTargetProfit').value = p.target;
-          if (p.cap !== undefined) document.getElementById('consCapPct').value = p.cap;
-          if (p.minDays !== undefined) document.getElementById('consMinDays').value = p.minDays;
-        } catch(e){}
-      }
-
-      // 2. Current Progress
-      const savedProg = localStorage.getItem('proptracker_calc_prog');
-      if (savedProg) {
-        try {
-          const pr = JSON.parse(savedProg);
-          if (pr.target !== undefined) document.getElementById('progTargetProfit').value = pr.target;
-          if (pr.cap !== undefined) document.getElementById('progCapPct').value = pr.cap;
-          if (pr.minDays !== undefined) document.getElementById('progMinDays').value = pr.minDays;
-          if (Array.isArray(pr.dailyProfits)) dailyProfits = pr.dailyProfits;
-        } catch(e){}
-      }
-
-      // 3. Target Calculator
-      const savedSimple = localStorage.getItem('proptracker_calc_simple');
-      if (savedSimple) {
-        try {
-          const s = JSON.parse(savedSimple);
-          if (s.target !== undefined) document.getElementById('simpleTarget').value = s.target;
-          if (s.rpl !== undefined) document.getElementById('simpleRPL').value = s.rpl;
-        } catch(e){}
-      }
-    }
-
-    function loadFromLocalStorage() {
-      const evs = localStorage.getItem('proptracker_evaluations'), pays = localStorage.getItem('proptracker_payouts');
-      evaluations = evs ? JSON.parse(evs) : []; payouts = pays ? JSON.parse(pays) : [];
-      loadCalculatorsFromLocalStorage();
-      initDailyInputs();
-      onDataChanged();
-    }
-
-    window.addEventListener('load', () => { loadFromLocalStorage(); });
-  </script>
+ <div class="ambient-bg">
+ <div class="ambient-blob-1"></div>
+ <div class="ambient-blob-2"></div>
+ </div>
+
+ <!-- TOP HEADER -->
+ <header class="liquid-glass-header sticky top-0 z-40 px-4 py-3 sm:px-6">
+ <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+ <div class="flex items-center gap-3">
+ <!-- Updated Icon matching Favicon Purple Flame -->
+ <div class="p-2 bg-purple-900/30 rounded-xl border border-purple-500/30 shadow-inner backdrop-blur-md flex items-center justify-center">
+ <svg class="w-6 h-6" viewBox="0 0 100 100">
+ <circle cx="50" cy="50" r="48" fill="#0b0314"/>
+ <path d="M50 12 C58 28 80 38 80 62 C80 78 66 88 50 88 C34 88 20 78 20 62 C20 38 42 28 50 12 Z" fill="#9333ea"/>
+ <path d="M50 32 C56 44 70 52 70 68 C70 79 61 85 50 85 C39 85 30 79 30 68 C30 52 44 44 50 32 Z" fill="#ec4899"/>
+ <path d="M50 48 C53 56 62 62 62 72 C62 79 56 83 50 83 C44 83 38 79 38 72 C38 62 47 56 50 48 Z" fill="#f472b6"/>
+ <path d="M50 60 C51 65 56 68 56 74 C56 78 53 80 50 80 C47 80 44 78 44 74 C44 68 49 65 50 60 Z" fill="#fbcfe8"/>
+ </svg>
+ </div>
+ <div>
+ <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-2 drop-shadow-md">
+ PropTracker <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm">PRO</span><span style="font-size: 0.75rem; opacity: 0.5; margin-top: 2px;"><i>v1.1</i></span>
+ </h1> 
+ </div>
+ </div>
+
+ <!-- Backup Controls -->
+ <div class="flex items-center gap-2.5">
+ <button onclick="document.getElementById('fileBackup').click()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl liquid-glass-btn text-[11px] font-semibold text-purple-100 transition active:scale-95">
+ Import Data
+ </button>
+ <input type="file" id="fileBackup" accept=".json" class="hidden" onchange="handleImportBackup(event)">
+ <button onclick="handleExportBackup()" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl liquid-glass-btn text-[11px] font-semibold text-purple-100 transition active:scale-95">
+ Export Backup
+ </button>
+ <button onclick="openCpaModal()" class="flex items-center gap-1.5 px-4 py-1.5 rounded-xl liquid-glass-btn-primary text-white font-bold text-[11px] transition active:scale-95">
+ <svg class="w-3.5 h-3.5 drop-shadow-sm" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+ Tax Export
+ </button>
+ </div>
+ </div>
+ </header>
+
+ <!-- NAVIGATION TABS -->
+ <div class="border-b border-white/5 px-4 sm:px-6 bg-[#1a0b2e]/40 backdrop-blur-md">
+ <div class="max-w-7xl mx-auto flex gap-2.5 overflow-x-auto py-3 custom-scrollbar">
+ <button onclick="switchTab('dashboard')" id="tabBtn-dashboard" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap liquid-glass-btn shadow-sm active:scale-95">
+ Dashboard Overview
+ </button>
+ <button onclick="switchTab('evaluations')" id="tabBtn-evaluations" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
+ Evaluation Accounts
+ </button>
+ <button onclick="switchTab('payouts')" id="tabBtn-payouts" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
+ Payout Logs
+ </button>
+ <button onclick="switchTab('consistency')" id="tabBtn-consistency" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
+ Consistency Calculator
+ </button>
+ <button onclick="switchTab('target')" id="tabBtn-target" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
+ Target Calculator
+ </button>
+ </div>
+ </div>
+
+ <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+ <!-- MAIN CONTAINER -->
+ <main class="flex-grow p-4 sm:p-6 max-w-7xl mx-auto w-full">
+
+ <!-- ================= DASHBOARD TAB ================= -->
+ <section id="tabContent-dashboard" class="space-y-6 animate-fade-in">
+ <!-- ROW 1: TOP 3 METRICS -->
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+ <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
+ <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Net Profit</p>
+ <p class="text-4xl font-black mt-2 text-white drop-shadow-md" id="statNetProfit">$0.00</p>
+ </div>
+ <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
+ <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Total Payouts</p>
+ <p class="text-4xl font-black mt-2 text-emerald-400 drop-shadow-md" id="statTotalPayouts">$0.00</p>
+ </div>
+ <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
+ <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Evaluation Costs</p>
+ <p class="text-4xl font-black mt-2 text-rose-400 drop-shadow-md" id="statTotalExpenses">$0.00</p>
+ </div>
+ </div>
+
+ <!-- ROW 2: BOTTOM 3 SPLIT STATS -->
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+ <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
+ <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Return On Investment</p>
+ <p class="text-3xl font-black mt-2 text-emerald-400 drop-shadow-md" id="cardROI">0.0%</p>
+ </div>
+ <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
+ <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Total Payouts Received</p>
+ <p class="text-3xl font-black mt-2 text-white drop-shadow-md" id="cardPayoutCount">0</p>
+ </div>
+ <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
+ <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Evaluation Accounts</p>
+ <p class="text-3xl font-black mt-2 text-purple-300 drop-shadow-md" id="cardEvalCount">0</p>
+ </div>
+ </div>
+
+ <!-- NEW DASHBOARD CALENDAR -->
+ <div class="liquid-glass p-6 rounded-3xl space-y-4">
+ <div class="flex items-center justify-between flex-wrap gap-3 border-b border-white/10 pb-3">
+ <div>
+ <h3 class="font-bold text-white text-base drop-shadow-sm">Activity Calendar</h3>
+ <p class="text-[11px] text-purple-300 opacity-80">Daily overview of evaluations purchased & payouts logged</p>
+ </div>
+ <div class="flex items-center gap-2">
+ <button onclick="changeCalendarMonth(-1)" class="px-2.5 py-1 rounded-lg liquid-glass-btn text-xs font-bold text-purple-200 hover:text-white transition active:scale-95">◀</button>
+ <span id="calMonthYearLabel" class="text-xs font-bold text-white min-w-[110px] text-center"></span>
+ <button onclick="changeCalendarMonth(1)" class="px-2.5 py-1 rounded-lg liquid-glass-btn text-xs font-bold text-purple-200 hover:text-white transition active:scale-95">▶</button>
+ <button onclick="jumpCalendarToday()" class="px-3 py-1 rounded-lg liquid-glass-btn text-xs font-semibold text-purple-300 hover:text-white transition active:scale-95 ml-1">Today</button>
+ </div>
+ </div>
+
+ <div class="grid grid-cols-7 gap-1.5 text-center text-[10px] font-extrabold uppercase text-purple-300/80 pb-1">
+ <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+ </div>
+ <div id="dashboardCalendarGrid" class="grid grid-cols-7 gap-1.5"></div>
+ </div>
+
+ <!-- CHART SECTION -->
+ <div class="liquid-glass p-6 rounded-3xl space-y-4">
+ <div class="flex items-center justify-between flex-wrap gap-3">
+ <div>
+ <h3 class="font-bold text-white text-base drop-shadow-sm">Monthly Purchases vs Payouts</h3>
+ <p class="text-[11px] text-purple-300 opacity-80">Monthly evaluation expenses compared to actual payouts</p>
+ </div>
+ <div class="flex items-center gap-2">
+ <label class="text-[11px] text-purple-300 font-semibold">Time Horizon:</label>
+ <select id="chartFilter" onchange="rebuildGraphs()" class="px-3 py-1.5 rounded-xl liquid-glass-input text-xs font-semibold cursor-pointer">
+ <option value="all">All Time</option>
+ <option value="ytd">YTD</option>
+ <option value="6m">Last 6 Months</option>
+ <option value="3m">Last 3 Months</option>
+ <option value="1m">This Month</option>
+ </select>
+ </div>
+ </div>
+ <div class="h-64 relative w-full">
+ <canvas id="financialChart"></canvas>
+ </div>
+ </div>
+
+ <!-- DASHBOARD LOG TABLES -->
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+ <div class="liquid-glass p-6 rounded-3xl space-y-4">
+ <div class="flex items-center justify-between border-b border-white/10 pb-3">
+ <h3 class="font-bold text-white text-sm drop-shadow-sm">Recent Evaluations</h3>
+ <button onclick="switchTab('evaluations')" class="text-[11px] text-emerald-400 font-bold hover:text-emerald-300 transition px-2 py-1 rounded-lg hover:bg-white/5">View All</button>
+ </div>
+ <div class="overflow-x-auto custom-scrollbar">
+ <table class="w-full text-left text-xs text-purple-100">
+ <thead>
+ <tr class="text-purple-300 font-bold opacity-80 text-[10px] uppercase tracking-wider">
+ <th class="py-2 font-semibold">Date</th>
+ <th class="py-2 font-semibold">Firm &amp; Details</th>
+ <th class="py-2 font-semibold text-right">Cost</th>
+ </tr>
+ </thead>
+ <tbody id="tblActiveSummary" class="divide-y divide-white/5"></tbody>
+ </table>
+ </div>
+ </div>
+
+ <div class="liquid-glass p-6 rounded-3xl space-y-4">
+ <div class="flex items-center justify-between border-b border-white/10 pb-3">
+ <h3 class="font-bold text-white text-sm drop-shadow-sm">Recent Payouts</h3>
+ <button onclick="switchTab('payouts')" class="text-[11px] text-emerald-400 font-bold hover:text-emerald-300 transition px-2 py-1 rounded-lg hover:bg-white/5">View All</button>
+ </div>
+ <div class="overflow-x-auto custom-scrollbar">
+ <table class="w-full text-left text-xs text-purple-100">
+ <thead>
+ <tr class="text-purple-300 font-bold opacity-80 text-[10px] uppercase tracking-wider">
+ <th class="py-2 font-semibold">Date</th>
+ <th class="py-2 font-semibold">Firm &amp; Details</th>
+ <th class="py-2 font-semibold text-right">Amount</th>
+ </tr>
+ </thead>
+ <tbody id="tblPendingSummary" class="divide-y divide-white/5"></tbody>
+ </table>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <!-- ================= EVALUATION ACCOUNTS TAB ================= -->
+ <section id="tabContent-evaluations" class="hidden space-y-6">
+ <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+ <div class="liquid-glass p-6 rounded-3xl h-fit space-y-5">
+ <h3 id="evalFormTitle" class="font-bold text-white text-base border-b border-white/10 pb-3 drop-shadow-sm">Add Evaluation</h3>
+ <form id="frmEvaluation" onsubmit="handleEvalSubmit(event)" class="space-y-4">
+ <input type="hidden" id="evalEditId">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
+ <input type="text" id="evalFirm" required placeholder="e.g. Apex, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div class="grid grid-cols-2 gap-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size ($)</label>
+ <input type="number" id="evalSize" required placeholder="50000" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Type</label>
+ <input type="text" id="evalType" placeholder="e.g. Pro, Flex" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ </div>
+ <div class="grid grid-cols-2 gap-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Cost ($)</label>
+ <input type="number" step="0.01" id="evalCost" required placeholder="120.00" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Purchase Date</label>
+ <input type="date" id="evalDate" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Reference/ID (Optional)</label>
+ <input type="text" id="evalRef" placeholder="e.g. 123456" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div class="flex gap-3 pt-3">
+ <button type="submit" class="flex-grow py-3 rounded-xl liquid-glass-btn-primary text-white font-bold text-[13px] transition active:scale-95">Save Challenge</button>
+ <button type="button" onclick="cancelEvalEdit()" id="btnCancelEvalEdit" class="hidden px-5 py-3 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-[13px] transition active:scale-95">Cancel</button>
+ </div>
+ </form>
+ </div>
+
+ <div class="liquid-glass p-6 rounded-3xl lg:col-span-2 space-y-4">
+ <div class="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
+ <h3 class="font-bold text-white text-base drop-shadow-sm">Evaluations History</h3>
+ <div class="flex items-center gap-3">
+ <!-- Selection controls -->
+ <button id="btnToggleSelectEvals" onclick="toggleSelectMode('evals')" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95">Select</button>
+ <button id="btnBatchDeleteEvals" onclick="deleteSelectedEvals()" class="hidden px-3 py-1.5 rounded-xl bg-rose-600/80 text-white text-xs font-bold hover:bg-rose-500 transition active:scale-95">Delete Selected (<span id="countSelectedEvals">0</span>)</button>
+ 
+<div class="flex items-center gap-1.5 ml-1">
+ <label class="text-[11px] text-purple-300 font-semibold">Show:</label>
+ <select id="evalPageSize" onchange="changePageSize('evals', this.value)" class="px-2 py-1 rounded-lg liquid-glass-input text-xs font-semibold cursor-pointer">
+ <option value="10">10</option>
+ <option value="25">25</option>
+ <option value="50">50</option>
+ <option value="all">ALL</option>
+ </select>
+ </div>
+ </div>
+ </div>
+ <div class="overflow-x-auto custom-scrollbar pb-2">
+ <table class="w-full text-left text-[13px] text-purple-100 min-w-[500px]">
+ <thead>
+ <tr class="text-purple-300 opacity-80 text-[10px] uppercase tracking-wider select-none border-b border-white/10">
+ <th class="py-3 px-2 w-8 hidden col-select-evals text-center"><input type="checkbox" id="chkSelectAllEvals" onchange="toggleSelectAll('evals', this.checked)"></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'date')">Date <span id="sort-evals-date"></span></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'firm')">Firm <span id="sort-evals-firm"></span></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'type')">Type <span id="sort-evals-type"></span></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'size')">Size <span id="sort-evals-size"></span></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'reference')">Ref/ID <span id="sort-evals-reference"></span></th>
+ <th class="py-3 px-3 text-right cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'cost')">Cost <span id="sort-evals-cost"></span></th>
+ <th class="py-3 px-3 text-right font-semibold">Action</th>
+ </tr>
+ </thead>
+ <tbody id="tblEvaluationsList" class="divide-y divide-white/5"></tbody>
+ </table>
+ </div>
+ <div class="flex items-center justify-end gap-1.5 pt-4 border-t border-white/10" id="evalsPagination"></div>
+ </div>
+ </div>
+ </section>
+
+ <!-- ================= PAYOUT LOGS TAB ================= -->
+ <section id="tabContent-payouts" class="hidden space-y-6">
+ <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+ <div class="liquid-glass p-6 rounded-3xl h-fit space-y-5">
+ <h3 id="payoutFormTitle" class="font-bold text-white text-base border-b border-white/10 pb-3 drop-shadow-sm">Log Payout</h3>
+ <form id="frmPayout" onsubmit="handlePayoutSubmit(event)" class="space-y-4">
+ <input type="hidden" id="payoutEditId">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
+ <input type="text" id="payoutFirm" required placeholder="e.g. Topstep, Apex" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size/Type</label>
+ <input type="text" id="payoutAccountDetails" required placeholder="e.g. 50k PA, 100k Master" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Date Logged</label>
+ <input type="date" id="payoutDate" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div class="grid grid-cols-1 gap-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Amount ($)</label>
+ <input type="number" step="0.01" id="payoutNet" required placeholder="Bank Net" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ </div>
+ <div class="flex gap-3 pt-3">
+ <button type="submit" class="flex-grow py-3 rounded-xl liquid-glass-btn-primary text-white font-bold text-[13px] transition active:scale-95">Save Payout</button>
+ <button type="button" onclick="cancelPayoutEdit()" id="btnCancelPayoutEdit" class="hidden px-5 py-3 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-[13px] transition active:scale-95">Cancel</button>
+ </div>
+ </form>
+ </div>
+
+ <div class="liquid-glass p-6 rounded-3xl lg:col-span-2 space-y-4">
+ <div class="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
+ <h3 class="font-bold text-white text-base drop-shadow-sm">Payout Records</h3>
+ <div class="flex items-center gap-3">
+ <!-- Selection controls -->
+ <button id="btnToggleSelectPayouts" onclick="toggleSelectMode('payouts')" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95">Select</button>
+ <button id="btnBatchDeletePayouts" onclick="deleteSelectedPayouts()" class="hidden px-3 py-1.5 rounded-xl bg-rose-600/80 text-white text-xs font-bold hover:bg-rose-500 transition active:scale-95">Delete Selected (<span id="countSelectedPayouts">0</span>)</button>
+
+ <div class="flex items-center gap-1.5 ml-1">
+ <label class="text-[11px] text-purple-300 font-semibold">Show:</label>
+ <select id="payoutPageSize" onchange="changePageSize('payouts', this.value)" class="px-2 py-1 rounded-lg liquid-glass-input text-xs font-semibold cursor-pointer">
+ <option value="10">10</option>
+ <option value="25">25</option>
+ <option value="50">50</option>
+ <option value="all">ALL</option>
+ </select>
+ </div>
+ </div>
+ </div>
+ <div class="overflow-x-auto custom-scrollbar pb-2">
+ <table class="w-full text-left text-[13px] text-purple-100 min-w-[500px]">
+ <thead>
+ <tr class="text-purple-300 opacity-80 text-[10px] uppercase tracking-wider select-none border-b border-white/10">
+ <th class="py-3 px-2 w-8 hidden col-select-payouts text-center"><input type="checkbox" id="chkSelectAllPayouts" onchange="toggleSelectAll('payouts', this.checked)"></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('payouts', 'date')">Date <span id="sort-payouts-date"></span></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('payouts', 'firm')">Firm <span id="sort-payouts-firm"></span></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('payouts', 'accountDetails')">Size/Type <span id="sort-payouts-accountDetails"></span></th>
+ <th class="py-3 px-3 text-right cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('payouts', 'net')">Amount <span id="sort-payouts-net"></span></th>
+ <th class="py-3 px-3 text-right font-semibold">Action</th>
+ </tr>
+ </thead>
+ <tbody id="tblPayoutsList" class="divide-y divide-white/5"></tbody>
+ </table>
+ </div>
+ <div class="flex items-center justify-end gap-1.5 pt-4 border-t border-white/10" id="payoutsPagination"></div>
+ </div>
+ </div>
+ </section>
+
+ <!-- ================= CONSISTENCY CALCULATOR TAB ================= -->
+ <section id="tabContent-consistency" class="hidden space-y-6">
+ <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+ <!-- Card 1: Target Projection Calculator -->
+ <div class="liquid-glass p-6 rounded-3xl space-y-5">
+ <div class="flex items-center justify-between border-b border-white/10 pb-3">
+ <h3 class="font-bold text-white text-base drop-shadow-sm">Target Projection Calculator</h3>
+ <div class="flex gap-2">
+ <button onclick="saveProjCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn-primary text-white text-xs font-bold transition active:scale-95">Save</button>
+ <button onclick="resetProjCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn text-purple-200 hover:text-white text-xs font-semibold transition active:scale-95">Reset</button>
+ </div>
+ </div>
+ <div class="space-y-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Target Profit ($)</label>
+ <input type="number" id="consTargetProfit" oninput="runConsistencySolver()" placeholder="3000" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div class="grid grid-cols-2 gap-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Rule Cap (%)</label>
+ <input type="number" id="consCapPct" oninput="runConsistencySolver()" placeholder="50" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Min Days</label>
+ <input type="number" id="consMinDays" oninput="runConsistencySolver()" placeholder="2" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ </div>
+
+ <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+ <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
+ <span class="text-[9px] font-bold uppercase text-purple-300">Max Allowed Best Day</span>
+ <div id="projMaxBestDay" class="text-xl font-extrabold text-purple-300 mt-1">$0.00</div>
+ </div>
+ <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
+ <span class="text-[9px] font-bold uppercase text-purple-300">Min Avg Daily Profit</span>
+ <div id="projMinAvg" class="text-xl font-extrabold text-emerald-400 mt-1">$0.00</div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Card 2: Current Progress Calculator (Independent) -->
+ <div class="liquid-glass p-6 rounded-3xl space-y-5">
+ <div class="flex items-center justify-between border-b border-white/10 pb-3">
+ <h3 class="font-bold text-white text-base drop-shadow-sm">Current Progress Calculator</h3>
+ <div class="flex gap-2">
+ <button onclick="saveProgCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn-primary text-white text-xs font-bold transition active:scale-95">Save</button>
+ <button onclick="resetProgCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn text-purple-200 hover:text-white text-xs font-semibold transition active:scale-95">Reset</button>
+ </div>
+ </div>
+ <p class="text-xs text-purple-200 opacity-80">Enter your rules &amp; daily profits to check compliance.</p>
+
+ <!-- Independent Rule Inputs for Progress Tracker -->
+ <div class="space-y-4 border-b border-white/10 pb-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Target Profit ($)</label>
+ <input type="number" id="progTargetProfit" oninput="runProgressTrackerCalc()" placeholder="3000" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div class="grid grid-cols-2 gap-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Rule Cap (%)</label>
+ <input type="number" id="progCapPct" oninput="runProgressTrackerCalc()" placeholder="50" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Min Days</label>
+ <input type="number" id="progMinDays" oninput="runProgressTrackerCalc()" placeholder="2" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ </div>
+ </div>
+ 
+ <div id="dailyInputsContainer" class="space-y-2"></div>
+
+ <button onclick="addDailyInputRow()" class="w-full py-2.5 liquid-glass-btn text-purple-200 rounded-xl text-xs font-bold transition active:scale-95">
+ + Add Trading Day
+ </button>
+
+ <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+ <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
+ <span class="text-[9px] font-bold uppercase text-purple-300">Total Profit To Date</span>
+ <div id="trackTotalProfit" class="text-xl font-extrabold text-white mt-1">$0.00</div>
+ </div>
+ <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
+ <span class="text-[9px] font-bold uppercase text-purple-300">Current Best Day %</span>
+ <div id="trackBestDayPct" class="text-xl font-extrabold text-emerald-400 mt-1">0%</div>
+ </div>
+ </div>
+ <div id="trackStatusMsg" class="text-xs text-center font-semibold pt-1"></div>
+ </div>
+ </div>
+ </section>
+
+ <!-- ================= TARGET CALCULATOR TAB ================= -->
+ <section id="tabContent-target" class="hidden space-y-6">
+ <div class="liquid-glass p-6 rounded-3xl max-w-xl mx-auto space-y-5">
+ <div class="flex items-center justify-between border-b border-white/10 pb-3">
+ <h3 class="font-bold text-white text-base drop-shadow-sm">Target Calculator</h3>
+ <div class="flex gap-2">
+ <button onclick="saveSimpleCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn-primary text-white text-xs font-bold transition active:scale-95">Save</button>
+ <button onclick="resetSimpleCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn text-purple-200 hover:text-white text-xs font-semibold transition active:scale-95">Reset</button>
+ </div>
+ </div>
+ 
+ <div class="space-y-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Target Profit ($)</label>
+ <input type="number" id="simpleTarget" placeholder="3000" step="0.01" oninput="runSimpleTargetCalc()" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Realized P&L ($)</label>
+ <input type="number" id="simpleRPL" placeholder="500" step="0.01" oninput="runSimpleTargetCalc()" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+
+ <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+ <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
+ <span class="text-[9px] font-bold uppercase text-purple-300">Remaining Profit Needed</span>
+ <div id="simpleRemaining" class="text-2xl font-extrabold text-purple-300 mt-1">$0.00</div>
+ </div>
+ <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
+ <span class="text-[9px] font-bold uppercase text-purple-300">Target Progress</span>
+ <div id="simplePct" class="text-2xl font-extrabold text-emerald-400 mt-1">0%</div>
+ </div>
+ </div>
+
+ <div class="w-full bg-black/40 h-3 rounded-full overflow-hidden border border-white/10 mt-3">
+ <div id="simpleProgressBar" class="h-full bg-gradient-to-r from-purple-500 to-emerald-400 transition-all duration-300" style="width: 0%;"></div>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ </main>
+
+ <!-- TAX EXPORT MODAL -->
+ <div id="cpaModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-lg flex items-center justify-center p-4 hidden">
+ <div class="liquid-glass w-full max-w-lg rounded-3xl p-7 relative shadow-2xl">
+ <button onclick="closeCpaModal()" class="absolute top-5 right-5 text-purple-300 hover:text-white transition">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+ </button>
+
+ <div class="space-y-5">
+ <div>
+ <h3 class="text-lg font-bold text-white drop-shadow-sm">Tax Export Settings</h3>
+ <p class="text-[11px] text-purple-200 opacity-80 mt-1">Configure compliance outputs. Status markers are automatically omitted.</p>
+ </div>
+ <div class="grid grid-cols-2 gap-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300 mb-1.5 ml-1">Timeframe</label>
+ <select id="exportTimeframe" onchange="toggleCpaTimeframeDropdowns()" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm cursor-pointer">
+ <option value="all">All Logs</option>
+ <option value="yearly">Yearly Aggregate</option>
+ <option value="quarterly">Quarterly Breakdown</option>
+ <option value="monthly">Monthly Snapshot</option>
+ </select>
+ </div>
+ <div id="exportYearDiv" class="hidden">
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300 mb-1.5 ml-1">Tax Year</label>
+ <select id="exportYear" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm cursor-pointer"></select>
+ </div>
+ </div>
+ <div class="grid grid-cols-2 gap-4">
+ <div id="exportQuarterDiv" class="hidden">
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300 mb-1.5 ml-1">Quarter</label>
+ <select id="exportQuarter" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm cursor-pointer">
+ <option value="1">Q1 (Jan - Mar)</option>
+ <option value="2">Q2 (Apr - Jun)</option>
+ <option value="3">Q3 (Jul - Sep)</option>
+ <option value="4">Q4 (Oct - Dec)</option>
+ </select>
+ </div>
+ <div id="exportMonthDiv" class="hidden">
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300 mb-1.5 ml-1">Month</label>
+ <select id="exportMonth" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm cursor-pointer">
+ <option value="01">January</option><option value="02">February</option><option value="03">March</option>
+ <option value="04">April</option><option value="05">May</option><option value="06">June</option>
+ <option value="07">July</option><option value="08">August</option><option value="09">September</option>
+ <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+ </select>
+ </div>
+ </div>
+ <div class="grid grid-cols-3 gap-3 pt-3 border-t border-white/10">
+ <button onclick="downloadReport('csv')" class="py-3 rounded-xl liquid-glass-btn text-white font-bold text-[11px] transition active:scale-95">CSV Spread</button>
+ <button onclick="downloadReport('excel')" class="py-3 rounded-xl bg-blue-600/80 backdrop-blur-md hover:bg-blue-500 border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] text-white font-bold text-[11px] transition active:scale-95">Excel Book</button>
+ <button onclick="downloadReport('pdf')" class="py-3 rounded-xl bg-rose-600/80 backdrop-blur-md hover:bg-rose-500 border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] text-white font-bold text-[11px] transition active:scale-95">PDF Report</button>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- REMOVAL MODAL -->
+ <div id="confirmModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-lg flex items-center justify-center p-4 hidden">
+ <div class="liquid-glass w-full max-w-sm rounded-3xl p-7 space-y-4 shadow-2xl">
+ <h3 class="text-base font-bold text-white drop-shadow-sm">Confirm Deletion</h3>
+ <p id="confirmModalText" class="text-[13px] text-purple-200 opacity-90">Are you sure you want to permanently erase this log?</p>
+ <div class="flex justify-end gap-3 pt-3">
+ <button id="btnConfirmCancel" class="px-5 py-2.5 liquid-glass-btn text-white rounded-xl font-bold transition active:scale-95 text-xs">Cancel</button>
+ <button id="btnConfirmProceed" class="px-5 py-2.5 bg-rose-600/90 backdrop-blur border border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3)] text-white rounded-xl font-bold transition active:scale-95 text-xs">Delete</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- CORE SCRIPT -->
+ <script>
+ let evaluations = [];
+ let payouts = [];
+ let financeChart = null;
+ let dailyProfits = ['', '', ''];
+
+ let pageSizes = { evals: 10, payouts: 10 };
+ let currentPage = { evals: 1, payouts: 1 };
+ 
+ let sortConfig = {
+ evals: { column: 'date', direction: 'desc' },
+ payouts: { column: 'date', direction: 'desc' }
+ };
+
+ // Multi-select State Variables
+ let selectMode = { evals: false, payouts: false };
+ let selectedIds = { evals: new Set(), payouts: new Set() };
+
+ // Calendar State
+ let calCurrentDate = new Date();
+
+ function showToast(title, text, type = 'emerald') {
+ const id = Date.now();
+ const borderTheme = type === 'rose' ? 'border-rose-500/40 text-rose-300 bg-[rgba(30,15,55,0.8)]' : 'border-emerald-500/40 text-emerald-300 bg-[rgba(30,15,55,0.8)]';
+ const toastHtml = `
+ <div id="toast-${id}" class="p-4 rounded-2xl border ${borderTheme} backdrop-blur-xl shadow-2xl pointer-events-auto flex items-start gap-3 transition-all duration-300 transform translate-y-2 opacity-0">
+ <div class="mt-0.5 font-bold text-[13px] drop-shadow-sm">
+ ${title}: <span class="font-medium text-white">${text}</span>
+ </div>
+ </div>
+ `;
+ document.getElementById('toastContainer').insertAdjacentHTML('beforeend', toastHtml);
+ setTimeout(() => { const item = document.getElementById(`toast-${id}`); if(item) item.classList.remove('translate-y-2', 'opacity-0'); }, 50);
+ setTimeout(() => { const item = document.getElementById(`toast-${id}`); if (item) { item.classList.add('translate-y-2', 'opacity-0'); setTimeout(() => item.remove(), 300); } }, 3500);
+ }
+
+ function askConfirmation(message, onConfirm) {
+ const modal = document.getElementById('confirmModal');
+ document.getElementById('confirmModalText').innerText = message;
+ modal.classList.remove('hidden');
+
+ const btnCancel = document.getElementById('btnConfirmCancel');
+ const btnProceed = document.getElementById('btnConfirmProceed');
+
+ const close = () => { modal.classList.add('hidden'); btnCancel.onclick = null; btnProceed.onclick = null; };
+ btnCancel.onclick = close;
+ btnProceed.onclick = () => { onConfirm(); close(); };
+ }
+
+ function formatCurrency(val) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val || 0); }
+
+ function switchTab(tabName) {
+ const tabs = ['dashboard', 'evaluations', 'payouts', 'consistency', 'target'];
+ tabs.forEach(t => {
+ const btn = document.getElementById(`tabBtn-${t}`);
+ const cnt = document.getElementById(`tabContent-${t}`);
+ if (t === tabName) {
+ btn.className = "px-4 py-2 rounded-xl text-[13px] font-bold transition whitespace-nowrap liquid-glass-btn shadow-sm active:scale-95 text-white";
+ cnt.classList.remove('hidden');
+ cnt.classList.add('animate-fade-in');
+ } else {
+ btn.className = "px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent";
+ cnt.classList.add('hidden');
+ cnt.classList.remove('animate-fade-in');
+ }
+ });
+ if (tabName === 'dashboard') {
+ renderDashboardCalendar();
+ setTimeout(rebuildGraphs, 50);
+ }
+ }
+
+ function onDataChanged() {
+ saveToLocalStorage();
+ updateSummaryMetrics();
+ renderDashboardCalendar();
+ renderEvaluationsTable();
+ renderPayoutsTable();
+ runConsistencySolver();
+ runProgressTrackerCalc();
+ runSimpleTargetCalc();
+ rebuildGraphs();
+ }
+
+ function updateSummaryMetrics() {
+ let totalExpense = 0, totalIncome = 0;
+ evaluations.forEach(e => totalExpense += parseFloat(e.cost) || 0);
+ payouts.forEach(p => totalIncome += parseFloat(p.net !== undefined ? p.net : (p.amount || 0)));
+
+ const netProfit = totalIncome - totalExpense;
+ const roiPercent = totalExpense > 0 ? ((netProfit / totalExpense) * 100).toFixed(1) : '0.0';
+
+ document.getElementById('statNetProfit').innerText = formatCurrency(netProfit);
+ document.getElementById('statTotalPayouts').innerText = formatCurrency(totalIncome);
+ document.getElementById('statTotalExpenses').innerText = formatCurrency(totalExpense);
+
+ document.getElementById('cardROI').innerText = `${roiPercent}%`;
+ document.getElementById('cardROI').className = netProfit >= 0 ? "text-3xl font-black mt-2 text-emerald-400 drop-shadow-md" : "text-3xl font-black mt-2 text-rose-400 drop-shadow-md";
+ document.getElementById('cardPayoutCount').innerText = payouts.length;
+ document.getElementById('cardEvalCount').innerText = evaluations.length;
+
+ const sortedEvals = [...evaluations].sort((a,b) => new Date(b.date) - new Date(a.date));
+ const activeBody = document.getElementById('tblActiveSummary');
+ if (sortedEvals.length === 0) activeBody.innerHTML = `<tr><td colspan="3" class="py-5 text-center text-xs text-purple-300">No evaluations tracked.</td></tr>`;
+ else activeBody.innerHTML = sortedEvals.slice(0, 5).map(e => `<tr class="text-xs hover:bg-white/[0.04] transition"><td class="py-3 px-2 text-purple-200 font-mono">${e.date}</td><td class="py-3 font-semibold text-white">${e.firm} <span class="opacity-70 text-[11px] font-normal ml-1">(${e.type || ''} ${e.size ? (e.size/1000)+'k' : ''})</span></td><td class="py-3 px-2 text-right text-rose-400 font-bold drop-shadow-sm">${formatCurrency(e.cost)}</td></tr>`).join('');
+
+ const sortedPayouts = [...payouts].sort((a,b) => new Date(b.date) - new Date(a.date));
+ const pendingBody = document.getElementById('tblPendingSummary');
+ if (sortedPayouts.length === 0) pendingBody.innerHTML = `<tr><td colspan="3" class="py-5 text-center text-xs text-purple-300">No payouts logged.</td></tr>`;
+ else pendingBody.innerHTML = sortedPayouts.slice(0, 5).map(p => `<tr class="text-xs hover:bg-white/[0.04] transition"><td class="py-3 px-2 text-purple-200 font-mono">${p.date}</td><td class="py-3 font-semibold text-white">${p.firm} <span class="opacity-70 text-[11px] font-normal ml-1">(${p.accountDetails || p.details || 'N/A'})</span></td><td class="py-3 px-2 text-right text-emerald-400 font-bold drop-shadow-sm">${formatCurrency(p.net !== undefined ? p.net : p.amount)}</td></tr>`).join('');
+ }
+
+ /* CALENDAR FUNCTIONS */
+ function changeCalendarMonth(delta) {
+ calCurrentDate.setMonth(calCurrentDate.getMonth() + delta);
+ renderDashboardCalendar();
+ }
+
+ function jumpCalendarToday() {
+ calCurrentDate = new Date();
+ renderDashboardCalendar();
+ }
+
+ function renderDashboardCalendar() {
+ const grid = document.getElementById('dashboardCalendarGrid');
+ if (!grid) return;
+ grid.innerHTML = '';
+
+ const year = calCurrentDate.getFullYear();
+ const month = calCurrentDate.getMonth();
+
+ const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+ document.getElementById('calMonthYearLabel').innerText = `${monthNames[month]} ${year}`;
+
+ const firstDay = new Date(year, month, 1).getDay();
+ const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+ const todayStr = new Date().toISOString().substring(0, 10);
+
+ // Organize data by date
+ const dailySummary = {};
+
+ evaluations.forEach(e => {
+ if (!e.date) return;
+ dailySummary[e.date] = dailySummary[e.date] || { evalCount: 0, evalCost: 0, payoutCount: 0, payoutNet: 0 };
+ dailySummary[e.date].evalCount += 1;
+ dailySummary[e.date].evalCost += parseFloat(e.cost) || 0;
+ });
+
+ payouts.forEach(p => {
+ if (!p.date) return;
+ dailySummary[p.date] = dailySummary[p.date] || { evalCount: 0, evalCost: 0, payoutCount: 0, payoutNet: 0 };
+ dailySummary[p.date].payoutCount += 1;
+ dailySummary[p.date].payoutNet += parseFloat(p.net !== undefined ? p.net : p.amount) || 0;
+ });
+
+ // Blank slots for prior month days
+ for (let i = 0; i < firstDay; i++) {
+ grid.innerHTML += `<div class="h-20 sm:h-24 rounded-2xl border border-white/[0.02] bg-black/10 opacity-30"></div>`;
+ }
+
+ // Render actual calendar days
+ for (let day = 1; day <= daysInMonth; day++) {
+ const monthStr = String(month + 1).padStart(2, '0');
+ const dayStr = String(day).padStart(2, '0');
+ const fullDateStr = `${year}-${monthStr}-${dayStr}`;
+
+ const data = dailySummary[fullDateStr] || { evalCount: 0, evalCost: 0, payoutCount: 0, payoutNet: 0 };
+ const isToday = fullDateStr === todayStr;
+
+ let contentHtml = '';
+ if (data.evalCount > 0) {
+ contentHtml += `<div class="text-[9px] sm:text-[10px] font-bold text-rose-400 leading-tight">-${formatCurrency(data.evalCost)} <span class="opacity-70">(${data.evalCount})</span></div>`;
+ }
+ if (data.payoutCount > 0) {
+ contentHtml += `<div class="text-[9px] sm:text-[10px] font-bold text-emerald-400 leading-tight">+${formatCurrency(data.payoutNet)} <span class="opacity-70">(${data.payoutCount})</span></div>`;
+ }
+
+ const dayCell = `
+ <div class="h-20 sm:h-24 p-1.5 sm:p-2 rounded-2xl border ${isToday ? 'border-purple-500/80 bg-purple-900/20' : 'border-white/5 bg-black/20'} flex flex-col justify-between hover:border-white/20 transition group relative overflow-hidden">
+ <span class="text-[10px] sm:text-xs font-extrabold ${isToday ? 'text-purple-300' : 'text-purple-200/60'}">${day}</span>
+ <div class="space-y-0.5 sm:space-y-1 text-right">
+ ${contentHtml}
+ </div>
+ </div>
+ `;
+ grid.innerHTML += dayCell;
+ }
+ }
+
+ /* MULTI-SELECT FUNCTIONS */
+ function toggleSelectMode(type) {
+ selectMode[type] = !selectMode[type];
+ const btn = document.getElementById(type === 'evals' ? 'btnToggleSelectEvals' : 'btnToggleSelectPayouts');
+ const batchBtn = document.getElementById(type === 'evals' ? 'btnBatchDeleteEvals' : 'btnBatchDeletePayouts');
+ const colSelects = document.querySelectorAll(type === 'evals' ? '.col-select-evals' : '.col-select-payouts');
+
+ if (selectMode[type]) {
+ btn.innerText = 'Cancel Select';
+ btn.className = 'px-3 py-1.5 rounded-xl bg-purple-600/40 text-purple-200 text-xs font-bold hover:text-white transition active:scale-95 border border-purple-500/30';
+ batchBtn.classList.remove('hidden');
+ colSelects.forEach(el => el.classList.remove('hidden'));
+ } else {
+ btn.innerText = 'Select';
+ btn.className = 'px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95';
+ batchBtn.classList.add('hidden');
+ colSelects.forEach(el => el.classList.add('hidden'));
+ selectedIds[type].clear();
+ const masterChk = document.getElementById(type === 'evals' ? 'chkSelectAllEvals' : 'chkSelectAllPayouts');
+ if (masterChk) masterChk.checked = false;
+ updateSelectedCount(type);
+ }
+ type === 'evals' ? renderEvaluationsTable() : renderPayoutsTable();
+ }
+
+ function toggleSelectItem(type, id, isChecked) {
+ if (isChecked) selectedIds[type].add(id);
+ else selectedIds[type].delete(id);
+ updateSelectedCount(type);
+ }
+
+ function toggleSelectAll(type, isChecked) {
+ const items = type === 'evals' ? sortDataset(evaluations, sortConfig.evals) : sortDataset(payouts, sortConfig.payouts);
+ const size = pageSizes[type];
+ const page = currentPage[type];
+ const start = (page - 1) * size;
+ const paginated = items.slice(start, start + size);
+
+ paginated.forEach(item => {
+ if (isChecked) selectedIds[type].add(item.id);
+ else selectedIds[type].delete(item.id);
+ });
+
+ updateSelectedCount(type);
+ type === 'evals' ? renderEvaluationsTable() : renderPayoutsTable();
+ }
+
+ function updateSelectedCount(type) {
+ const countEl = document.getElementById(type === 'evals' ? 'countSelectedEvals' : 'countSelectedPayouts');
+ if (countEl) countEl.innerText = selectedIds[type].size;
+ }
+
+ function deleteSelectedEvals() {
+ const count = selectedIds.evals.size;
+ if (count === 0) return showToast("No Selection", "Please check entries to delete.", "rose");
+ askConfirmation(`Permanently erase ${count} selected evaluation log(s)?`, () => {
+ evaluations = evaluations.filter(e => !selectedIds.evals.has(e.id));
+ selectedIds.evals.clear();
+ updateSelectedCount('evals');
+ onDataChanged();
+ showToast("Batch Delete", `${count} evaluation logs deleted.`, "rose");
+ });
+ }
+
+ function deleteSelectedPayouts() {
+ const count = selectedIds.payouts.size;
+ if (count === 0) return showToast("No Selection", "Please check entries to delete.", "rose");
+ askConfirmation(`Permanently erase ${count} selected payout log(s)?`, () => {
+ payouts = payouts.filter(p => !selectedIds.payouts.has(p.id));
+ selectedIds.payouts.clear();
+ updateSelectedCount('payouts');
+ onDataChanged();
+ showToast("Batch Delete", `${count} payout logs deleted.`, "rose");
+ });
+ }
+
+ function changePageSize(type, size) {
+ pageSizes[type] = size === 'all' ? 999999 : parseInt(size);
+ currentPage[type] = 1;
+ type === 'evals' ? renderEvaluationsTable() : renderPayoutsTable();
+ }
+
+ function setPage(type, page) {
+ currentPage[type] = page;
+ type === 'evals' ? renderEvaluationsTable() : renderPayoutsTable();
+ }
+
+ function renderPaginationControls(type, totalItems) {
+ const containerId = type === 'evals' ? 'evalsPagination' : 'payoutsPagination';
+ const container = document.getElementById(containerId);
+ if(!container) return;
+ container.innerHTML = '';
+ 
+ const limit = pageSizes[type];
+ if (limit >= 999999 || totalItems === 0) return;
+
+ const totalPages = Math.ceil(totalItems / limit) || 1;
+ const curr = currentPage[type];
+
+ const prevBtn = document.createElement('button');
+ prevBtn.className = 'page-btn';
+ prevBtn.innerText = 'Prev';
+ prevBtn.disabled = curr === 1;
+ prevBtn.onclick = () => setPage(type, curr - 1);
+ container.appendChild(prevBtn);
+
+ for(let i = 1; i <= totalPages; i++) {
+ const btn = document.createElement('button');
+ btn.className = `page-btn ${i === curr ? 'active' : ''}`;
+ btn.innerText = i;
+ btn.onclick = () => setPage(type, i);
+ container.appendChild(btn);
+ }
+
+ const nextBtn = document.createElement('button');
+ nextBtn.className = 'page-btn';
+ nextBtn.innerText = 'Next';
+ nextBtn.disabled = curr === totalPages;
+ nextBtn.onclick = () => setPage(type, curr + 1);
+ container.appendChild(nextBtn);
+ }
+
+ function sortDataset(data, config) {
+ if (!config.column) return data;
+ return [...data].sort((a, b) => {
+ let valA = a[config.column], valB = b[config.column];
+ if (config.column === 'date') return config.direction === 'asc' ? new Date(valA) - new Date(valB) : new Date(valB) - new Date(valA);
+ if (typeof valA === 'number') return config.direction === 'asc' ? valA - valB : valB - valA;
+ valA = String(valA || '').toLowerCase(); valB = String(valB || '').toLowerCase();
+ if (valA < valB) return config.direction === 'asc' ? -1 : 1;
+ if (valA > valB) return config.direction === 'asc' ? 1 : -1;
+ return 0;
+ });
+ }
+
+ function toggleSort(tableType, columnName) {
+ const cfg = sortConfig[tableType];
+ if (cfg.column === columnName) cfg.direction = cfg.direction === 'asc' ? 'desc' : 'asc';
+ else { cfg.column = columnName; cfg.direction = 'asc'; }
+ tableType === 'evals' ? renderEvaluationsTable() : renderPayoutsTable();
+ }
+
+ function updateSortIndicators(tableType) {
+ const columns = tableType === 'evals' ? ['date', 'firm', 'type', 'size', 'reference', 'cost'] : ['date', 'firm', 'accountDetails', 'net'];
+ const cfg = sortConfig[tableType];
+ columns.forEach(col => {
+ const el = document.getElementById(`sort-${tableType}-${col}`);
+ if (!el) return;
+ if (cfg.column === col) { el.innerText = cfg.direction === 'asc' ? ' ▲' : ' ▼'; el.className = "text-emerald-400 text-[9px] drop-shadow-sm"; } 
+ else { el.innerText = ' ↕'; el.className = "text-purple-400 text-[9px]"; }
+ });
+ }
+
+ function renderEvaluationsTable() {
+ const tbody = document.getElementById('tblEvaluationsList');
+ if (!tbody) return; updateSortIndicators('evals');
+ const items = sortDataset(evaluations, sortConfig.evals);
+ 
+ if (items.length === 0) { 
+ tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-sm text-purple-300">No logs saved in workspace.</td></tr>`; 
+ renderPaginationControls('evals', 0);
+ return; 
+ }
+
+ const size = pageSizes.evals;
+ const page = currentPage.evals;
+ const start = (page - 1) * size;
+ const paginated = items.slice(start, start + size);
+
+ tbody.innerHTML = paginated.map(e => `
+ <tr class="hover:bg-white/[0.04] transition-colors text-[13px]">
+ <td class="py-3.5 px-2 text-center ${selectMode.evals ? '' : 'hidden'} col-select-evals">
+ <input type="checkbox" ${selectedIds.evals.has(e.id) ? 'checked' : ''} onchange="toggleSelectItem('evals', '${e.id}', this.checked)">
+ </td>
+ <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px]">${e.date}</td>
+ <td class="py-3.5 px-3 font-bold text-white">${e.firm}</td>
+ <td class="py-3.5 px-3 text-purple-100 font-semibold">${e.type || e.accountType || 'N/A'}</td>
+ <td class="py-3.5 px-3 text-purple-100">${formatCurrency(e.size)}</td>
+ <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px] opacity-80">${e.reference || 'N/A'}</td>
+ <td class="py-3.5 px-3 text-right font-black text-rose-400 drop-shadow-sm">${formatCurrency(e.cost)}</td>
+ <td class="py-3.5 px-3 text-right">
+ <div class="flex items-center justify-end gap-3 text-[11px]">
+ <button onclick="editEvaluation('${e.id}')" class="text-purple-300 hover:text-white font-bold transition px-2 py-1 rounded hover:bg-white/5 active:scale-95">Edit</button>
+ <button onclick="deleteEvaluation('${e.id}')" class="text-rose-400/80 hover:text-rose-400 font-bold transition px-2 py-1 rounded hover:bg-rose-500/10 active:scale-95">Del</button>
+ </div>
+ </td>
+ </tr>`).join('');
+
+ renderPaginationControls('evals', items.length);
+ }
+
+ function renderPayoutsTable() {
+ const tbody = document.getElementById('tblPayoutsList');
+ if (!tbody) return; updateSortIndicators('payouts');
+ const items = sortDataset(payouts, sortConfig.payouts);
+
+ if (items.length === 0) { 
+ tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-sm text-purple-300">No payouts logged yet.</td></tr>`; 
+ renderPaginationControls('payouts', 0);
+ return; 
+ }
+
+ const size = pageSizes.payouts;
+ const page = currentPage.payouts;
+ const start = (page - 1) * size;
+ const paginated = items.slice(start, start + size);
+
+ tbody.innerHTML = paginated.map(p => {
+ const details = p.accountDetails || p.details || 'N/A';
+ const amount = p.net !== undefined ? p.net : p.amount;
+ return `
+ <tr class="hover:bg-white/[0.04] transition-colors text-[13px]">
+ <td class="py-3.5 px-2 text-center ${selectMode.payouts ? '' : 'hidden'} col-select-payouts">
+ <input type="checkbox" ${selectedIds.payouts.has(p.id) ? 'checked' : ''} onchange="toggleSelectItem('payouts', '${p.id}', this.checked)">
+ </td>
+ <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px]">${p.date}</td>
+ <td class="py-3.5 px-3 font-bold text-white">${p.firm}</td>
+ <td class="py-3.5 px-3 text-purple-100 font-mono text-[12px] opacity-90">${details}</td>
+ <td class="py-3.5 px-3 text-right font-black text-emerald-400 drop-shadow-sm">${formatCurrency(amount)}</td>
+ <td class="py-3.5 px-3 text-right">
+ <div class="flex items-center justify-end gap-3 text-[11px]">
+ <button onclick="editPayout('${p.id}')" class="text-purple-300 hover:text-white font-bold transition px-2 py-1 rounded hover:bg-white/5 active:scale-95">Edit</button>
+ <button onclick="deletePayout('${p.id}')" class="text-rose-400/80 hover:text-rose-400 font-bold transition px-2 py-1 rounded hover:bg-rose-500/10 active:scale-95">Del</button>
+ </div>
+ </td>
+ </tr>`;
+ }).join('');
+
+ renderPaginationControls('payouts', items.length);
+ }
+
+ function handleEvalSubmit(e) {
+ e.preventDefault();
+ const id = document.getElementById('evalEditId').value;
+ const data = {
+ firm: document.getElementById('evalFirm').value, size: parseFloat(document.getElementById('evalSize').value) || 0,
+ type: document.getElementById('evalType').value, cost: parseFloat(document.getElementById('evalCost').value) || 0,
+ date: document.getElementById('evalDate').value, reference: document.getElementById('evalRef').value || 'N/A'
+ };
+ if (id) { const idx = evaluations.findIndex(item => item.id === id); if (idx !== -1) { data.id = id; evaluations[idx] = data; } showToast("Success", "Evaluation record updated."); } 
+ else { data.id = Date.now().toString(); evaluations.push(data); showToast("Created", "Evaluation added to ledger."); }
+ cancelEvalEdit(); onDataChanged();
+ }
+
+ function editEvaluation(id) {
+ const item = evaluations.find(e => e.id === id); if (!item) return;
+ document.getElementById('evalEditId').value = item.id; document.getElementById('evalFirm').value = item.firm;
+ document.getElementById('evalSize').value = item.size; document.getElementById('evalType').value = item.type || '';
+ document.getElementById('evalCost').value = item.cost; document.getElementById('evalDate').value = item.date;
+ document.getElementById('evalRef').value = item.reference === 'N/A' ? '' : item.reference;
+ document.getElementById('evalFormTitle').innerText = "Edit Evaluation Form"; document.getElementById('btnCancelEvalEdit').classList.remove('hidden');
+ }
+
+ function cancelEvalEdit() { document.getElementById('frmEvaluation').reset(); document.getElementById('evalEditId').value = ''; document.getElementById('evalFormTitle').innerText = "Add Evaluation"; document.getElementById('btnCancelEvalEdit').classList.add('hidden'); }
+ function deleteEvaluation(id) { askConfirmation("Permanently erase this challenge expense item?", () => { evaluations = evaluations.filter(e => e.id !== id); onDataChanged(); showToast("Removed", "Ledger log deleted.", "rose"); }); }
+
+ function handlePayoutSubmit(e) {
+ e.preventDefault();
+ const id = document.getElementById('payoutEditId').value;
+ const data = { firm: document.getElementById('payoutFirm').value, accountDetails: document.getElementById('payoutAccountDetails').value, date: document.getElementById('payoutDate').value, net: parseFloat(document.getElementById('payoutNet').value) || 0 };
+ if (id) { const idx = payouts.findIndex(p => p.id === id); if (idx !== -1) { data.id = id; payouts[idx] = data; } showToast("Success", "Payout updated."); } 
+ else { data.id = Date.now().toString(); payouts.push(data); showToast("Logged", "Income payout recorded."); }
+ cancelPayoutEdit(); onDataChanged();
+ }
+
+ function editPayout(id) {
+ const item = payouts.find(p => p.id === id); if (!item) return;
+ document.getElementById('payoutEditId').value = item.id; document.getElementById('payoutFirm').value = item.firm;
+ document.getElementById('payoutAccountDetails').value = item.accountDetails || item.details || ''; document.getElementById('payoutDate').value = item.date;
+ document.getElementById('payoutNet').value = item.net !== undefined ? item.net : item.amount;
+ document.getElementById('payoutFormTitle').innerText = "Edit Payout Form"; document.getElementById('btnCancelPayoutEdit').classList.remove('hidden');
+ }
+
+ function cancelPayoutEdit() { document.getElementById('frmPayout').reset(); document.getElementById('payoutEditId').value = ''; document.getElementById('payoutFormTitle').innerText = "Log Payout"; document.getElementById('btnCancelPayoutEdit').classList.add('hidden'); }
+ function deletePayout(id) { askConfirmation("Erase this cash-out distribution entry?", () => { payouts = payouts.filter(p => p.id !== id); onDataChanged(); showToast("Removed", "Payout log deleted.", "rose"); }); }
+
+ function runConsistencySolver() {
+ const targetVal = document.getElementById('consTargetProfit').value;
+ const capVal = document.getElementById('consCapPct').value;
+ const minDaysVal = document.getElementById('consMinDays').value;
+
+ const target = targetVal !== '' ? parseFloat(targetVal) : 3000;
+ const capPct = capVal !== '' ? parseFloat(capVal) : 50;
+ const minDays = minDaysVal !== '' ? parseFloat(minDaysVal) : 2;
+
+ const maxBestDay = capPct > 0 ? target * (capPct / 100) : 0;
+ const minAvg = minDays > 0 ? target / minDays : 0;
+
+ document.getElementById('projMaxBestDay').innerText = formatCurrency(maxBestDay);
+ document.getElementById('projMinAvg').innerText = formatCurrency(minAvg);
+ }
+
+ function saveProjCalc() {
+ const projState = {
+ target: document.getElementById('consTargetProfit').value,
+ cap: document.getElementById('consCapPct').value,
+ minDays: document.getElementById('consMinDays').value
+ };
+ localStorage.setItem('proptracker_calc_proj', JSON.stringify(projState));
+ showToast("Saved", "Target Projection state saved.");
+ }
+
+ function resetProjCalc() {
+ document.getElementById('consTargetProfit').value = '';
+ document.getElementById('consCapPct').value = '';
+ document.getElementById('consMinDays').value = '';
+ localStorage.removeItem('proptracker_calc_proj');
+ runConsistencySolver();
+ showToast("Reset", "Target Projection restored to defaults.");
+ }
+
+ function initDailyInputs() {
+ const container = document.getElementById('dailyInputsContainer');
+ container.innerHTML = '';
+ dailyProfits.forEach((val, idx) => {
+ const div = document.createElement('div');
+ div.className = 'flex gap-2 items-center';
+ div.innerHTML = `
+ <input type="number" value="${val}" step="0.01" oninput="updateDailyVal(${idx}, this.value)" placeholder="1000" class="w-full px-3 py-2 rounded-xl liquid-glass-input text-xs font-semibold">
+ <button type="button" onclick="removeDailyInputRow(${idx})" class="px-3 py-2 rounded-xl bg-rose-500/20 text-rose-400 font-bold text-xs hover:bg-rose-500/30">✕</button>
+ `;
+ container.appendChild(div);
+ });
+ }
+
+ function updateDailyVal(idx, val) {
+ dailyProfits[idx] = val;
+ runProgressTrackerCalc();
+ }
+
+ function addDailyInputRow() {
+ dailyProfits.push('');
+ initDailyInputs();
+ runProgressTrackerCalc();
+ }
+
+ function removeDailyInputRow(idx) {
+ dailyProfits.splice(idx, 1);
+ initDailyInputs();
+ runProgressTrackerCalc();
+ }
+
+ function runProgressTrackerCalc() {
+ const parsedProfits = dailyProfits.map(v => (v === '' || v === null || isNaN(parseFloat(v))) ? 1000 : parseFloat(v));
+ const total = parsedProfits.reduce((a, b) => a + b, 0);
+ const best = parsedProfits.length ? Math.max(...parsedProfits) : 0;
+ const bestPct = total > 0 ? (best / total) * 100 : 0;
+
+ const capVal = document.getElementById('progCapPct').value;
+ const capPct = capVal !== '' ? parseFloat(capVal) : 50;
+
+ document.getElementById('trackTotalProfit').innerText = formatCurrency(total);
+ 
+ const pctEl = document.getElementById('trackBestDayPct');
+ pctEl.innerText = bestPct.toFixed(1) + '%';
+ 
+ const msgEl = document.getElementById('trackStatusMsg');
+
+ if(bestPct > capPct) {
+ pctEl.className = 'text-xl font-extrabold text-rose-400 mt-1';
+ msgEl.innerHTML = `<span class="text-rose-400">⚠️ Best day exceeds the ${capPct}% rule cap!</span>`;
+ } else {
+ pctEl.className = 'text-xl font-extrabold text-emerald-400 mt-1';
+ msgEl.innerHTML = `<span class="text-emerald-400">✓ Compliant! Best day is under the ${capPct}% limit.</span>`;
+ }
+ }
+
+ function saveProgCalc() {
+ const progState = {
+ target: document.getElementById('progTargetProfit').value,
+ cap: document.getElementById('progCapPct').value,
+ minDays: document.getElementById('progMinDays').value,
+ dailyProfits: dailyProfits
+ };
+ localStorage.setItem('proptracker_calc_prog', JSON.stringify(progState));
+ showToast("Saved", "Current Progress state saved.");
+ }
+
+ function resetProgCalc() {
+ document.getElementById('progTargetProfit').value = '';
+ document.getElementById('progCapPct').value = '';
+ document.getElementById('progMinDays').value = '';
+ dailyProfits = ['', '', ''];
+ localStorage.removeItem('proptracker_calc_prog');
+ initDailyInputs();
+ runProgressTrackerCalc();
+ showToast("Reset", "Current Progress restored to defaults.");
+ }
+
+ function runSimpleTargetCalc() {
+ const targetVal = document.getElementById('simpleTarget').value;
+ const rplVal = document.getElementById('simpleRPL').value;
+
+ const target = targetVal !== '' ? parseFloat(targetVal) : 3000;
+ const rpl = rplVal !== '' ? parseFloat(rplVal) : 500;
+
+ const remaining = target - rpl;
+ const rawPct = target > 0 ? (rpl / target) * 100 : 0;
+
+ document.getElementById('simpleRemaining').innerText = formatCurrency(remaining);
+ 
+ const pctEl = document.getElementById('simplePct');
+ const barEl = document.getElementById('simpleProgressBar');
+
+ pctEl.innerText = rawPct.toFixed(1) + '%';
+
+ if (rawPct < 0) {
+ pctEl.className = 'text-2xl font-extrabold text-rose-400 mt-1';
+ barEl.className = 'h-full bg-gradient-to-r from-rose-600 to-rose-400 transition-all duration-300';
+ barEl.style.width = Math.min(Math.abs(rawPct), 100) + '%';
+ } else {
+ pctEl.className = 'text-2xl font-extrabold text-emerald-400 mt-1';
+ barEl.className = 'h-full bg-gradient-to-r from-purple-500 to-emerald-400 transition-all duration-300';
+ barEl.style.width = Math.min(rawPct, 100) + '%';
+ }
+ }
+
+ function saveSimpleCalc() {
+ const simpleState = {
+ target: document.getElementById('simpleTarget').value,
+ rpl: document.getElementById('simpleRPL').value
+ };
+ localStorage.setItem('proptracker_calc_simple', JSON.stringify(simpleState));
+ showToast("Saved", "Target Calculator state saved.");
+ }
+
+ function resetSimpleCalc() {
+ document.getElementById('simpleTarget').value = '';
+ document.getElementById('simpleRPL').value = '';
+ localStorage.removeItem('proptracker_calc_simple');
+ runSimpleTargetCalc();
+ showToast("Reset", "Target Calculator restored to defaults.");
+ }
+
+ function rebuildGraphs() {
+ const canvas = document.getElementById('financialChart'); if (!canvas) return;
+ if (financeChart) financeChart.destroy();
+
+ const filterMode = document.getElementById('chartFilter').value;
+ const now = new Date();
+ const currentYear = now.getFullYear();
+ const currentMonthStr = now.toISOString().substring(0, 7);
+
+ const monthlyData = {};
+
+ const isDateAllowed = (dateStr) => {
+ if (!dateStr) return true;
+ const date = new Date(dateStr + 'T00:00:00');
+ if (filterMode === 'ytd') return date.getFullYear() === currentYear;
+ if (filterMode === '6m') {
+ const cutoff = new Date(); cutoff.setMonth(now.getMonth() - 6);
+ return date >= cutoff;
+ }
+ if (filterMode === '3m') {
+ const cutoff = new Date(); cutoff.setMonth(now.getMonth() - 3);
+ return date >= cutoff;
+ }
+ if (filterMode === '1m') return dateStr.substring(0, 7) === currentMonthStr;
+ return true;
+ };
+
+ evaluations.forEach(e => {
+ if (isDateAllowed(e.date)) {
+ const m = e.date ? e.date.substring(0, 7) : 'Unknown';
+ monthlyData[m] = monthlyData[m] || { cost: 0, payouts: 0 };
+ monthlyData[m].cost += parseFloat(e.cost) || 0;
+ }
+ });
+
+ payouts.forEach(p => {
+ if (isDateAllowed(p.date)) {
+ const m = p.date ? p.date.substring(0, 7) : 'Unknown';
+ monthlyData[m] = monthlyData[m] || { cost: 0, payouts: 0 };
+ monthlyData[m].payouts += parseFloat(p.net !== undefined ? p.net : p.amount) || 0;
+ }
+ });
+
+ const labels = Object.keys(monthlyData).sort();
+ const costValues = labels.map(k => monthlyData[k].cost);
+ const payoutValues = labels.map(k => monthlyData[k].payouts);
+
+ financeChart = new Chart(canvas.getContext('2d'), {
+ type: 'bar',
+ data: {
+ labels: labels.length ? labels : ['No Data'],
+ datasets: [
+ {
+ label: 'Eval Spend ($)',
+ data: costValues.length ? costValues : [0],
+ backgroundColor: 'rgba(244, 63, 94, 0.7)',
+ borderColor: '#f43f5e',
+ borderWidth: 1
+ },
+ {
+ label: 'Payouts ($)',
+ data: payoutValues.length ? payoutValues : [0],
+ backgroundColor: 'rgba(16, 185, 129, 0.7)',
+ borderColor: '#10b981',
+ borderWidth: 1
+ }
+ ]
+ },
+ options: {
+ responsive: true, maintainAspectRatio: false,
+ plugins: { legend: { labels: { color: '#e2e8f0', boxWidth: 10, font: { size: 10, family: 'Inter', weight: '600' } } } },
+ scales: {
+ x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#cbd5e1', font: { size: 9 } } },
+ y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#cbd5e1', font: { size: 9 } } }
+ }
+ }
+ });
+ }
+
+ function openCpaModal() {
+ const years = new Set(); evaluations.forEach(e => years.add(e.date.split('-')[0])); payouts.forEach(p => years.add(p.date.split('-')[0]));
+ if (years.size === 0) years.add(new Date().getFullYear().toString());
+ document.getElementById('exportYear').innerHTML = Array.from(years).sort((a,b)=>b-a).map(y => `<option value="${y}">${y}</option>`).join('');
+ document.getElementById('cpaModal').classList.remove('hidden'); toggleCpaTimeframeDropdowns();
+ }
+ function closeCpaModal() { document.getElementById('cpaModal').classList.add('hidden'); }
+ function toggleCpaTimeframeDropdowns() {
+ const t = document.getElementById('exportTimeframe').value;
+ document.getElementById('exportYearDiv').classList.toggle('hidden', t === 'all');
+ document.getElementById('exportQuarterDiv').classList.toggle('hidden', t !== 'quarterly');
+ document.getElementById('exportMonthDiv').classList.toggle('hidden', t !== 'monthly');
+ }
+
+ function downloadReport(format) {
+ const timeframe = document.getElementById('exportTimeframe').value, y = document.getElementById('exportYear').value, q = document.getElementById('exportQuarter').value, m = document.getElementById('exportMonth').value;
+ const records = [];
+ const filter = (dateStr) => {
+ if (timeframe === 'all') return true; const d = new Date(dateStr + 'T00:00:00'); if (d.getFullYear().toString() !== y) return false;
+ if (timeframe === 'yearly') return true; if (timeframe === 'quarterly') return (Math.floor(d.getMonth() / 3) + 1).toString() === q;
+ if (timeframe === 'monthly') return (d.getMonth() + 1).toString().padStart(2, '0') === m; return false;
+ };
+ evaluations.forEach(e => { if (filter(e.date)) records.push({ date: e.date, type: 'Expense', category: 'Evaluation Fee', firm: e.firm, reference: e.reference || 'N/A', amount: -parseFloat(e.cost) }); });
+ payouts.forEach(p => { if (filter(p.date)) records.push({ date: p.date, type: 'Income', category: 'Payout Split', firm: p.firm, reference: p.accountDetails || p.details || 'N/A', amount: parseFloat(p.net !== undefined ? p.net : p.amount) }); });
+ records.sort((a,b) => new Date(a.date) - new Date(b.date));
+ let income = 0, expense = 0; records.forEach(r => r.type === 'Income' ? income += r.amount : expense += Math.abs(r.amount));
+ const title = `Tax_Report_${timeframe}_${Date.now()}`;
+ if (format === 'csv') compileCsv(records, income, expense, `${title}.csv`);
+ if (format === 'excel') compileExcel(records, income, expense, `${title}.xlsx`);
+ if (format === 'pdf') compilePdf(records, income, expense, timeframe, y, q, m, `${title}.pdf`);
+ closeCpaModal();
+ }
+
+ function compileCsv(records, income, expense, filename) {
+ let csv = "Date,Type,Category,Prop Firm,Detail Reference,Amount ($)\n";
+ records.forEach(r => csv += `${r.date},${r.type},${r.category},"${r.firm}","${r.reference}",${r.amount}\n`);
+ csv += `\nSUMMARY,Total Income:,${income}\nSUMMARY,Total Expenses:,${expense}\nSUMMARY,Net Profit:,${income - expense}\n`;
+ const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = filename; document.body.appendChild(link); link.click(); document.body.removeChild(link);
+ showToast("Report Exported", "CSV downloaded successfully.");
+ }
+ function compileExcel(records, income, expense, filename) {
+ const rows = [["Date", "Type", "Category", "Prop Firm", "Detail Reference", "Amount ($)"]];
+ records.forEach(r => rows.push([r.date, r.type, r.category, r.firm, r.reference, r.amount]));
+ rows.push([]), rows.push(["", "", "SUMMARY", "Total Income:", income]), rows.push(["", "", "SUMMARY", "Total Expenses:", -expense]), rows.push(["", "", "SUMMARY", "Net Profit:", income - expense]);
+ const wb = XLSX.utils.book_new(), ws = XLSX.utils.aoa_to_sheet(rows); XLSX.utils.book_append_sheet(wb, ws, "Tax Statement"); XLSX.writeFile(wb, filename);
+ showToast("Report Exported", "Excel file workbook saved.");
+ }
+ function compilePdf(records, income, expense, timeframe, y, q, m, filename) {
+ const { jsPDF } = window.jspdf; const doc = new jsPDF();
+ doc.setFont("Helvetica", "bold").setFontSize(18).setTextColor(15, 23, 42); doc.text("PropTracker Pro - Ledger Statement", 14, 20);
+ doc.setFont("Helvetica", "normal").setFontSize(9).setTextColor(100, 116, 139); doc.text(`Timeframe: ${timeframe.toUpperCase()} | Generated: ${new Date().toLocaleDateString()}`, 14, 26);
+ const body = records.map(r => [r.date, r.type, r.category, r.firm, r.reference, formatCurrency(r.amount)]);
+ doc.autoTable({ startY: 32, head: [["Date", "Type", "Category", "Prop Firm", "Detail Reference", "Amount ($)"]], body: body, theme: 'striped', headStyles: { fillColor: [15, 23, 42], fontSize: 8, fontStyle: 'bold' }, styles: { fontSize: 8 } });
+ const finalY = doc.lastAutoTable.finalY + 12;
+ doc.setFont("Helvetica", "bold").setFontSize(10).setTextColor(15, 23, 42); doc.text("TAXABLE SUMMARY", 14, finalY);
+ doc.setFont("Helvetica", "normal"); doc.text(`Total Income: ${formatCurrency(income)}`, 14, finalY + 6); doc.text(`Total Expenses: -${formatCurrency(expense)}`, 14, finalY + 12);
+ doc.setFont("Helvetica", "bold"); doc.text(`Net Profit: ${formatCurrency(income - expense)}`, 14, finalY + 20);
+ doc.save(filename); showToast("Report Exported", "PDF breakdown created cleanly.");
+ }
+
+ /* UPDATED SIMPLIFIED BACKUP EXPORT FILENAME */
+ function handleExportBackup() {
+ const todayDate = new Date().toISOString().substring(0, 10);
+ const blob = new Blob([JSON.stringify({ evaluations, payouts }, null, 2)], { type: 'application/json' });
+ const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `proptracker_backup_${todayDate}.json`; link.click();
+ showToast("Backup Saved", "JSON schema file downloaded successfully.");
+ }
+
+ function handleImportBackup(e) {
+ const file = e.target.files[0]; if (!file) return;
+ const reader = new FileReader();
+ reader.onload = function(evt) {
+ try { 
+ const parsed = JSON.parse(evt.target.result);
+ 
+ if (Array.isArray(parsed.evaluations) || Array.isArray(parsed.payouts) || Array.isArray(parsed.evals)) {
+ evaluations = parsed.evaluations || parsed.evals || [];
+ payouts = parsed.payouts || [];
+ onDataChanged(); 
+ showToast("Success", "Workspace metrics populated from backup.");
+ } else {
+ showToast("Import Failed", "Invalid JSON template layout.", "rose");
+ }
+ } 
+ catch (err) { showToast("Import Failed", "Invalid JSON template layout.", "rose"); }
+ }; reader.readAsText(file);
+ }
+
+ function saveToLocalStorage() { 
+ localStorage.setItem('proptracker_evaluations', JSON.stringify(evaluations)); 
+ localStorage.setItem('proptracker_payouts', JSON.stringify(payouts)); 
+ }
+
+ function loadCalculatorsFromLocalStorage() {
+ // 1. Target Projection
+ const savedProj = localStorage.getItem('proptracker_calc_proj');
+ if (savedProj) {
+ try {
+ const p = JSON.parse(savedProj);
+ if (p.target !== undefined) document.getElementById('consTargetProfit').value = p.target;
+ if (p.cap !== undefined) document.getElementById('consCapPct').value = p.cap;
+ if (p.minDays !== undefined) document.getElementById('consMinDays').value = p.minDays;
+ } catch(e){}
+ }
+
+ // 2. Current Progress
+ const savedProg = localStorage.getItem('proptracker_calc_prog');
+ if (savedProg) {
+ try {
+ const pr = JSON.parse(savedProg);
+ if (pr.target !== undefined) document.getElementById('progTargetProfit').value = pr.target;
+ if (pr.cap !== undefined) document.getElementById('progCapPct').value = pr.cap;
+ if (pr.minDays !== undefined) document.getElementById('progMinDays').value = pr.minDays;
+ if (Array.isArray(pr.dailyProfits)) dailyProfits = pr.dailyProfits;
+ } catch(e){}
+ }
+
+ // 3. Target Calculator
+ const savedSimple = localStorage.getItem('proptracker_calc_simple');
+ if (savedSimple) {
+ try {
+ const s = JSON.parse(savedSimple);
+ if (s.target !== undefined) document.getElementById('simpleTarget').value = s.target;
+ if (s.rpl !== undefined) document.getElementById('simpleRPL').value = s.rpl;
+ } catch(e){}
+ }
+ }
+
+ function loadFromLocalStorage() {
+ const evs = localStorage.getItem('proptracker_evaluations'), pays = localStorage.getItem('proptracker_payouts');
+ evaluations = evs ? JSON.parse(evs) : []; payouts = pays ? JSON.parse(pays) : [];
+ loadCalculatorsFromLocalStorage();
+ initDailyInputs();
+ onDataChanged();
+ }
+
+ window.addEventListener('load', () => { loadFromLocalStorage(); });
+ </script>
 </body>
 </html>
