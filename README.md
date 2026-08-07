@@ -19,5 +19,5 @@
   - Changed settings menu to hamburger menu
   - Moved Tax Report to new menu
   - Updated Google sync and syncing indicator to help with mobile visualization
-
+ 
 ----- <b><i>v2.2</b></i> -----
