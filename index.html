@@ -30,7 +30,7 @@
  color: #f8fafc;
  }
  
-.ambient-bg {
+ .ambient-bg {
  position: fixed;
  top: 0; left: 0; width: 100vw; height: 100vh;
  z-index: -1;
@@ -164,7 +164,7 @@
  </svg>
  </div>
  <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-2 drop-shadow-md">
- PropTracker <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm">PRO</span><span style="font-size: 0.75rem; opacity: 0.5; margin-top: 2px;"><i>v2.1</i></span>
+ PropTracker <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm">PRO</span><span style="font-size: 0.75rem; opacity: 0.5; margin-top: 2px;"><i>v2.2</i></span>
  </h1>
  </div>
 
@@ -176,6 +176,13 @@
  <span id="syncText" class="hidden sm:inline opacity-90">Local Only</span>
  </div>
 
+ <!-- Manual Cloud Sync Button -->
+ <button onclick="triggerManualSync()" class="p-2 rounded-xl liquid-glass-btn text-purple-200 hover:text-white transition active:scale-95 flex items-center justify-center" title="Manual Cloud Sync to proptracker_data.json">
+ <svg id="manualSyncIcon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+ <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+ </svg>
+ </button>
+
  <!-- Google Connect/Login Button -->
  <button id="btnHeaderAuthDrive" onclick="handleAuthDrive()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl liquid-glass-btn text-[11px] font-semibold text-purple-100 transition active:scale-95">
  <svg class="w-3.5 h-3.5 text-purple-300" fill="currentColor" viewBox="0 0 24 24">
@@ -184,7 +191,7 @@
  <span id="btnHeaderAuthText" class="whitespace-nowrap">Sync</span>
  </button>
 
- <!-- 3-Line Hamburger Menu Icon (Circular styling retained) -->
+ <!-- Hamburger Menu Icon -->
  <button onclick="openSettingsModal()" class="w-8 h-8 rounded-full bg-purple-600/30 border border-purple-500/40 text-purple-200 hover:text-white flex items-center justify-center transition active:scale-95 shadow-sm" title="Menu & Options">
  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
  <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -198,7 +205,7 @@
  <div class="border-b border-white/10 px-4 sm:px-6 bg-[#120624]/90 backdrop-blur-xl">
  <div class="max-w-7xl mx-auto flex gap-2.5 overflow-x-auto py-3 custom-scrollbar">
  <button onclick="switchTab('dashboard')" id="tabBtn-dashboard" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap liquid-glass-btn shadow-sm active:scale-95">
- Dashboard Overview
+ Dashboard
  </button>
  <button onclick="switchTab('evaluations')" id="tabBtn-evaluations" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
  Evaluation Accounts
@@ -265,9 +272,11 @@
  <div class="flex items-center gap-1.5 sm:gap-2">
  <button onclick="changeCalendarMonth(-1)" class="px-2.5 py-1 rounded-lg liquid-glass-btn text-xs font-bold text-purple-200 hover:text-white transition active:scale-95">◀</button>
  
- <select id="calSelectMonth" onchange="onCalendarSelectChange()" class="px-2 py-1 rounded-lg liquid-glass-input text-xs font-bold text-white cursor-pointer"></select>
- <select id="calSelectYear" onchange="onCalendarSelectChange()" class="px-2 py-1 rounded-lg liquid-glass-input text-xs font-bold text-white cursor-pointer"></select>
- 
+ <!-- Centered Date Picker Button -->
+ <button onclick="openCalPickerModal()" id="btnCalPickerLabel" class="px-3.5 py-1.5 rounded-xl liquid-glass-btn text-xs font-bold text-white hover:text-purple-200 transition active:scale-95 flex items-center gap-1.5">
+ Loading...
+ </button>
+
  <button onclick="changeCalendarMonth(1)" class="px-2.5 py-1 rounded-lg liquid-glass-btn text-xs font-bold text-purple-200 hover:text-white transition active:scale-95">▶</button>
  <button onclick="jumpCalendarToday()" class="px-3 py-1 rounded-lg liquid-glass-btn text-xs font-semibold text-purple-300 hover:text-white transition active:scale-95 ml-1">Today</button>
  </div>
@@ -348,9 +357,8 @@
  <section id="tabContent-evaluations" class="hidden space-y-6">
  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
  <div class="liquid-glass p-6 rounded-3xl h-fit space-y-5">
- <h3 id="evalFormTitle" class="font-bold text-white text-base border-b border-white/10 pb-3 drop-shadow-sm">Add Evaluation</h3>
+ <h3 class="font-bold text-white text-base border-b border-white/10 pb-3 drop-shadow-sm">Add Evaluation</h3>
  <form id="frmEvaluation" onsubmit="handleEvalSubmit(event)" class="space-y-4">
- <input type="hidden" id="evalEditId">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
  <input type="text" id="evalFirm" required placeholder="e.g. Apex, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
@@ -381,7 +389,6 @@
  </div>
  <div class="flex gap-3 pt-3">
  <button type="submit" class="flex-grow py-3 rounded-xl liquid-glass-btn-primary text-white font-bold text-[13px] transition active:scale-95">Save Challenge</button>
- <button type="button" onclick="cancelEvalEdit()" id="btnCancelEvalEdit" class="hidden px-5 py-3 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-[13px] transition active:scale-95">Cancel</button>
  </div>
  </form>
  </div>
@@ -430,9 +437,8 @@
  <section id="tabContent-payouts" class="hidden space-y-6">
  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
  <div class="liquid-glass p-6 rounded-3xl h-fit space-y-5">
- <h3 id="payoutFormTitle" class="font-bold text-white text-base border-b border-white/10 pb-3 drop-shadow-sm">Log Payout</h3>
+ <h3 class="font-bold text-white text-base border-b border-white/10 pb-3 drop-shadow-sm">Log Payout</h3>
  <form id="frmPayout" onsubmit="handlePayoutSubmit(event)" class="space-y-4">
- <input type="hidden" id="payoutEditId">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
  <input type="text" id="payoutFirm" required placeholder="e.g. Topstep, Apex" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
@@ -453,7 +459,6 @@
  </div>
  <div class="flex gap-3 pt-3">
  <button type="submit" class="flex-grow py-3 rounded-xl liquid-glass-btn-primary text-white font-bold text-[13px] transition active:scale-95">Save Payout</button>
- <button type="button" onclick="cancelPayoutEdit()" id="btnCancelPayoutEdit" class="hidden px-5 py-3 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-[13px] transition active:scale-95">Cancel</button>
  </div>
  </form>
  </div>
@@ -537,7 +542,7 @@
  </div>
  </div>
 
- <!-- Card 2: Current Progress Calculator (Independent) -->
+ <!-- Card 2: Current Progress Calculator -->
  <div class="liquid-glass p-6 rounded-3xl space-y-5">
  <div class="flex items-center justify-between border-b border-white/10 pb-3">
  <h3 class="font-bold text-white text-base drop-shadow-sm">Current Progress Calculator</h3>
@@ -627,7 +632,141 @@
 
  </main>
 
- <!-- SETTINGS & GOOGLE DRIVE MODAL -->
+ <!-- EDIT EVALUATION MODAL -->
+ <div id="editEvalModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-lg flex items-center justify-center p-4 hidden">
+ <div class="liquid-glass w-full max-w-lg rounded-3xl p-7 relative shadow-2xl space-y-5">
+ <button onclick="closeEditEvalModal()" class="absolute top-5 right-5 text-purple-300 hover:text-white transition">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+ </button>
+ <h3 class="text-lg font-bold text-white drop-shadow-sm border-b border-white/10 pb-3">Edit Evaluation Entry</h3>
+ <form id="frmModalEvaluation" onsubmit="handleModalEvalSubmit(event)" class="space-y-4">
+ <input type="hidden" id="modalEvalEditId">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
+ <input type="text" id="modalEvalFirm" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div class="grid grid-cols-2 gap-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size ($)</label>
+ <input type="number" id="modalEvalSize" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Type</label>
+ <input type="text" id="modalEvalType" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ </div>
+ <div class="grid grid-cols-2 gap-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Cost ($)</label>
+ <input type="number" step="0.01" id="modalEvalCost" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Purchase Date</label>
+ <input type="date" id="modalEvalDate" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Reference/ID (Optional)</label>
+ <input type="text" id="modalEvalRef" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div class="flex gap-3 pt-3">
+ <button type="submit" class="flex-grow py-3 rounded-xl liquid-glass-btn-primary text-white font-bold text-[13px] transition active:scale-95">Update Evaluation</button>
+ <button type="button" onclick="closeEditEvalModal()" class="px-5 py-3 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-[13px] transition active:scale-95">Cancel</button>
+ </div>
+ </form>
+ </div>
+ </div>
+
+ <!-- EDIT PAYOUT MODAL -->
+ <div id="editPayoutModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-lg flex items-center justify-center p-4 hidden">
+ <div class="liquid-glass w-full max-w-lg rounded-3xl p-7 relative shadow-2xl space-y-5">
+ <button onclick="closeEditPayoutModal()" class="absolute top-5 right-5 text-purple-300 hover:text-white transition">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+ </button>
+ <h3 class="text-lg font-bold text-white drop-shadow-sm border-b border-white/10 pb-3">Edit Payout Entry</h3>
+ <form id="frmModalPayout" onsubmit="handleModalPayoutSubmit(event)" class="space-y-4">
+ <input type="hidden" id="modalPayoutEditId">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
+ <input type="text" id="modalPayoutFirm" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size/Type</label>
+ <input type="text" id="modalPayoutAccountDetails" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Date Logged</label>
+ <input type="date" id="modalPayoutDate" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Amount ($)</label>
+ <input type="number" step="0.01" id="modalPayoutNet" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div class="flex gap-3 pt-3">
+ <button type="submit" class="flex-grow py-3 rounded-xl liquid-glass-btn-primary text-white font-bold text-[13px] transition active:scale-95">Update Payout</button>
+ <button type="button" onclick="closeEditPayoutModal()" class="px-5 py-3 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-[13px] transition active:scale-95">Cancel</button>
+ </div>
+ </form>
+ </div>
+ </div>
+
+ <!-- CALENDAR MONTH/YEAR PICKER MODAL -->
+ <div id="calPickerModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-lg flex items-center justify-center p-4 hidden">
+ <div class="liquid-glass w-full max-w-xs rounded-3xl p-6 relative shadow-2xl space-y-4">
+ <button onclick="closeCalPickerModal()" class="absolute top-4 right-4 text-purple-300 hover:text-white transition">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+ </button>
+ <h3 class="text-base font-bold text-white drop-shadow-sm border-b border-white/10 pb-2">Select Calendar Date</h3>
+ <div class="space-y-3">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1">Month</label>
+ <select id="calModalSelectMonth" class="w-full px-3 py-2 rounded-xl liquid-glass-input text-sm cursor-pointer"></select>
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1">Year</label>
+ <select id="calModalSelectYear" class="w-full px-3 py-2 rounded-xl liquid-glass-input text-sm cursor-pointer"></select>
+ </div>
+ </div>
+ <div class="pt-2 flex justify-end gap-2">
+ <button onclick="closeCalPickerModal()" class="px-4 py-2 rounded-xl liquid-glass-btn text-purple-200 text-xs font-semibold">Cancel</button>
+ <button onclick="applyCalPickerModal()" class="px-4 py-2 rounded-xl liquid-glass-btn-primary text-white text-xs font-bold">Apply</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- CUSTOM MODERN GOOGLE DRIVE FOLDER PICKER MODAL -->
+ <div id="customDrivePickerModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-xl flex items-center justify-center p-4 hidden">
+ <div class="liquid-glass w-full max-w-md rounded-3xl p-6 relative shadow-2xl flex flex-col max-h-[80vh]">
+ <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-3">
+ <h3 class="text-base font-bold text-white drop-shadow-sm flex items-center gap-2">
+ <svg class="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h4l2 2h8a2 2 0 012 2v10a2 2 0 01-2 2z"/></svg>
+ Select Cloud Folder
+ </h3>
+ <button onclick="closeCustomDrivePickerModal()" class="text-purple-300 hover:text-white transition">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+ </button>
+ </div>
+
+ <!-- Navigation Breadcrumb -->
+ <div id="driveBreadcrumbs" class="flex items-center gap-1 text-xs text-purple-300/80 pb-2 border-b border-white/5 overflow-x-auto">
+ <span class="hover:text-white cursor-pointer font-semibold" onclick="navDriveFolder('root', 'My Drive')">My Drive</span>
+ </div>
+
+ <!-- Folder List -->
+ <div id="driveFolderList" class="flex-grow overflow-y-auto custom-scrollbar my-3 space-y-1 pr-1">
+ <div class="text-center py-8 text-xs text-purple-300/60">Fetching Google Drive folders...</div>
+ </div>
+
+ <div class="pt-3 border-t border-white/10 flex justify-between items-center">
+ <span id="currentSelectedFolderName" class="text-xs text-purple-200 font-semibold truncate max-w-[200px]">My Drive</span>
+ <button onclick="confirmSelectedDriveFolder()" class="px-5 py-2.5 rounded-xl liquid-glass-btn-primary text-white text-xs font-bold transition active:scale-95">
+ Select This Folder
+ </button>
+ </div>
+ </div>
+ </div>
+
+ <!-- SETTINGS MODAL -->
  <div id="settingsModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-lg flex items-center justify-center p-4 hidden">
  <div class="liquid-glass w-full max-w-md rounded-3xl p-7 relative shadow-2xl space-y-5">
  <button onclick="closeSettingsModal()" class="absolute top-5 right-5 text-purple-300 hover:text-white transition">
@@ -788,21 +927,38 @@
  let driveFolderName = localStorage.getItem('proptracker_gdrive_folder_name') || null;
  let driveFileId = localStorage.getItem('proptracker_gdrive_file_id') || null;
 
+ let customDrivePickerStack = [];
+ let currentBrowsingFolder = { id: 'root', name: 'My Drive' };
+
  function updateSyncIndicator(status) {
  const dot = document.getElementById('syncDot');
  const text = document.getElementById('syncText');
+ const icon = document.getElementById('manualSyncIcon');
  if (!dot || !text) return;
 
  if (status === 'synced') {
  dot.className = "w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]";
  text.innerText = "Synced";
+ if (icon) icon.classList.remove('animate-spin');
  } else if (status === 'syncing') {
  dot.className = "w-2 h-2 rounded-full bg-amber-400 animate-pulse shadow-[0_0_8px_rgba(251,191,36,0.8)]";
  text.innerText = "Syncing...";
+ if (icon) icon.classList.add('animate-spin');
  } else {
  dot.className = "w-2 h-2 rounded-full bg-slate-500";
  text.innerText = "Local Only";
+ if (icon) icon.classList.remove('animate-spin');
  }
+ }
+
+ function triggerManualSync() {
+ if (!driveAccessToken) {
+ showToast("Not Connected", "Connecting to Google Drive...", "rose");
+ handleAuthDrive();
+ return;
+ }
+ showToast("Sync Triggered", "Syncing data to proptracker_data.json...");
+ syncToGoogleDrive();
  }
 
  function showToast(title, text, type = 'emerald') {
@@ -907,20 +1063,12 @@
  renderDashboardCalendar();
  }
 
- function onCalendarSelectChange() {
- const m = parseInt(document.getElementById('calSelectMonth').value);
- const y = parseInt(document.getElementById('calSelectYear').value);
- calCurrentDate.setFullYear(y, m, 1);
- renderDashboardCalendar();
- }
-
- function updateCalendarControls(year, month) {
- const monthSelect = document.getElementById('calSelectMonth');
- const yearSelect = document.getElementById('calSelectYear');
- if (!monthSelect || !yearSelect) return;
-
+ function openCalPickerModal() {
  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
- monthSelect.innerHTML = monthNames.map((name, idx) => `<option value="${idx}" ${idx === month ? 'selected' : ''}>${name}</option>`).join('');
+ const monthSelect = document.getElementById('calModalSelectMonth');
+ const yearSelect = document.getElementById('calModalSelectYear');
+
+ monthSelect.innerHTML = monthNames.map((name, idx) => `<option value="${idx}" ${idx === calCurrentDate.getMonth() ? 'selected' : ''}>${name}</option>`).join('');
 
  const years = new Set();
  const currentYr = new Date().getFullYear();
@@ -929,7 +1077,21 @@
  payouts.forEach(p => { if (p.date) years.add(new Date(p.date + 'T00:00:00').getFullYear()); });
 
  const sortedYears = Array.from(years).sort((a,b) => a - b);
- yearSelect.innerHTML = sortedYears.map(y => `<option value="${y}" ${y === year ? 'selected' : ''}>${y}</option>`).join('');
+ yearSelect.innerHTML = sortedYears.map(y => `<option value="${y}" ${y === calCurrentDate.getFullYear() ? 'selected' : ''}>${y}</option>`).join('');
+
+ document.getElementById('calPickerModal').classList.remove('hidden');
+ }
+
+ function closeCalPickerModal() {
+ document.getElementById('calPickerModal').classList.add('hidden');
+ }
+
+ function applyCalPickerModal() {
+ const m = parseInt(document.getElementById('calModalSelectMonth').value);
+ const y = parseInt(document.getElementById('calModalSelectYear').value);
+ calCurrentDate.setFullYear(y, m, 1);
+ closeCalPickerModal();
+ renderDashboardCalendar();
  }
 
  function renderDashboardCalendar() {
@@ -940,11 +1102,12 @@
  const year = calCurrentDate.getFullYear();
  const month = calCurrentDate.getMonth();
 
- updateCalendarControls(year, month);
+ const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+ const btnLabel = document.getElementById('btnCalPickerLabel');
+ if (btnLabel) btnLabel.innerText = `${monthNames[month]} ${year}`;
 
  const firstDay = new Date(year, month, 1).getDay();
  const daysInMonth = new Date(year, month + 1, 0).getDate();
-
  const todayStr = new Date().toISOString().substring(0, 10);
 
  const dailySummary = {};
@@ -977,10 +1140,10 @@
 
  let contentHtml = '';
  if (data.evalCount > 0) {
- contentHtml += `<div class="text-xs sm:text-sm font-bold text-rose-400 leading-tight">-${formatCurrency(data.evalCost)} <span class="opacity-70">(${data.evalCount})</span></div>`;
+ contentHtml += `<div class="text-[10px] sm:text-[11px] font-bold text-rose-400 leading-tight">-${formatCurrency(data.evalCost)} <span class="opacity-70">(${data.evalCount})</span></div>`;
  }
  if (data.payoutCount > 0) {
- contentHtml += `<div class="text-xs sm:text-sm font-bold text-emerald-400 leading-tight">+${formatCurrency(data.payoutNet)} <span class="opacity-70">(${data.payoutCount})</span></div>`;
+ contentHtml += `<div class="text-[10px] sm:text-[11px] font-bold text-emerald-400 leading-tight">+${formatCurrency(data.payoutNet)} <span class="opacity-70">(${data.payoutCount})</span></div>`;
  }
 
  const dayCell = `
@@ -1176,7 +1339,7 @@
  <td class="py-3.5 px-3 text-right font-black text-rose-400 drop-shadow-sm">${formatCurrency(e.cost)}</td>
  <td class="py-3.5 px-3 text-right">
  <div class="flex items-center justify-end gap-3 text-[11px]">
- <button onclick="editEvaluation('${e.id}')" class="text-purple-300 hover:text-white font-bold transition px-2 py-1 rounded hover:bg-white/5 active:scale-95">Edit</button>
+ <button onclick="openEditEvalModal('${e.id}')" class="text-purple-300 hover:text-white font-bold transition px-2 py-1 rounded hover:bg-white/5 active:scale-95">Edit</button>
  <button onclick="deleteEvaluation('${e.id}')" class="text-rose-400/80 hover:text-rose-400 font-bold transition px-2 py-1 rounded hover:bg-rose-500/10 active:scale-95">Del</button>
  </div>
  </td>
@@ -1215,7 +1378,7 @@
  <td class="py-3.5 px-3 text-right font-black text-emerald-400 drop-shadow-sm">${formatCurrency(amount)}</td>
  <td class="py-3.5 px-3 text-right">
  <div class="flex items-center justify-end gap-3 text-[11px]">
- <button onclick="editPayout('${p.id}')" class="text-purple-300 hover:text-white font-bold transition px-2 py-1 rounded hover:bg-white/5 active:scale-95">Edit</button>
+ <button onclick="openEditPayoutModal('${p.id}')" class="text-purple-300 hover:text-white font-bold transition px-2 py-1 rounded hover:bg-white/5 active:scale-95">Edit</button>
  <button onclick="deletePayout('${p.id}')" class="text-rose-400/80 hover:text-rose-400 font-bold transition px-2 py-1 rounded hover:bg-rose-500/10 active:scale-95">Del</button>
  </div>
  </td>
@@ -1227,47 +1390,97 @@
 
  function handleEvalSubmit(e) {
  e.preventDefault();
- const id = document.getElementById('evalEditId').value;
  const data = {
+ id: Date.now().toString(),
  firm: document.getElementById('evalFirm').value, size: parseFloat(document.getElementById('evalSize').value) || 0,
  type: document.getElementById('evalType').value, cost: parseFloat(document.getElementById('evalCost').value) || 0,
  date: document.getElementById('evalDate').value, reference: document.getElementById('evalRef').value || 'N/A'
  };
- if (id) { const idx = evaluations.findIndex(item => item.id === id); if (idx !== -1) { data.id = id; evaluations[idx] = data; } showToast("Success", "Evaluation record updated."); } 
- else { data.id = Date.now().toString(); evaluations.push(data); showToast("Created", "Evaluation added to ledger."); }
- cancelEvalEdit(); onDataChanged();
+ evaluations.push(data);
+ showToast("Created", "Evaluation added to ledger.");
+ document.getElementById('frmEvaluation').reset();
+ onDataChanged();
  }
 
- function editEvaluation(id) {
+ function openEditEvalModal(id) {
  const item = evaluations.find(e => e.id === id); if (!item) return;
- document.getElementById('evalEditId').value = item.id; document.getElementById('evalFirm').value = item.firm;
- document.getElementById('evalSize').value = item.size; document.getElementById('evalType').value = item.type || '';
- document.getElementById('evalCost').value = item.cost; document.getElementById('evalDate').value = item.date;
- document.getElementById('evalRef').value = item.reference === 'N/A' ? '' : item.reference;
- document.getElementById('evalFormTitle').innerText = "Edit Evaluation Form"; document.getElementById('btnCancelEvalEdit').classList.remove('hidden');
+ document.getElementById('modalEvalEditId').value = item.id;
+ document.getElementById('modalEvalFirm').value = item.firm;
+ document.getElementById('modalEvalSize').value = item.size;
+ document.getElementById('modalEvalType').value = item.type || '';
+ document.getElementById('modalEvalCost').value = item.cost;
+ document.getElementById('modalEvalDate').value = item.date;
+ document.getElementById('modalEvalRef').value = item.reference === 'N/A' ? '' : item.reference;
+ document.getElementById('editEvalModal').classList.remove('hidden');
  }
 
- function cancelEvalEdit() { document.getElementById('frmEvaluation').reset(); document.getElementById('evalEditId').value = ''; document.getElementById('evalFormTitle').innerText = "Add Evaluation"; document.getElementById('btnCancelEvalEdit').classList.add('hidden'); }
+ function closeEditEvalModal() {
+ document.getElementById('editEvalModal').classList.add('hidden');
+ }
+
+ function handleModalEvalSubmit(e) {
+ e.preventDefault();
+ const id = document.getElementById('modalEvalEditId').value;
+ const idx = evaluations.findIndex(item => item.id === id);
+ if (idx !== -1) {
+ evaluations[idx] = {
+ id: id,
+ firm: document.getElementById('modalEvalFirm').value,
+ size: parseFloat(document.getElementById('modalEvalSize').value) || 0,
+ type: document.getElementById('modalEvalType').value,
+ cost: parseFloat(document.getElementById('modalEvalCost').value) || 0,
+ date: document.getElementById('modalEvalDate').value,
+ reference: document.getElementById('modalEvalRef').value || 'N/A'
+ };
+ showToast("Success", "Evaluation record updated.");
+ }
+ closeEditEvalModal();
+ onDataChanged();
+ }
+
  function deleteEvaluation(id) { askConfirmation("Permanently erase this challenge expense item?", () => { evaluations = evaluations.filter(e => e.id !== id); onDataChanged(); showToast("Removed", "Ledger log deleted.", "rose"); }); }
 
  function handlePayoutSubmit(e) {
  e.preventDefault();
- const id = document.getElementById('payoutEditId').value;
- const data = { firm: document.getElementById('payoutFirm').value, accountDetails: document.getElementById('payoutAccountDetails').value, date: document.getElementById('payoutDate').value, net: parseFloat(document.getElementById('payoutNet').value) || 0 };
- if (id) { const idx = payouts.findIndex(p => p.id === id); if (idx !== -1) { data.id = id; payouts[idx] = data; } showToast("Success", "Payout updated."); } 
- else { data.id = Date.now().toString(); payouts.push(data); showToast("Logged", "Income payout recorded."); }
- cancelPayoutEdit(); onDataChanged();
+ const data = { id: Date.now().toString(), firm: document.getElementById('payoutFirm').value, accountDetails: document.getElementById('payoutAccountDetails').value, date: document.getElementById('payoutDate').value, net: parseFloat(document.getElementById('payoutNet').value) || 0 };
+ payouts.push(data);
+ showToast("Logged", "Income payout recorded.");
+ document.getElementById('frmPayout').reset();
+ onDataChanged();
  }
 
- function editPayout(id) {
+ function openEditPayoutModal(id) {
  const item = payouts.find(p => p.id === id); if (!item) return;
- document.getElementById('payoutEditId').value = item.id; document.getElementById('payoutFirm').value = item.firm;
- document.getElementById('payoutAccountDetails').value = item.accountDetails || item.details || ''; document.getElementById('payoutDate').value = item.date;
- document.getElementById('payoutNet').value = item.net !== undefined ? item.net : item.amount;
- document.getElementById('payoutFormTitle').innerText = "Edit Payout Form"; document.getElementById('btnCancelPayoutEdit').classList.remove('hidden');
+ document.getElementById('modalPayoutEditId').value = item.id;
+ document.getElementById('modalPayoutFirm').value = item.firm;
+ document.getElementById('modalPayoutAccountDetails').value = item.accountDetails || item.details || '';
+ document.getElementById('modalPayoutDate').value = item.date;
+ document.getElementById('modalPayoutNet').value = item.net !== undefined ? item.net : item.amount;
+ document.getElementById('editPayoutModal').classList.remove('hidden');
  }
 
- function cancelPayoutEdit() { document.getElementById('frmPayout').reset(); document.getElementById('payoutEditId').value = ''; document.getElementById('payoutFormTitle').innerText = "Log Payout"; document.getElementById('btnCancelPayoutEdit').classList.add('hidden'); }
+ function closeEditPayoutModal() {
+ document.getElementById('editPayoutModal').classList.add('hidden');
+ }
+
+ function handleModalPayoutSubmit(e) {
+ e.preventDefault();
+ const id = document.getElementById('modalPayoutEditId').value;
+ const idx = payouts.findIndex(p => p.id === id);
+ if (idx !== -1) {
+ payouts[idx] = {
+ id: id,
+ firm: document.getElementById('modalPayoutFirm').value,
+ accountDetails: document.getElementById('modalPayoutAccountDetails').value,
+ date: document.getElementById('modalPayoutDate').value,
+ net: parseFloat(document.getElementById('modalPayoutNet').value) || 0
+ };
+ showToast("Success", "Payout updated.");
+ }
+ closeEditPayoutModal();
+ onDataChanged();
+ }
+
  function deletePayout(id) { askConfirmation("Erase this cash-out distribution entry?", () => { payouts = payouts.filter(p => p.id !== id); onDataChanged(); showToast("Removed", "Payout log deleted.", "rose"); }); }
 
  function runConsistencySolver() {
@@ -1639,7 +1852,7 @@
  onDataChanged();
  }
 
- /* ================= GOOGLE DRIVE API & PICKER INTEGRATION ================= */
+ /* ================= GOOGLE DRIVE API & CUSTOM PICKER INTEGRATION ================= */
  function openSettingsModal() {
  updateSettingsModalUI();
  document.getElementById('settingsModal').classList.remove('hidden');
@@ -1705,29 +1918,71 @@
 
  function openDrivePicker() {
  if (!driveAccessToken) return;
- gapi.load('picker', () => {
- const view = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
- .setSelectFolderEnabled(true)
- .setMimeTypes('application/vnd.google-apps.folder');
+ customDrivePickerStack = [{ id: 'root', name: 'My Drive' }];
+ navDriveFolder('root', 'My Drive');
+ document.getElementById('customDrivePickerModal').classList.remove('hidden');
+ }
 
- const picker = new google.picker.PickerBuilder()
- .addView(view)
- .setOAuthToken(driveAccessToken)
- .setCallback((data) => {
- if (data.action === google.picker.Action.PICKED) {
- const doc = data.docs[0];
- driveFolderId = doc.id;
- driveFolderName = doc.name;
+ function closeCustomDrivePickerModal() {
+ document.getElementById('customDrivePickerModal').classList.add('hidden');
+ }
+
+ async function navDriveFolder(folderId, folderName) {
+ currentBrowsingFolder = { id: folderId, name: folderName };
+ document.getElementById('currentSelectedFolderName').innerText = folderName;
+
+ const listEl = document.getElementById('driveFolderList');
+ listEl.innerHTML = `<div class="text-center py-8 text-xs text-purple-300/60">Loading folders...</div>`;
+
+ // Update Breadcrumbs
+ const crumbIndex = customDrivePickerStack.findIndex(item => item.id === folderId);
+ if (crumbIndex !== -1) {
+ customDrivePickerStack = customDrivePickerStack.slice(0, crumbIndex + 1);
+ } else {
+ customDrivePickerStack.push({ id: folderId, name: folderName });
+ }
+
+ const breadcrumbEl = document.getElementById('driveBreadcrumbs');
+ breadcrumbEl.innerHTML = customDrivePickerStack.map((item, idx) => `
+ <span class="hover:text-white cursor-pointer font-semibold" onclick="navDriveFolder('${item.id}', '${item.name}')">${item.name}</span>
+ ${idx < customDrivePickerStack.length - 1 ? '<span class="opacity-40">/</span>' : ''}
+ `).join('');
+
+ try {
+ const q = encodeURIComponent(`'${folderId}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`);
+ const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)&pageSize=50`, {
+ headers: { Authorization: `Bearer ${driveAccessToken}` }
+ });
+ const data = await res.json();
+ 
+ if (data.files && data.files.length > 0) {
+ listEl.innerHTML = data.files.map(f => `
+ <div onclick="navDriveFolder('${f.id}', '${f.name.replace(/'/g, "\\'")}')" class="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] transition flex items-center justify-between cursor-pointer group">
+ <div class="flex items-center gap-2.5">
+ <svg class="w-4 h-4 text-purple-400 group-hover:text-purple-300 transition" fill="currentColor" viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h4l2 2h8a2 2 0 012 v10a2 2 0 01-2 2z"/></svg>
+ <span class="text-xs font-semibold text-purple-100 group-hover:text-white transition">${f.name}</span>
+ </div>
+ <svg class="w-4 h-4 text-purple-300/40 group-hover:text-purple-200 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+ </div>
+ `).join('');
+ } else {
+ listEl.innerHTML = `<div class="text-center py-8 text-xs text-purple-300/50">No subfolders inside this location.</div>`;
+ }
+ } catch (e) {
+ console.error("Error listing Drive folders:", e);
+ listEl.innerHTML = `<div class="text-center py-8 text-xs text-rose-400">Failed to fetch folders.</div>`;
+ }
+ }
+
+ function confirmSelectedDriveFolder() {
+ driveFolderId = currentBrowsingFolder.id;
+ driveFolderName = currentBrowsingFolder.name;
  localStorage.setItem('proptracker_gdrive_folder_id', driveFolderId);
  localStorage.setItem('proptracker_gdrive_folder_name', driveFolderName);
  updateSettingsModalUI();
- showToast("Folder Picked", `Selected "${driveFolderName}" as cloud target.`);
+ closeCustomDrivePickerModal();
+ showToast("Folder Picked", `Selected "${driveFolderName}" as target folder.`);
  syncToGoogleDrive();
- }
- })
- .build();
- picker.setVisible(true);
- });
  }
 
  async function syncToGoogleDrive() {
