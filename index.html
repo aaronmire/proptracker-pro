@@ -147,7 +147,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <header class="liquid-glass-header sticky top-0 z-40 px-4 py-3 sm:px-6">
  <div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
  <div class="flex items-center gap-3">
- <!-- Updated Icon matching Favicon Purple Flame -->
  <div class="p-2 bg-purple-900/30 rounded-xl border border-purple-500/30 shadow-inner backdrop-blur-md flex items-center justify-center">
  <svg class="w-6 h-6" viewBox="0 0 100 100">
  <circle cx="50" cy="50" r="48" fill="#0b0314"/>
@@ -241,7 +240,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  </div>
  </div>
 
- <!-- NEW DASHBOARD CALENDAR -->
+ <!-- DASHBOARD CALENDAR -->
  <div class="liquid-glass p-6 rounded-3xl space-y-4">
  <div class="flex items-center justify-between flex-wrap gap-3 border-b border-white/10 pb-3">
  <div>
@@ -373,7 +372,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <div class="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
  <h3 class="font-bold text-white text-base drop-shadow-sm">Evaluations History</h3>
  <div class="flex items-center gap-3">
- <!-- Selection controls -->
  <button id="btnToggleSelectEvals" onclick="toggleSelectMode('evals')" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95">Select</button>
  <button id="btnBatchDeleteEvals" onclick="deleteSelectedEvals()" class="hidden px-3 py-1.5 rounded-xl bg-rose-600/80 text-white text-xs font-bold hover:bg-rose-500 transition active:scale-95">Delete Selected (<span id="countSelectedEvals">0</span>)</button>
  
@@ -446,7 +444,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <div class="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
  <h3 class="font-bold text-white text-base drop-shadow-sm">Payout Records</h3>
  <div class="flex items-center gap-3">
- <!-- Selection controls -->
  <button id="btnToggleSelectPayouts" onclick="toggleSelectMode('payouts')" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95">Select</button>
  <button id="btnBatchDeletePayouts" onclick="deleteSelectedPayouts()" class="hidden px-3 py-1.5 rounded-xl bg-rose-600/80 text-white text-xs font-bold hover:bg-rose-500 transition active:scale-95">Delete Selected (<span id="countSelectedPayouts">0</span>)</button>
 
@@ -533,7 +530,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  </div>
  <p class="text-xs text-purple-200 opacity-80">Enter your rules &amp; daily profits to check compliance.</p>
 
- <!-- Independent Rule Inputs for Progress Tracker -->
  <div class="space-y-4 border-b border-white/10 pb-4">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Target Profit ($)</label>
@@ -696,11 +692,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  payouts: { column: 'date', direction: 'desc' }
  };
 
- // Multi-select State Variables
  let selectMode = { evals: false, payouts: false };
  let selectedIds = { evals: new Set(), payouts: new Set() };
 
- // Calendar State
  let calCurrentDate = new Date();
 
  function showToast(title, text, type = 'emerald') {
@@ -794,7 +788,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  else pendingBody.innerHTML = sortedPayouts.slice(0, 5).map(p => `<tr class="text-xs hover:bg-white/[0.04] transition"><td class="py-3 px-2 text-purple-200 font-mono">${p.date}</td><td class="py-3 font-semibold text-white">${p.firm} <span class="opacity-70 text-[11px] font-normal ml-1">(${p.accountDetails || p.details || 'N/A'})</span></td><td class="py-3 px-2 text-right text-emerald-400 font-bold drop-shadow-sm">${formatCurrency(p.net !== undefined ? p.net : p.amount)}</td></tr>`).join('');
  }
 
- /* CALENDAR FUNCTIONS */
  function changeCalendarMonth(delta) {
  calCurrentDate.setMonth(calCurrentDate.getMonth() + delta);
  renderDashboardCalendar();
@@ -821,7 +814,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
  const todayStr = new Date().toISOString().substring(0, 10);
 
- // Organize data by date
  const dailySummary = {};
 
  evaluations.forEach(e => {
@@ -838,12 +830,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  dailySummary[p.date].payoutNet += parseFloat(p.net !== undefined ? p.net : p.amount) || 0;
  });
 
- // Blank slots for prior month days
  for (let i = 0; i < firstDay; i++) {
  grid.innerHTML += `<div class="h-20 sm:h-24 rounded-2xl border border-white/[0.02] bg-black/10 opacity-30"></div>`;
  }
 
- // Render actual calendar days
  for (let day = 1; day <= daysInMonth; day++) {
  const monthStr = String(month + 1).padStart(2, '0');
  const dayStr = String(day).padStart(2, '0');
@@ -854,10 +844,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
  let contentHtml = '';
  if (data.evalCount > 0) {
- contentHtml += `<div class="text-[9px] sm:text-[10px] font-bold text-rose-400 leading-tight">-${formatCurrency(data.evalCost)} <span class="opacity-70">(${data.evalCount})</span></div>`;
+ contentHtml += `<div class="text-xs sm:text-sm font-bold text-rose-400 leading-tight">-${formatCurrency(data.evalCost)} <span class="opacity-70">(${data.evalCount})</span></div>`;
  }
  if (data.payoutCount > 0) {
- contentHtml += `<div class="text-[9px] sm:text-[10px] font-bold text-emerald-400 leading-tight">+${formatCurrency(data.payoutNet)} <span class="opacity-70">(${data.payoutCount})</span></div>`;
+ contentHtml += `<div class="text-xs sm:text-sm font-bold text-emerald-400 leading-tight">+${formatCurrency(data.payoutNet)} <span class="opacity-70">(${data.payoutCount})</span></div>`;
  }
 
  const dayCell = `
@@ -872,7 +862,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  }
  }
 
- /* MULTI-SELECT FUNCTIONS */
  function toggleSelectMode(type) {
  selectMode[type] = !selectMode[type];
  const btn = document.getElementById(type === 'evals' ? 'btnToggleSelectEvals' : 'btnToggleSelectPayouts');
@@ -1445,7 +1434,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  doc.save(filename); showToast("Report Exported", "PDF breakdown created cleanly.");
  }
 
- /* UPDATED SIMPLIFIED BACKUP EXPORT FILENAME */
  function handleExportBackup() {
  const todayDate = new Date().toISOString().substring(0, 10);
  const blob = new Blob([JSON.stringify({ evaluations, payouts }, null, 2)], { type: 'application/json' });
@@ -1479,7 +1467,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  }
 
  function loadCalculatorsFromLocalStorage() {
- // 1. Target Projection
  const savedProj = localStorage.getItem('proptracker_calc_proj');
  if (savedProj) {
  try {
@@ -1490,7 +1477,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  } catch(e){}
  }
 
- // 2. Current Progress
  const savedProg = localStorage.getItem('proptracker_calc_prog');
  if (savedProg) {
  try {
@@ -1502,7 +1488,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  } catch(e){}
  }
 
- // 3. Target Calculator
  const savedSimple = localStorage.getItem('proptracker_calc_simple');
  if (savedSimple) {
  try {
