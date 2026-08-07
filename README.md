@@ -21,3 +21,8 @@
   - Updated Google sync and syncing indicator to help with mobile visualization
  
 ----- <b><i>v2.2</b></i> -----
+- Modal popups when editing entries on Evaluation Accounts and Payout Logs tabs
+- Manual cloud sync button added
+- Rename Dashboard Overview to Dashboard
+- Replaced calendar month/year picker with a popup modal
+- Modernized Google Drive folder picker
