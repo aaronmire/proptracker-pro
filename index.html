@@ -355,15 +355,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
  <input type="text" id="evalFirm" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
- <div class="grid grid-cols-2 gap-4">
  <div>
- <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size ($)</label>
- <input type="number" id="evalSize" required placeholder="50000" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
- </div>
- <div>
- <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Type</label>
- <input type="text" id="evalType" placeholder="e.g. Pro, Flex" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
- </div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size/Type</label>
+ <input type="text" id="evalAccountDetails" required placeholder="e.g. 25K Flex, 50K Pro" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div class="grid grid-cols-2 gap-4">
  <div>
@@ -410,7 +404,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <th class="py-3 px-2 w-8 hidden col-select-evals text-center"><input type="checkbox" id="chkSelectAllEvals" onchange="toggleSelectAll('evals', this.checked)"></th>
  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'date')">Date <span id="sort-evals-date"></span></th>
  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'firm')">Firm <span id="sort-evals-firm"></span></th>
- <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'sizeType')">Size / Type <span id="sort-evals-sizeType"></span></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'accountDetails')">Size/Type <span id="sort-evals-accountDetails"></span></th>
  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'reference')">Ref/ID <span id="sort-evals-reference"></span></th>
  <th class="py-3 px-3 text-right cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'cost')">Cost <span id="sort-evals-cost"></span></th>
  <th class="py-3 px-3 text-right font-semibold">Action</th>
@@ -636,15 +630,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
  <input type="text" id="modalEvalFirm" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
- <div class="grid grid-cols-2 gap-4">
  <div>
- <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size ($)</label>
- <input type="number" id="modalEvalSize" required placeholder="50000" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
- </div>
- <div>
- <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Type</label>
- <input type="text" id="modalEvalType" placeholder="e.g. Pro, Flex" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
- </div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size/Type</label>
+ <input type="text" id="modalEvalAccountDetails" required placeholder="e.g. 25K Flex, 50K Pro" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div class="grid grid-cols-2 gap-4">
  <div>
@@ -932,23 +920,26 @@ let sortConfig = {
 
  function formatCurrency(val) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val || 0); }
 
- function formatShortSize(val) {
- const num = parseFloat(val);
- if (isNaN(num) || num === 0) return '$0';
+ function getEvalDisplayDetails(e) {
+ if (e.accountDetails) return e.accountDetails;
+ 
+ let parts = [];
+ if (e.size !== undefined && e.size !== null && e.size !== '') {
+ const num = parseFloat(e.size);
+ if (!isNaN(num) && num > 0) {
  if (num >= 1000) {
  const kVal = num / 1000;
- return `$${Number.isInteger(kVal) ? kVal : kVal.toFixed(1)}K`;
+ parts.push(`${Number.isInteger(kVal) ? kVal : kVal.toFixed(1)}K`);
+ } else {
+ parts.push(`${num}`);
  }
- return `$${num}`;
+ } else if (typeof e.size === 'string' && e.size.trim() !== '') {
+ parts.push(e.size.trim().replace(/^\$/, ''));
  }
-
- function formatEvalCombinedDetails(evalItem) {
- const sizeStr = evalItem.size ? formatShortSize(evalItem.size) : '';
- const typeStr = evalItem.type || evalItem.accountType || '';
- if (sizeStr && typeStr) return `${sizeStr} ${typeStr}`;
- if (sizeStr) return sizeStr;
- if (typeStr) return typeStr;
- return 'N/A';
+ }
+ const typeStr = e.type || e.accountType;
+ if (typeStr && typeStr !== 'N/A') parts.push(typeStr);
+ return parts.length > 0 ? parts.join(' ') : 'N/A';
  }
 
  function updateSyncIndicator(status) {
@@ -1067,7 +1058,7 @@ let sortConfig = {
  const sortedEvals = [...evaluations].sort((a,b) => new Date(b.date) - new Date(a.date));
  const activeBody = document.getElementById('tblActiveSummary');
  if (sortedEvals.length === 0) activeBody.innerHTML = `<tr><td colspan="3" class="py-5 text-center text-xs text-purple-300">No evaluations tracked.</td></tr>`;
- else activeBody.innerHTML = sortedEvals.slice(0, 5).map(e => `<tr class="text-xs hover:bg-white/[0.04] transition"><td class="py-3 px-2 text-purple-200 font-mono">${e.date}</td><td class="py-3 font-semibold text-white">${e.firm} <span class="opacity-70 text-[11px] font-normal ml-1">(${formatEvalCombinedDetails(e)})</span></td><td class="py-3 px-2 text-right text-rose-400 font-bold drop-shadow-sm">${formatCurrency(e.cost)}</td></tr>`).join('');
+ else activeBody.innerHTML = sortedEvals.slice(0, 5).map(e => `<tr class="text-xs hover:bg-white/[0.04] transition"><td class="py-3 px-2 text-purple-200 font-mono">${e.date}</td><td class="py-3 font-semibold text-white">${e.firm} <span class="opacity-70 text-[11px] font-normal ml-1">(${getEvalDisplayDetails(e)})</span></td><td class="py-3 px-2 text-right text-rose-400 font-bold drop-shadow-sm">${formatCurrency(e.cost)}</td></tr>`).join('');
 
  const sortedPayouts = [...payouts].sort((a,b) => new Date(b.date) - new Date(a.date));
  const pendingBody = document.getElementById('tblPendingSummary');
@@ -1305,9 +1296,9 @@ const limit = pageSizes[type];
  if (!config.column) return data;
  return [...data].sort((a, b) => {
  let valA = a[config.column], valB = b[config.column];
- if (config.column === 'sizeType') {
- valA = formatEvalCombinedDetails(a);
- valB = formatEvalCombinedDetails(b);
+ if (config.column === 'accountDetails') {
+ valA = getEvalDisplayDetails(a);
+ valB = getEvalDisplayDetails(b);
  }
  if (config.column === 'date') return config.direction === 'asc' ? new Date(valA) - new Date(valB) : new Date(valB) - new Date(valA);
  if (typeof valA === 'number') return config.direction === 'asc' ? valA - valB : valB - valA;
@@ -1326,7 +1317,7 @@ const limit = pageSizes[type];
  }
 
  function updateSortIndicators(tableType) {
- const columns = tableType === 'evals' ? ['date', 'firm', 'sizeType', 'reference', 'cost'] : ['date', 'firm', 'accountDetails', 'net'];
+ const columns = tableType === 'evals' ? ['date', 'firm', 'accountDetails', 'reference', 'cost'] : ['date', 'firm', 'accountDetails', 'net'];
  const cfg = sortConfig[tableType];
  columns.forEach(col => {
  const el = document.getElementById(`sort-${tableType}-${col}`);
@@ -1359,7 +1350,7 @@ renderPaginationControls('evals', 0);
  </td>
  <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px]">${e.date}</td>
  <td class="py-3.5 px-3 font-bold text-white">${e.firm}</td>
- <td class="py-3.5 px-3 text-purple-100 font-semibold">${formatEvalCombinedDetails(e)}</td>
+ <td class="py-3.5 px-3 text-purple-100 font-mono text-[12px] opacity-90">${getEvalDisplayDetails(e)}</td>
  <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px] opacity-80">${e.reference || 'N/A'}</td>
  <td class="py-3.5 px-3 text-right font-black text-rose-400 drop-shadow-sm">${formatCurrency(e.cost)}</td>
  <td class="py-3.5 px-3 text-right">
@@ -1418,8 +1409,7 @@ renderPaginationControls('payouts', 0);
  const data = {
  id: Date.now().toString(),
  firm: document.getElementById('evalFirm').value, 
- size: parseFloat(document.getElementById('evalSize').value) || 0,
- type: document.getElementById('evalType').value, 
+ accountDetails: document.getElementById('evalAccountDetails').value,
  cost: parseFloat(document.getElementById('evalCost').value) || 0,
  date: document.getElementById('evalDate').value, 
  reference: document.getElementById('evalRef').value || 'N/A'
@@ -1434,8 +1424,7 @@ renderPaginationControls('payouts', 0);
  const item = evaluations.find(e => e.id === id); if (!item) return;
  document.getElementById('modalEvalEditId').value = item.id;
  document.getElementById('modalEvalFirm').value = item.firm;
- document.getElementById('modalEvalSize').value = item.size;
- document.getElementById('modalEvalType').value = item.type || item.accountType || '';
+ document.getElementById('modalEvalAccountDetails').value = getEvalDisplayDetails(item);
  document.getElementById('modalEvalCost').value = item.cost;
  document.getElementById('modalEvalDate').value = item.date;
  document.getElementById('modalEvalRef').value = item.reference === 'N/A' ? '' : item.reference;
@@ -1454,8 +1443,7 @@ renderPaginationControls('payouts', 0);
  evaluations[idx] = {
  id: id,
  firm: document.getElementById('modalEvalFirm').value,
- size: parseFloat(document.getElementById('modalEvalSize').value) || 0,
- type: document.getElementById('modalEvalType').value,
+ accountDetails: document.getElementById('modalEvalAccountDetails').value,
  cost: parseFloat(document.getElementById('modalEvalCost').value) || 0,
  date: document.getElementById('modalEvalDate').value,
  reference: document.getElementById('modalEvalRef').value || 'N/A'
@@ -1770,7 +1758,7 @@ const pctEl = document.getElementById('simplePct');
  if (timeframe === 'yearly') return true; if (timeframe === 'quarterly') return (Math.floor(d.getMonth() / 3) + 1).toString() === q;
  if (timeframe === 'monthly') return (d.getMonth() + 1).toString().padStart(2, '0') === m; return false;
  };
- evaluations.forEach(e => { if (filter(e.date)) records.push({ date: e.date, type: 'Expense', category: 'Evaluation Fee', firm: e.firm, reference: e.reference || 'N/A', amount: -parseFloat(e.cost) }); });
+ evaluations.forEach(e => { if (filter(e.date)) records.push({ date: e.date, type: 'Expense', category: 'Evaluation Fee', firm: e.firm, reference: getEvalDisplayDetails(e) || e.reference || 'N/A', amount: -parseFloat(e.cost) }); });
  payouts.forEach(p => { if (filter(p.date)) records.push({ date: p.date, type: 'Income', category: 'Payout Split', firm: p.firm, reference: p.accountDetails || p.details || 'N/A', amount: parseFloat(p.net !== undefined ? p.net : p.amount) }); });
  records.sort((a,b) => new Date(a.date) - new Date(a.date));
  let income = 0, expense = 0; records.forEach(r => r.type === 'Income' ? income += r.amount : expense += Math.abs(r.amount));
