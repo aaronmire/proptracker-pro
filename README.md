@@ -27,3 +27,8 @@
 - Replaced calendar month/year picker with a popup modal
 - Modernized Google Drive folder picker
 - Moved Google account connection to the settings menu 
+
+----- <b><i>v2.3</b></i> -----
+- Cloud upload changes - clicking it forces immediate write to proptracker_data.json with latest workspace changes
+- Account size/type formatting
+- Added persistent Google Sign-In token to stay signed in with Google when reloading app
