@@ -5,7 +5,7 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <title>PropTracker Pro</title>
  
- <!-- Custom Purple Flame Favicon -->
+<!-- Custom Purple Flame Favicon -->
  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230b0314'/><path d='M50 12 C58 28 80 38 80 62 C80 78 66 88 50 88 C34 88 20 78 20 62 C20 38 42 28 50 12 Z' fill='%239333ea'/><path d='M50 32 C56 44 70 52 70 68 C70 79 61 85 50 85 C30 52 44 44 50 32 Z' fill='%23ec4899'/><path d='M50 48 C53 56 62 62 62 72 C62 79 56 83 50 83 C44 83 38 79 38 72 C38 62 47 56 50 48 Z' fill='%23f472b6'/><path d='M50 60 C51 65 56 68 56 74 C56 78 53 80 50 80 C47 80 44 78 44 74 C44 68 49 65 50 60 Z' fill='%23fbcfe8'/></svg>">
 
  <!-- Tailwind CSS -->
@@ -30,7 +30,7 @@
  color: #f8fafc;
  }
  
- .ambient-bg {
+.ambient-bg {
  position: fixed;
  top: 0; left: 0; width: 100vw; height: 100vh;
  z-index: -1;
@@ -107,7 +107,7 @@
  .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 9999px; }
  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
  
- input[type="date"]::-webkit-calendar-picker-indicator {
+input[type="date"]::-webkit-calendar-picker-indicator {
  filter: invert(1);
  cursor: pointer;
  opacity: 0.5;
@@ -164,7 +164,7 @@
  </svg>
  </div>
  <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5 sm:gap-2 drop-shadow-md truncate">
- PropTracker <span class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm shrink-0">PRO</span><span style="font-size: 0.75rem; opacity: 0.5; margin-top: 2px;"><i>v2.2</i></span>
+ PropTracker <span class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm shrink-0">PRO</span><span style="font-size: 0.75rem; opacity: 0.5; margin-top: 2px;"><i>v2.3</i></span>
  </h1>
  </div>
 
@@ -176,10 +176,10 @@
  <span id="syncText" class="hidden sm:inline opacity-90">Local Only</span>
  </div>
 
- <!-- Manual Cloud Sync Button -->
- <button onclick="triggerManualSync()" class="p-2 rounded-xl liquid-glass-btn text-purple-200 hover:text-white transition active:scale-95 flex items-center justify-center" title="Manual Cloud Sync to proptracker_data.json">
+ <!-- Manual Cloud Upload/Update Button -->
+ <button onclick="triggerManualSync()" class="p-2 rounded-xl liquid-glass-btn text-purple-200 hover:text-white transition active:scale-95 flex items-center justify-center" title="Push latest changes to proptracker_data.json">
  <svg id="manualSyncIcon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
- <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+ <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
  </svg>
  </button>
 
@@ -264,7 +264,7 @@
  <div class="flex items-center gap-1.5 sm:gap-2">
  <button onclick="changeCalendarMonth(-1)" class="px-2.5 py-1 rounded-lg liquid-glass-btn text-xs font-bold text-purple-200 hover:text-white transition active:scale-95">◀</button>
  
- <!-- Centered Date Picker Button -->
+<!-- Centered Date Picker Button -->
  <button onclick="openCalPickerModal()" id="btnCalPickerLabel" class="px-3.5 py-1.5 rounded-xl liquid-glass-btn text-xs font-bold text-white hover:text-purple-200 transition active:scale-95 flex items-center gap-1.5">
  Loading...
  </button>
@@ -353,7 +353,7 @@
  <form id="frmEvaluation" onsubmit="handleEvalSubmit(event)" class="space-y-4">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
- <input type="text" id="evalFirm" required placeholder="e.g. Apex, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ <input type="text" id="evalFirm" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div class="grid grid-cols-2 gap-4">
  <div>
@@ -410,8 +410,7 @@
  <th class="py-3 px-2 w-8 hidden col-select-evals text-center"><input type="checkbox" id="chkSelectAllEvals" onchange="toggleSelectAll('evals', this.checked)"></th>
  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'date')">Date <span id="sort-evals-date"></span></th>
  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'firm')">Firm <span id="sort-evals-firm"></span></th>
- <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'type')">Type <span id="sort-evals-type"></span></th>
- <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'size')">Size <span id="sort-evals-size"></span></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'sizeType')">Size / Type <span id="sort-evals-sizeType"></span></th>
  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'reference')">Ref/ID <span id="sort-evals-reference"></span></th>
  <th class="py-3 px-3 text-right cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('evals', 'cost')">Cost <span id="sort-evals-cost"></span></th>
  <th class="py-3 px-3 text-right font-semibold">Action</th>
@@ -433,11 +432,11 @@
  <form id="frmPayout" onsubmit="handlePayoutSubmit(event)" class="space-y-4">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
- <input type="text" id="payoutFirm" required placeholder="e.g. Topstep, Apex" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ <input type="text" id="payoutFirm" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size/Type</label>
- <input type="text" id="payoutAccountDetails" required placeholder="e.g. 50k PA, 100k Master" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ <input type="text" id="payoutAccountDetails" required placeholder="e.g. 25K Flex, 50K Pro" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Date Logged</label>
@@ -562,7 +561,7 @@
  </div>
  </div>
  
- <div id="dailyInputsContainer" class="space-y-2"></div>
+<div id="dailyInputsContainer" class="space-y-2"></div>
 
  <button onclick="addDailyInputRow()" class="w-full py-2.5 liquid-glass-btn text-purple-200 rounded-xl text-xs font-bold transition active:scale-95">
  + Add Trading Day
@@ -594,7 +593,7 @@
  </div>
  </div>
  
- <div class="space-y-4">
+<div class="space-y-4">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Target Profit ($)</label>
  <input type="number" id="simpleTarget" placeholder="3000" step="0.01" oninput="runSimpleTargetCalc()" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
@@ -635,16 +634,16 @@
  <input type="hidden" id="modalEvalEditId">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
- <input type="text" id="modalEvalFirm" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ <input type="text" id="modalEvalFirm" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div class="grid grid-cols-2 gap-4">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size ($)</label>
- <input type="number" id="modalEvalSize" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ <input type="number" id="modalEvalSize" required placeholder="50000" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Type</label>
- <input type="text" id="modalEvalType" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ <input type="text" id="modalEvalType" placeholder="e.g. Pro, Flex" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  </div>
  <div class="grid grid-cols-2 gap-4">
@@ -680,11 +679,11 @@
  <input type="hidden" id="modalPayoutEditId">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
- <input type="text" id="modalPayoutFirm" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ <input type="text" id="modalPayoutFirm" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size/Type</label>
- <input type="text" id="modalPayoutAccountDetails" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ <input type="text" id="modalPayoutAccountDetails" required placeholder="e.g. 25K Flex, 50K Pro" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Date Logged</label>
@@ -726,7 +725,7 @@
  </div>
  </div>
 
- <!-- CUSTOM MODERN GOOGLE DRIVE FOLDER PICKER MODAL (Higher z-index layer: z-[60]) -->
+ <!-- CUSTOM MODERN GOOGLE DRIVE FOLDER PICKER MODAL -->
  <div id="customDrivePickerModal" class="fixed inset-0 z-[60] bg-black/75 backdrop-blur-xl flex items-center justify-center p-4 hidden">
  <div class="liquid-glass w-full max-w-md rounded-3xl p-6 relative shadow-2xl flex flex-col max-h-[80vh]">
  <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-3">
@@ -786,8 +785,7 @@
  </div>
 
  <div class="space-y-2 pt-1">
- <!-- Google Connect/Sync Button Moved Here -->
- <button id="btnHeaderAuthDrive" onclick="handleAuthDrive()" class="w-full py-2.5 rounded-xl liquid-glass-btn-primary text-white font-bold text-xs transition active:scale-95 flex items-center justify-center gap-2">
+ <button id="btnHeaderAuthDrive" onclick="handleAuthDrive(false)" class="w-full py-2.5 rounded-xl liquid-glass-btn-primary text-white font-bold text-xs transition active:scale-95 flex items-center justify-center gap-2">
  <svg class="w-4 h-4 text-purple-200" fill="currentColor" viewBox="0 0 24 24">
  <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C6.721,2,2,6.721,2,12.545s4.721,10.545,10.545,10.545c6.191,0,10.309-4.355,10.309-10.486c0-0.705-0.076-1.39-0.185-2.065H12.545z"/>
  </svg>
@@ -817,7 +815,7 @@
  </button>
  <input type="file" id="fileBackup" accept=".json" class="hidden" onchange="handleImportBackup(event)">
  
- <button onclick="handleExportBackup()" class="py-2.5 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-xs hover:text-white transition active:scale-95">
+<button onclick="handleExportBackup()" class="py-2.5 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-xs hover:text-white transition active:scale-95">
  Export Backup
  </button>
  </div>
@@ -910,7 +908,7 @@
  let pageSizes = { evals: 10, payouts: 10 };
  let currentPage = { evals: 1, payouts: 1 };
  
- let sortConfig = {
+let sortConfig = {
  evals: { column: 'date', direction: 'desc' },
  payouts: { column: 'date', direction: 'desc' }
  };
@@ -920,15 +918,38 @@
 
  let calCurrentDate = new Date();
 
- // Google Drive Sync States & Token Caching
+ // Google Drive Sync States & Token Caching (Using localStorage for persistence)
  const driveClientId = '473412055368-1kmi3j378bccjcgc1j28r1hpluhscbnh.apps.googleusercontent.com';
- let driveAccessToken = sessionStorage.getItem('proptracker_gdrive_access_token') || null;
+ let driveAccessToken = localStorage.getItem('proptracker_gdrive_access_token') || null;
+ let driveTokenExpiresAt = parseInt(localStorage.getItem('proptracker_gdrive_token_expires') || '0', 10);
  let driveFolderId = localStorage.getItem('proptracker_gdrive_folder_id') || null;
  let driveFolderName = localStorage.getItem('proptracker_gdrive_folder_name') || null;
  let driveFileId = localStorage.getItem('proptracker_gdrive_file_id') || null;
 
+ let tokenClient = null;
  let customDrivePickerStack = [];
  let currentBrowsingFolder = { id: 'root', name: 'My Drive' };
+
+ function formatCurrency(val) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val || 0); }
+
+ function formatShortSize(val) {
+ const num = parseFloat(val);
+ if (isNaN(num) || num === 0) return '$0';
+ if (num >= 1000) {
+ const kVal = num / 1000;
+ return `$${Number.isInteger(kVal) ? kVal : kVal.toFixed(1)}K`;
+ }
+ return `$${num}`;
+ }
+
+ function formatEvalCombinedDetails(evalItem) {
+ const sizeStr = evalItem.size ? formatShortSize(evalItem.size) : '';
+ const typeStr = evalItem.type || evalItem.accountType || '';
+ if (sizeStr && typeStr) return `${sizeStr} ${typeStr}`;
+ if (sizeStr) return sizeStr;
+ if (typeStr) return typeStr;
+ return 'N/A';
+ }
 
  function updateSyncIndicator(status) {
  const dot = document.getElementById('syncDot');
@@ -939,25 +960,28 @@
  if (status === 'synced') {
  dot.className = "w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]";
  text.innerText = "Synced";
- if (icon) icon.classList.remove('animate-spin');
+ if (icon) icon.classList.remove('animate-pulse');
  } else if (status === 'syncing') {
  dot.className = "w-2 h-2 rounded-full bg-amber-400 animate-pulse shadow-[0_0_8px_rgba(251,191,36,0.8)]";
  text.innerText = "Syncing...";
- if (icon) icon.classList.add('animate-spin');
+ if (icon) icon.classList.add('animate-pulse');
  } else {
  dot.className = "w-2 h-2 rounded-full bg-slate-500";
  text.innerText = "Local Only";
- if (icon) icon.classList.remove('animate-spin');
+ if (icon) icon.classList.remove('animate-pulse');
  }
  }
 
  function triggerManualSync() {
- if (!driveAccessToken) {
- showToast("Not Connected", "Opening workspace options...", "rose");
- openSettingsModal();
+ if (!isTokenValid()) {
+ showToast("Sign In Required", "Authenticating with Google...", "rose");
+ handleAuthDrive(false, () => {
+ showToast("Uploading Data", "Saving to proptracker_data.json...");
+ syncToGoogleDrive();
+ });
  return;
  }
- showToast("Sync Triggered", "Syncing data to proptracker_data.json...");
+ showToast("Uploading Data", "Pushing latest changes to proptracker_data.json...");
  syncToGoogleDrive();
  }
 
@@ -988,8 +1012,6 @@
  btnCancel.onclick = close;
  btnProceed.onclick = () => { onConfirm(); close(); };
  }
-
- function formatCurrency(val) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val || 0); }
 
  function switchTab(tabName) {
  const tabs = ['dashboard', 'evaluations', 'payouts', 'consistency', 'target'];
@@ -1045,7 +1067,7 @@
  const sortedEvals = [...evaluations].sort((a,b) => new Date(b.date) - new Date(a.date));
  const activeBody = document.getElementById('tblActiveSummary');
  if (sortedEvals.length === 0) activeBody.innerHTML = `<tr><td colspan="3" class="py-5 text-center text-xs text-purple-300">No evaluations tracked.</td></tr>`;
- else activeBody.innerHTML = sortedEvals.slice(0, 5).map(e => `<tr class="text-xs hover:bg-white/[0.04] transition"><td class="py-3 px-2 text-purple-200 font-mono">${e.date}</td><td class="py-3 font-semibold text-white">${e.firm} <span class="opacity-70 text-[11px] font-normal ml-1">(${e.type || ''} ${e.size ? (e.size/1000)+'k' : ''})</span></td><td class="py-3 px-2 text-right text-rose-400 font-bold drop-shadow-sm">${formatCurrency(e.cost)}</td></tr>`).join('');
+ else activeBody.innerHTML = sortedEvals.slice(0, 5).map(e => `<tr class="text-xs hover:bg-white/[0.04] transition"><td class="py-3 px-2 text-purple-200 font-mono">${e.date}</td><td class="py-3 font-semibold text-white">${e.firm} <span class="opacity-70 text-[11px] font-normal ml-1">(${formatEvalCombinedDetails(e)})</span></td><td class="py-3 px-2 text-right text-rose-400 font-bold drop-shadow-sm">${formatCurrency(e.cost)}</td></tr>`).join('');
 
  const sortedPayouts = [...payouts].sort((a,b) => new Date(b.date) - new Date(a.date));
  const pendingBody = document.getElementById('tblPendingSummary');
@@ -1250,7 +1272,7 @@
  if(!container) return;
  container.innerHTML = '';
  
- const limit = pageSizes[type];
+const limit = pageSizes[type];
  if (limit >= 999999 || totalItems === 0) return;
 
  const totalPages = Math.ceil(totalItems / limit) || 1;
@@ -1283,6 +1305,10 @@
  if (!config.column) return data;
  return [...data].sort((a, b) => {
  let valA = a[config.column], valB = b[config.column];
+ if (config.column === 'sizeType') {
+ valA = formatEvalCombinedDetails(a);
+ valB = formatEvalCombinedDetails(b);
+ }
  if (config.column === 'date') return config.direction === 'asc' ? new Date(valA) - new Date(valB) : new Date(valB) - new Date(valA);
  if (typeof valA === 'number') return config.direction === 'asc' ? valA - valB : valB - valA;
  valA = String(valA || '').toLowerCase(); valB = String(valB || '').toLowerCase();
@@ -1300,13 +1326,13 @@
  }
 
  function updateSortIndicators(tableType) {
- const columns = tableType === 'evals' ? ['date', 'firm', 'type', 'size', 'reference', 'cost'] : ['date', 'firm', 'accountDetails', 'net'];
+ const columns = tableType === 'evals' ? ['date', 'firm', 'sizeType', 'reference', 'cost'] : ['date', 'firm', 'accountDetails', 'net'];
  const cfg = sortConfig[tableType];
  columns.forEach(col => {
  const el = document.getElementById(`sort-${tableType}-${col}`);
  if (!el) return;
  if (cfg.column === col) { el.innerText = cfg.direction === 'asc' ? ' ▲' : ' ▼'; el.className = "text-emerald-400 text-[9px] drop-shadow-sm"; } 
- else { el.innerText = ' ↕'; el.className = "text-purple-400 text-[9px]"; }
+else { el.innerText = ' ↕'; el.className = "text-purple-400 text-[9px]"; }
  });
  }
 
@@ -1315,11 +1341,11 @@
  if (!tbody) return; updateSortIndicators('evals');
  const items = sortDataset(evaluations, sortConfig.evals);
  
- if (items.length === 0) { 
- tbody.innerHTML = `<tr><td colspan="8" class="py-8 text-center text-sm text-purple-300">No logs saved in workspace.</td></tr>`; 
- renderPaginationControls('evals', 0);
+if (items.length === 0) { 
+tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">No logs saved in workspace.</td></tr>`; 
+renderPaginationControls('evals', 0);
  return; 
- }
+}
 
  const size = pageSizes.evals;
  const page = currentPage.evals;
@@ -1333,8 +1359,7 @@
  </td>
  <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px]">${e.date}</td>
  <td class="py-3.5 px-3 font-bold text-white">${e.firm}</td>
- <td class="py-3.5 px-3 text-purple-100 font-semibold">${e.type || e.accountType || 'N/A'}</td>
- <td class="py-3.5 px-3 text-purple-100">${formatCurrency(e.size)}</td>
+ <td class="py-3.5 px-3 text-purple-100 font-semibold">${formatEvalCombinedDetails(e)}</td>
  <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px] opacity-80">${e.reference || 'N/A'}</td>
  <td class="py-3.5 px-3 text-right font-black text-rose-400 drop-shadow-sm">${formatCurrency(e.cost)}</td>
  <td class="py-3.5 px-3 text-right">
@@ -1354,10 +1379,10 @@
  const items = sortDataset(payouts, sortConfig.payouts);
 
  if (items.length === 0) { 
- tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-sm text-purple-300">No payouts logged yet.</td></tr>`; 
- renderPaginationControls('payouts', 0);
+tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-sm text-purple-300">No payouts logged yet.</td></tr>`; 
+renderPaginationControls('payouts', 0);
  return; 
- }
+}
 
  const size = pageSizes.payouts;
  const page = currentPage.payouts;
@@ -1392,9 +1417,12 @@
  e.preventDefault();
  const data = {
  id: Date.now().toString(),
- firm: document.getElementById('evalFirm').value, size: parseFloat(document.getElementById('evalSize').value) || 0,
- type: document.getElementById('evalType').value, cost: parseFloat(document.getElementById('evalCost').value) || 0,
- date: document.getElementById('evalDate').value, reference: document.getElementById('evalRef').value || 'N/A'
+ firm: document.getElementById('evalFirm').value, 
+ size: parseFloat(document.getElementById('evalSize').value) || 0,
+ type: document.getElementById('evalType').value, 
+ cost: parseFloat(document.getElementById('evalCost').value) || 0,
+ date: document.getElementById('evalDate').value, 
+ reference: document.getElementById('evalRef').value || 'N/A'
  };
  evaluations.push(data);
  showToast("Created", "Evaluation added to ledger.");
@@ -1407,7 +1435,7 @@
  document.getElementById('modalEvalEditId').value = item.id;
  document.getElementById('modalEvalFirm').value = item.firm;
  document.getElementById('modalEvalSize').value = item.size;
- document.getElementById('modalEvalType').value = item.type || '';
+ document.getElementById('modalEvalType').value = item.type || item.accountType || '';
  document.getElementById('modalEvalCost').value = item.cost;
  document.getElementById('modalEvalDate').value = item.date;
  document.getElementById('modalEvalRef').value = item.reference === 'N/A' ? '' : item.reference;
@@ -1560,10 +1588,10 @@
 
  document.getElementById('trackTotalProfit').innerText = formatCurrency(total);
  
- const pctEl = document.getElementById('trackBestDayPct');
+const pctEl = document.getElementById('trackBestDayPct');
  pctEl.innerText = bestPct.toFixed(1) + '%';
  
- const msgEl = document.getElementById('trackStatusMsg');
+const msgEl = document.getElementById('trackStatusMsg');
 
  if(bestPct > capPct) {
  pctEl.className = 'text-xl font-extrabold text-rose-400 mt-1';
@@ -1608,7 +1636,7 @@
 
  document.getElementById('simpleRemaining').innerText = formatCurrency(remaining);
  
- const pctEl = document.getElementById('simplePct');
+const pctEl = document.getElementById('simplePct');
  const barEl = document.getElementById('simpleProgressBar');
 
  pctEl.innerText = rawPct.toFixed(1) + '%';
@@ -1792,25 +1820,25 @@
  const reader = new FileReader();
  reader.onload = function(evt) {
  try { 
- const parsed = JSON.parse(evt.target.result);
+const parsed = JSON.parse(evt.target.result);
  
- if (Array.isArray(parsed.evaluations) || Array.isArray(parsed.payouts) || Array.isArray(parsed.evals)) {
+if (Array.isArray(parsed.evaluations) || Array.isArray(parsed.payouts) || Array.isArray(parsed.evals)) {
  evaluations = parsed.evaluations || parsed.evals || [];
  payouts = parsed.payouts || [];
  onDataChanged(); 
- showToast("Success", "Workspace metrics populated from backup.");
+showToast("Success", "Workspace metrics populated from backup.");
  } else {
  showToast("Import Failed", "Invalid JSON template layout.", "rose");
  }
  } 
- catch (err) { showToast("Import Failed", "Invalid JSON template layout.", "rose"); }
+catch (err) { showToast("Import Failed", "Invalid JSON template layout.", "rose"); }
  }; reader.readAsText(file);
  }
 
  function saveToLocalStorage() { 
- localStorage.setItem('proptracker_evaluations', JSON.stringify(evaluations)); 
- localStorage.setItem('proptracker_payouts', JSON.stringify(payouts)); 
- }
+localStorage.setItem('proptracker_evaluations', JSON.stringify(evaluations)); 
+localStorage.setItem('proptracker_payouts', JSON.stringify(payouts)); 
+}
 
  function loadCalculatorsFromLocalStorage() {
  const savedProj = localStorage.getItem('proptracker_calc_proj');
@@ -1852,7 +1880,11 @@
  onDataChanged();
  }
 
- /* ================= GOOGLE DRIVE API & CUSTOM PICKER INTEGRATION ================= */
+ /* ================= GOOGLE DRIVE API & PERSISTENT SESSION INTEGRATION ================= */
+ function isTokenValid() {
+ return driveAccessToken && Date.now() < (driveTokenExpiresAt - 60000);
+ }
+
  function openSettingsModal() {
  updateSettingsModalUI();
  document.getElementById('settingsModal').classList.remove('hidden');
@@ -1868,7 +1900,7 @@
  const btnPicker = document.getElementById('btnPickFolder');
  const authBtnText = document.getElementById('btnHeaderAuthText');
 
- if (driveAccessToken) {
+ if (isTokenValid() || driveAccessToken) {
  statusEl.innerText = "Connected";
  statusEl.className = "font-bold text-emerald-400";
  btnPicker.disabled = false;
@@ -1885,35 +1917,61 @@
  folderEl.innerText = driveFolderName || "Auto-Detecting...";
  }
 
- function handleAuthDrive(isSilent = false) {
- if (typeof google === 'undefined' || !google.accounts) {
- if (!isSilent) showToast("API Loading", "Google Identity Services script loading... try again in a moment.", "rose");
- return;
- }
-
- updateSyncIndicator('syncing');
-
- const client = google.accounts.oauth2.initTokenClient({
+ function getOrCreateTokenClient(callback) {
+ if (!tokenClient && typeof google !== 'undefined' && google.accounts && google.accounts.oauth2) {
+ tokenClient = google.accounts.oauth2.initTokenClient({
  client_id: driveClientId,
  scope: 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata.readonly',
  callback: (response) => {
  if (response.access_token) {
  driveAccessToken = response.access_token;
- sessionStorage.setItem('proptracker_gdrive_access_token', driveAccessToken);
+ const expiresIn = (parseInt(response.expires_in, 10) || 3599) * 1000;
+ driveTokenExpiresAt = Date.now() + expiresIn;
+ localStorage.setItem('proptracker_gdrive_access_token', driveAccessToken);
+ localStorage.setItem('proptracker_gdrive_token_expires', driveTokenExpiresAt.toString());
  updateSettingsModalUI();
- if (!isSilent) showToast("Connected", "Google Drive authenticated.");
- fetchRemoteDriveData();
+ if (typeof callback === 'function') callback();
  } else {
  updateSyncIndicator('local');
  }
  },
  });
+ }
+ return tokenClient;
+ }
+
+ function handleAuthDrive(isSilent = false, onSuccess = null) {
+ if (typeof google === 'undefined' || !google.accounts || !google.accounts.oauth2) {
+ if (!isSilent) showToast("API Loading", "Google Identity Services is initializing... try again in a moment.", "rose");
+ return;
+ }
+
+ const client = getOrCreateTokenClient(onSuccess);
+ if (!client) return;
+
+ updateSyncIndicator('syncing');
 
  if (isSilent) {
  client.requestAccessToken({ prompt: '' });
  } else {
- client.requestAccessToken();
+ client.requestAccessToken({ prompt: 'select_account' });
  }
+ }
+
+ async function ensureValidDriveToken() {
+ if (isTokenValid()) return true;
+ return new Promise((resolve) => {
+ if (typeof google === 'undefined' || !google.accounts || !google.accounts.oauth2) {
+ resolve(false);
+ return;
+ }
+ const client = getOrCreateTokenClient(() => resolve(true));
+ try {
+ client.requestAccessToken({ prompt: '' });
+ } catch (e) {
+ resolve(false);
+ }
+ });
  }
 
  function openDrivePicker() {
@@ -1934,7 +1992,6 @@
  const listEl = document.getElementById('driveFolderList');
  listEl.innerHTML = `<div class="text-center py-8 text-xs text-purple-300/60">Loading folders...</div>`;
 
- // Update Breadcrumbs
  const crumbIndex = customDrivePickerStack.findIndex(item => item.id === folderId);
  if (crumbIndex !== -1) {
  customDrivePickerStack = customDrivePickerStack.slice(0, crumbIndex + 1);
@@ -1955,7 +2012,7 @@
  });
  const data = await res.json();
  
- if (data.files && data.files.length > 0) {
+if (data.files && data.files.length > 0) {
  listEl.innerHTML = data.files.map(f => `
  <div onclick="navDriveFolder('${f.id}', '${f.name.replace(/'/g, "\\'")}')" class="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] transition flex items-center justify-between cursor-pointer group">
  <div class="flex items-center gap-2.5">
@@ -1986,16 +2043,19 @@
  }
 
  async function syncToGoogleDrive() {
- if (!driveAccessToken) {
+ if (!isTokenValid()) {
+ const renewed = await ensureValidDriveToken();
+ if (!renewed) {
  updateSyncIndicator('local');
  return;
+ }
  }
 
  updateSyncIndicator('syncing');
 
  const payload = JSON.stringify({ evaluations, payouts, lastUpdated: new Date().toISOString() }, null, 2);
  
- try {
+try {
  if (!driveFileId) {
  const query = encodeURIComponent(`name = 'proptracker_data.json' and trashed = false`);
  const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,parents)`, {
@@ -2050,7 +2110,11 @@
  }
 
  async function fetchRemoteDriveData() {
- if (!driveAccessToken) return;
+ if (!isTokenValid()) {
+ const renewed = await ensureValidDriveToken();
+ if (!renewed) return;
+ }
+
  updateSyncIndicator('syncing');
  try {
  if (!driveFileId) {
@@ -2109,12 +2173,15 @@
 
  window.addEventListener('load', () => { 
  loadFromLocalStorage();
- if (driveAccessToken) {
  updateSettingsModalUI();
+ 
+ setTimeout(() => {
+ if (isTokenValid()) {
  fetchRemoteDriveData();
- } else {
- setTimeout(() => handleAuthDrive(true), 1000);
+ } else if (driveAccessToken || localStorage.getItem('proptracker_gdrive_folder_id')) {
+ handleAuthDrive(true, fetchRemoteDriveData);
  }
+ }, 600);
  });
  </script>
 </body>
