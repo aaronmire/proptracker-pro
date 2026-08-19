@@ -32,3 +32,6 @@
 - Cloud upload changes - clicking it forces immediate write to proptracker_data.json with latest workspace changes
 - Account size/type formatting
 - Added persistent Google Sign-In token to stay signed in with Google when reloading app
+
+----- <b><i>v3.0</b></i> -----
+- New Journal tab
