@@ -179,22 +179,6 @@
  background: rgba(255,255,255,0.16);
  color: #ffffff;
  }
-
- .editor-select {
- padding: 4px 8px;
- border-radius: 8px;
- background: #1e1035;
- border: 1px solid rgba(255,255,255,0.2);
- font-size: 11px;
- font-weight: bold;
- color: #ffffff;
- cursor: pointer;
- outline: none;
- }
- .editor-select option {
- background: #150928;
- color: #ffffff;
- }
  </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased custom-scrollbar">
@@ -594,13 +578,6 @@
  <button type="button" onclick="formatDoc('bold')" class="editor-btn" title="Bold"><b>B</b></button>
  <button type="button" onclick="formatDoc('italic')" class="editor-btn" title="Italic"><i>I</i></button>
  <button type="button" onclick="formatDoc('underline')" class="editor-btn" title="Underline"><u>U</u></button>
- <button type="button" onclick="toggleHighlight('journalBody')" class="editor-btn text-purple-300" title="Highlight Toggle">HL</button>
- <select onchange="formatDoc('fontSize', this.value); this.selectedIndex=0;" class="editor-select">
- <option value="" disabled selected>Size</option>
- <option value="2">Small</option>
- <option value="3">Normal</option>
- <option value="5">Large</option>
- </select>
  </div>
  <div id="journalBody" contenteditable="true" class="w-full min-h-[110px] max-h-[220px] overflow-y-auto px-3 py-2.5 rounded-xl liquid-glass-input text-xs leading-relaxed custom-scrollbar focus:outline-none"></div>
  </div>
@@ -863,13 +840,6 @@
  <button type="button" onclick="formatEditModalDoc('bold')" class="editor-btn" title="Bold"><b>B</b></button>
  <button type="button" onclick="formatEditModalDoc('italic')" class="editor-btn" title="Italic"><i>I</i></button>
  <button type="button" onclick="formatEditModalDoc('underline')" class="editor-btn" title="Underline"><u>U</u></button>
- <button type="button" onclick="toggleHighlight('modalJournalEditBody')" class="editor-btn text-purple-300" title="Highlight Toggle">HL</button>
- <select onchange="formatEditModalDoc('fontSize', this.value); this.selectedIndex=0;" class="editor-select">
- <option value="" disabled selected>Size</option>
- <option value="2">Small</option>
- <option value="3">Normal</option>
- <option value="5">Large</option>
- </select>
  </div>
  <div id="modalJournalEditBody" contenteditable="true" class="w-full min-h-[110px] max-h-[180px] overflow-y-auto px-3 py-2.5 rounded-xl liquid-glass-input text-xs leading-relaxed custom-scrollbar focus:outline-none"></div>
  </div>
@@ -1208,36 +1178,6 @@
  function formatEditModalDoc(cmd, value = null) {
  document.execCommand(cmd, false, value);
  document.getElementById('modalJournalEditBody').focus();
- }
-
- function toggleHighlight(editorId) {
- const targetEl = document.getElementById(editorId);
- if (!targetEl) return;
- targetEl.focus();
-
- const sel = window.getSelection();
- if (!sel || sel.rangeCount === 0) return;
-
- let isHighlighted = false;
- let node = sel.anchorNode;
- if (node) {
- if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
- while (node && node !== targetEl) {
- const bg = window.getComputedStyle(node).backgroundColor;
- if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
- isHighlighted = true;
- break;
- }
- node = node.parentElement;
- }
- }
-
- if (isHighlighted) {
- document.execCommand('hiliteColor', false, 'transparent');
- document.execCommand('backColor', false, 'transparent');
- } else {
- document.execCommand('hiliteColor', false, '#a855f7');
- }
  }
 
  function getEvalDisplayDetails(e) {
