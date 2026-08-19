@@ -284,7 +284,6 @@
 
  <!-- ================= DASHBOARD TAB ================= -->
  <section id="tabContent-dashboard" class="space-y-6 animate-fade-in">
- <!-- ROW 1: TOP 3 METRICS -->
  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
  <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
  <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Net Profit</p>
@@ -300,7 +299,6 @@
  </div>
  </div>
 
- <!-- ROW 2: BOTTOM 3 SPLIT STATS -->
  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
  <div class="liquid-glass p-5 rounded-3xl relative overflow-hidden group hover:bg-white/[0.04] transition-colors">
  <p class="text-[10px] font-bold uppercase tracking-widest text-purple-300 opacity-80">Return On Investment</p>
@@ -326,7 +324,6 @@
  <div class="flex items-center gap-1.5 sm:gap-2">
  <button onclick="changeCalendarMonth(-1)" class="px-2.5 py-1 rounded-lg liquid-glass-btn text-xs font-bold text-purple-200 hover:text-white transition active:scale-95">◀</button>
  
- <!-- Centered Date Picker Button -->
  <button onclick="openCalPickerModal()" id="btnCalPickerLabel" class="px-3.5 py-1.5 rounded-xl liquid-glass-btn text-xs font-bold text-white hover:text-purple-200 transition active:scale-95 flex items-center gap-1.5">
  Loading...
  </button>
@@ -646,10 +643,10 @@
  <thead>
  <tr class="text-purple-300 opacity-80 text-[10px] uppercase tracking-wider select-none border-b border-white/10">
  <th class="py-3 px-2 w-8 hidden col-select-journal text-center"><input type="checkbox" id="chkSelectAllJournal" onchange="toggleSelectAll('journal', this.checked)"></th>
- <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('journal', 'date')">Date <span id="sort-journal-date"></span></th>
- <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold text-center w-16" onclick="toggleSort('journal', 'mood')">Mood <span id="sort-journal-mood"></span></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold w-28 whitespace-nowrap" onclick="toggleSort('journal', 'date')">Date <span id="sort-journal-date"></span></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold w-20 whitespace-nowrap" onclick="toggleSort('journal', 'mood')">Mood <span id="sort-journal-mood"></span></th>
  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('journal', 'subject')">Subject <span id="sort-journal-subject"></span></th>
- <th class="py-3 px-3 text-right font-semibold">Action</th>
+ <th class="py-3 px-3 text-right font-semibold w-36 whitespace-nowrap">Action</th>
  </tr>
  </thead>
  <tbody id="tblJournalList" class="divide-y divide-white/5"></tbody>
@@ -663,7 +660,6 @@
  <!-- ================= CONSISTENCY CALCULATOR TAB ================= -->
  <section id="tabContent-consistency" class="hidden space-y-6">
  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
- <!-- Card 1: Target Projection Calculator -->
  <div class="liquid-glass p-6 rounded-3xl space-y-5">
  <div class="flex items-center justify-between border-b border-white/10 pb-3">
  <h3 class="font-bold text-white text-base drop-shadow-sm">Target Projection Calculator</h3>
@@ -701,7 +697,6 @@
  </div>
  </div>
 
- <!-- Card 2: Current Progress Calculator -->
  <div class="liquid-glass p-6 rounded-3xl space-y-5">
  <div class="flex items-center justify-between border-b border-white/10 pb-3">
  <h3 class="font-bold text-white text-base drop-shadow-sm">Current Progress Calculator</h3>
@@ -814,9 +809,84 @@
  </div>
  </div>
 
- <div class="pt-3 border-t border-white/10 flex justify-end">
+ <div class="pt-3 border-t border-white/10 flex justify-end gap-2">
+ <button id="btnViewModalEditJournal" class="px-5 py-2.5 rounded-xl liquid-glass-btn-primary text-white text-xs font-bold transition active:scale-95">Edit Entry</button>
  <button onclick="closeViewJournalModal()" class="px-5 py-2.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition">Close</button>
  </div>
+ </div>
+ </div>
+
+ <!-- EDIT JOURNAL ENTRY MODAL -->
+ <div id="editJournalModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-lg flex items-center justify-center p-4 hidden">
+ <div class="liquid-glass w-full max-w-xl rounded-3xl p-7 relative shadow-2xl space-y-5 max-h-[90vh] flex flex-col">
+ <button onclick="closeEditJournalModal()" class="absolute top-5 right-5 text-purple-300 hover:text-white transition">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+ </button>
+ <h3 class="text-lg font-bold text-white drop-shadow-sm border-b border-white/10 pb-3">Edit Journal Entry</h3>
+ <form id="frmModalJournal" onsubmit="handleModalJournalSubmit(event)" class="space-y-4 overflow-y-auto custom-scrollbar pr-1">
+ <input type="hidden" id="modalJournalEditId">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Subject</label>
+ <input type="text" id="modalJournalEditSubject" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+
+ <div class="grid grid-cols-2 gap-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Date</label>
+ <input type="date" id="modalJournalEditDate" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Mood</label>
+ <div class="flex items-center justify-around py-2 px-1 rounded-xl liquid-glass-input">
+ <input type="radio" id="modalMoodGreen" name="modalJournalMood" value="green" class="hidden mood-radio">
+ <label for="modalMoodGreen" class="p-1.5 rounded-xl border border-transparent cursor-pointer flex items-center justify-center transition hover:bg-white/10" title="Green">
+ <span class="mood-orb mood-green"></span>
+ </label>
+
+ <input type="radio" id="modalMoodYellow" name="modalJournalMood" value="yellow" class="hidden mood-radio">
+ <label for="modalMoodYellow" class="p-1.5 rounded-xl border border-transparent cursor-pointer flex items-center justify-center transition hover:bg-white/10" title="Yellow">
+ <span class="mood-orb mood-yellow"></span>
+ </label>
+
+ <input type="radio" id="modalMoodRed" name="modalJournalMood" value="red" class="hidden mood-radio">
+ <label for="modalMoodRed" class="p-1.5 rounded-xl border border-transparent cursor-pointer flex items-center justify-center transition hover:bg-white/10" title="Red">
+ <span class="mood-orb mood-red"></span>
+ </label>
+ </div>
+ </div>
+ </div>
+
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Notes</label>
+ <div class="flex items-center gap-1.5 mb-1.5 flex-wrap">
+ <button type="button" onclick="formatEditModalDoc('bold')" class="editor-btn" title="Bold"><b>B</b></button>
+ <button type="button" onclick="formatEditModalDoc('italic')" class="editor-btn" title="Italic"><i>I</i></button>
+ <button type="button" onclick="formatEditModalDoc('underline')" class="editor-btn" title="Underline"><u>U</u></button>
+ <button type="button" onclick="formatEditModalDoc('hiliteColor', '#a855f7')" class="editor-btn text-purple-300" title="Highlight">HL</button>
+ <select onchange="formatEditModalDoc('fontSize', this.value); this.selectedIndex=0;" class="editor-select">
+ <option value="" disabled selected>Size</option>
+ <option value="2">Small</option>
+ <option value="3">Normal</option>
+ <option value="5">Large</option>
+ </select>
+ </div>
+ <div id="modalJournalEditBody" contenteditable="true" class="w-full min-h-[110px] max-h-[180px] overflow-y-auto px-3 py-2.5 rounded-xl liquid-glass-input text-xs leading-relaxed custom-scrollbar focus:outline-none"></div>
+ </div>
+
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Attach / Change Picture (Optional)</label>
+ <input type="file" id="modalJournalEditImage" accept="image/*" class="w-full text-xs text-purple-200 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-purple-900/40 file:text-purple-200 hover:file:bg-purple-800/60 cursor-pointer">
+ <div id="modalJournalEditImgPreviewContainer" class="hidden mt-2 relative">
+ <img id="modalJournalEditImgPreview" class="w-full max-h-32 object-cover rounded-xl border border-white/10" alt="Preview">
+ <button type="button" onclick="clearModalJournalEditImage()" class="absolute top-1.5 right-1.5 px-2 py-0.5 rounded-lg bg-black/70 text-rose-400 text-[10px] font-bold">Remove</button>
+ </div>
+ </div>
+
+ <div class="flex gap-3 pt-3">
+ <button type="submit" class="flex-grow py-3 rounded-xl liquid-glass-btn-primary text-white font-bold text-[13px] transition active:scale-95">Update Journal Entry</button>
+ <button type="button" onclick="closeEditJournalModal()" class="px-5 py-3 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-[13px] transition active:scale-95">Cancel</button>
+ </div>
+ </form>
  </div>
  </div>
 
@@ -935,12 +1005,10 @@
  </button>
  </div>
 
- <!-- Navigation Breadcrumb -->
  <div id="driveBreadcrumbs" class="flex items-center gap-1 text-xs text-purple-300/80 pb-2 border-b border-white/5 overflow-x-auto">
  <span class="hover:text-white cursor-pointer font-semibold" onclick="navDriveFolder('root', 'My Drive')">My Drive</span>
  </div>
 
- <!-- Folder List -->
  <div id="driveFolderList" class="flex-grow overflow-y-auto custom-scrollbar my-3 space-y-1 pr-1">
  <div class="text-center py-8 text-xs text-purple-300/60">Fetching Google Drive folders...</div>
  </div>
@@ -969,7 +1037,6 @@
  </div>
 
  <div class="space-y-4 border-t border-white/10 pt-4">
- <!-- Cloud Settings -->
  <div class="bg-black/30 p-3.5 rounded-2xl border border-white/5 space-y-2">
  <div class="flex items-center justify-between text-xs">
  <span class="font-semibold text-purple-200">Account Status:</span>
@@ -994,7 +1061,6 @@
  </button>
  </div>
 
- <!-- Tax Compliance Export Button -->
  <div class="border-t border-white/10 pt-4 space-y-2">
  <h4 class="text-xs font-bold uppercase tracking-wider text-purple-300">Reporting &amp; Statements</h4>
  <button onclick="closeSettingsModal(); openCpaModal();" class="w-full py-2.5 rounded-xl liquid-glass-btn-primary text-white font-bold text-xs transition active:scale-95 flex items-center justify-center gap-2">
@@ -1003,7 +1069,6 @@
  </button>
  </div>
 
- <!-- Local Backup Actions -->
  <div class="border-t border-white/10 pt-4 space-y-2">
  <h4 class="text-xs font-bold uppercase tracking-wider text-purple-300">Local Offline Backups</h4>
  <div class="grid grid-cols-2 gap-2.5">
@@ -1101,6 +1166,7 @@
  let payouts = [];
  let journals = [];
  let tempJournalImageBase64 = null;
+ let tempModalJournalEditImageBase64 = null;
 
  let financeChart = null;
  let dailyProfits = ['', '', ''];
@@ -1136,6 +1202,11 @@
  function formatDoc(cmd, value = null) {
  document.execCommand(cmd, false, value);
  document.getElementById('journalBody').focus();
+ }
+
+ function formatEditModalDoc(cmd, value = null) {
+ document.execCommand(cmd, false, value);
+ document.getElementById('modalJournalEditBody').focus();
  }
 
  function getEvalDisplayDetails(e) {
@@ -1571,8 +1642,8 @@
  columns.forEach(col => {
  const el = document.getElementById(`sort-${tableType}-${col}`);
  if (!el) return;
- if (cfg.column === col) { el.innerText = cfg.direction === 'asc' ? ' ▲' : ' ▼'; el.className = "text-emerald-400 text-[9px] drop-shadow-sm"; } 
- else { el.innerText = ' ↕'; el.className = "text-purple-400 text-[9px]"; }
+ if (cfg.column === col) { el.innerText = cfg.direction === 'asc' ? ' ▲' : ' ▼'; el.className = "text-emerald-400 text-[9px] drop-shadow-sm inline-block"; } 
+ else { el.innerText = ' ↕'; el.className = "text-purple-400 text-[9px] inline-block"; }
  });
  }
 
@@ -1659,6 +1730,10 @@
  return `<span class="mood-orb ${cls}"></span>`;
  }
 
+ function entryHasImage(item) {
+ return !!(item.image || (item.content && item.content.includes('<img')));
+ }
+
  function renderJournalTable() {
  const tbody = document.getElementById('tblJournalList');
  if (!tbody) return;
@@ -1676,21 +1751,32 @@
  const start = (page - 1) * size;
  const paginated = items.slice(start, start + size);
 
- tbody.innerHTML = paginated.map(j => `
+ tbody.innerHTML = paginated.map(j => {
+ const hasAttachment = entryHasImage(j);
+ const paperclipHtml = hasAttachment ? `<span class="text-purple-300 mr-1.5 inline-flex items-center align-middle" title="Has image attachment"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg></span>` : '';
+
+ return `
  <tr class="hover:bg-white/[0.04] transition-colors text-[13px]">
  <td class="py-3.5 px-2 text-center ${selectMode.journal ? '' : 'hidden'} col-select-journal">
  <input type="checkbox" ${selectedIds.journal.has(j.id) ? 'checked' : ''} onchange="toggleSelectItem('journal', '${j.id}', this.checked)">
  </td>
  <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px]">${j.date}</td>
- <td class="py-3.5 px-3 text-center">${getMoodOrbHtml(j.mood)}</td>
- <td class="py-3.5 px-3 font-bold text-white cursor-pointer hover:text-purple-300 transition underline underline-offset-2 decoration-purple-500/40" onclick="viewJournalEntry('${j.id}')">${j.subject}</td>
+ <td class="py-3.5 px-3 text-left pl-4">${getMoodOrbHtml(j.mood)}</td>
+ <td class="py-3.5 px-3 font-bold text-white">
+ <div class="flex items-center">
+ ${paperclipHtml}
+ <span class="cursor-pointer hover:text-purple-300 transition underline underline-offset-2 decoration-purple-500/40" onclick="viewJournalEntry('${j.id}')">${j.subject}</span>
+ </div>
+ </td>
  <td class="py-3.5 px-3 text-right">
- <div class="flex items-center justify-end gap-3 text-[11px]">
+ <div class="flex items-center justify-end gap-2 text-[11px]">
  <button onclick="viewJournalEntry('${j.id}')" class="text-purple-300 hover:text-white font-bold transition px-2 py-1 rounded hover:bg-white/5 active:scale-95">View</button>
+ <button onclick="openEditJournalModal('${j.id}')" class="text-purple-300 hover:text-white font-bold transition px-2 py-1 rounded hover:bg-white/5 active:scale-95">Edit</button>
  <button onclick="deleteJournal('${j.id}')" class="text-rose-400/80 hover:text-rose-400 font-bold transition px-2 py-1 rounded hover:bg-rose-500/10 active:scale-95">Del</button>
  </div>
  </td>
- </tr>`).join('');
+ </tr>`;
+ }).join('');
 
  renderPaginationControls('journal', items.length);
  }
@@ -1709,6 +1795,20 @@
  reader.readAsDataURL(file);
  });
 
+ document.getElementById('modalJournalEditImage')?.addEventListener('change', function(e) {
+ const file = e.target.files[0];
+ if (!file) return;
+ const reader = new FileReader();
+ reader.onload = function(evt) {
+ tempModalJournalEditImageBase64 = evt.target.result;
+ const preview = document.getElementById('modalJournalEditImgPreview');
+ const container = document.getElementById('modalJournalEditImgPreviewContainer');
+ preview.src = tempModalJournalEditImageBase64;
+ container.classList.remove('hidden');
+ };
+ reader.readAsDataURL(file);
+ });
+
  function clearJournalFormImage() {
  tempJournalImageBase64 = null;
  const input = document.getElementById('journalImage');
@@ -1716,6 +1816,16 @@
  const preview = document.getElementById('journalImgPreview');
  if (preview) preview.src = '';
  const container = document.getElementById('journalImgPreviewContainer');
+ if (container) container.classList.add('hidden');
+ }
+
+ function clearModalJournalEditImage() {
+ tempModalJournalEditImageBase64 = null;
+ const input = document.getElementById('modalJournalEditImage');
+ if (input) input.value = '';
+ const preview = document.getElementById('modalJournalEditImgPreview');
+ if (preview) preview.src = '';
+ const container = document.getElementById('modalJournalEditImgPreviewContainer');
  if (container) container.classList.add('hidden');
  }
 
@@ -1761,11 +1871,70 @@
  imgContainer.classList.add('hidden');
  }
 
+ const btnEdit = document.getElementById('btnViewModalEditJournal');
+ btnEdit.onclick = () => {
+ closeViewJournalModal();
+ openEditJournalModal(item.id);
+ };
+
  document.getElementById('viewJournalModal').classList.remove('hidden');
  }
 
  function closeViewJournalModal() {
  document.getElementById('viewJournalModal').classList.add('hidden');
+ }
+
+ function openEditJournalModal(id) {
+ const item = journals.find(j => j.id === id);
+ if (!item) return;
+
+ document.getElementById('modalJournalEditId').value = item.id;
+ document.getElementById('modalJournalEditSubject').value = item.subject || '';
+ document.getElementById('modalJournalEditDate').value = item.date || '';
+
+ const mood = item.mood || 'green';
+ const moodRadio = document.querySelector(`input[name="modalJournalMood"][value="${mood}"]`);
+ if (moodRadio) moodRadio.checked = true;
+
+ document.getElementById('modalJournalEditBody').innerHTML = item.content || '';
+
+ tempModalJournalEditImageBase64 = item.image || null;
+ const preview = document.getElementById('modalJournalEditImgPreview');
+ const container = document.getElementById('modalJournalEditImgPreviewContainer');
+ if (tempModalJournalEditImageBase64) {
+ preview.src = tempModalJournalEditImageBase64;
+ container.classList.remove('hidden');
+ } else {
+ preview.src = '';
+ container.classList.add('hidden');
+ }
+
+ document.getElementById('modalJournalEditImage').value = '';
+ document.getElementById('editJournalModal').classList.remove('hidden');
+ }
+
+ function closeEditJournalModal() {
+ document.getElementById('editJournalModal').classList.add('hidden');
+ }
+
+ function handleModalJournalSubmit(e) {
+ e.preventDefault();
+ const id = document.getElementById('modalJournalEditId').value;
+ const idx = journals.findIndex(j => j.id === id);
+ if (idx !== -1) {
+ const moodEl = document.querySelector('input[name="modalJournalMood"]:checked');
+ journals[idx] = {
+ id: id,
+ subject: document.getElementById('modalJournalEditSubject').value,
+ date: document.getElementById('modalJournalEditDate').value,
+ mood: moodEl ? moodEl.value : 'green',
+ content: document.getElementById('modalJournalEditBody').innerHTML,
+ image: tempModalJournalEditImageBase64 || null
+ };
+ showToast("Success", "Journal entry updated.");
+ }
+ closeEditJournalModal();
+ onDataChanged();
  }
 
  function deleteJournal(id) {
