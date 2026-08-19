@@ -138,6 +138,41 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  accent-color: #9333ea;
  cursor: pointer;
  }
+
+ .mood-orb {
+ width: 14px;
+ height: 14px;
+ border-radius: 9999px;
+ display: inline-block;
+ shrink-0: 0;
+ }
+ .mood-green {
+ background-color: #10b981;
+ box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+ }
+ .mood-yellow {
+ background-color: #f59e0b;
+ box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
+ }
+ .mood-red {
+ background-color: #ef4444;
+ box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+ }
+
+ .editor-btn {
+ padding: 4px 8px;
+ border-radius: 6px;
+ background: rgba(255,255,255,0.05);
+ border: 1px solid rgba(255,255,255,0.1);
+ font-size: 11px;
+ font-weight: bold;
+ color: #d8b4fe;
+ transition: all 0.2s;
+ }
+ .editor-btn:hover {
+ background: rgba(255,255,255,0.15);
+ color: #ffffff;
+ }
  </style>
 </head>
 <body class="min-h-screen flex flex-col antialiased custom-scrollbar">
@@ -166,7 +201,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5 sm:gap-2 drop-shadow-md truncate">
  <span>PropTracker</span>
  <span class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm shrink-0">PRO</span>
- <span class="text-[11px] font-medium tracking-normal text-purple-300/60 shrink-0 pr-1 select-none">v2.3</span>
+ <span class="text-[11px] font-medium tracking-normal text-purple-300/60 shrink-0 pr-1 select-none">v3.0</span>
  </h1>
  </div>
 
@@ -206,6 +241,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  </button>
  <button onclick="switchTab('payouts')" id="tabBtn-payouts" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
  Payout Logs
+ </button>
+ <button onclick="switchTab('journal')" id="tabBtn-journal" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
+ Journal
  </button>
  <button onclick="switchTab('consistency')" id="tabBtn-consistency" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
  Consistency Calculator
@@ -493,6 +531,103 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  </div>
  </section>
 
+ <!-- ================= JOURNAL TAB ================= -->
+ <section id="tabContent-journal" class="hidden space-y-6">
+ <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+ <div class="liquid-glass p-6 rounded-3xl h-fit space-y-5">
+ <h3 class="font-bold text-white text-base border-b border-white/10 pb-3 drop-shadow-sm">Add Journal Entry</h3>
+ <form id="frmJournal" onsubmit="handleJournalSubmit(event)" class="space-y-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Subject</label>
+ <input type="text" id="journalSubject" required placeholder="e.g. NQ London Session Breakout" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+
+ <div class="grid grid-cols-2 gap-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Date</label>
+ <input type="date" id="journalDate" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Mood / Sentiment</label>
+ <select id="journalMood" required class="w-full px-3 py-2.5 rounded-xl liquid-glass-input text-xs font-semibold cursor-pointer">
+ <option value="green">🟢 Bullish / Great</option>
+ <option value="yellow">🟡 Neutral / Balanced</option>
+ <option value="red">🔴 Bearish / Rough</option>
+ </select>
+ </div>
+ </div>
+
+ <!-- Basic Text Editing Toolbar -->
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Notes &amp; Reflection</label>
+ <div class="flex items-center gap-1.5 mb-1.5 flex-wrap">
+ <button type="button" onclick="formatDoc('bold')" class="editor-btn" title="Bold"><b>B</b></button>
+ <button type="button" onclick="formatDoc('italic')" class="editor-btn" title="Italic"><i>I</i></button>
+ <button type="button" onclick="formatDoc('underline')" class="editor-btn" title="Underline"><u>U</u></button>
+ <button type="button" onclick="formatDoc('hiliteColor', '#a855f7')" class="editor-btn text-purple-300" title="Highlight">HL</button>
+ <select onchange="formatDoc('fontSize', this.value); this.selectedIndex=0;" class="editor-btn cursor-pointer">
+ <option value="" disabled selected>Size</option>
+ <option value="2">Small</option>
+ <option value="3">Normal</option>
+ <option value="5">Large</option>
+ </select>
+ </div>
+ <div id="journalBody" contenteditable="true" class="w-full min-h-[110px] max-h-[220px] overflow-y-auto px-3 py-2.5 rounded-xl liquid-glass-input text-xs leading-relaxed custom-scrollbar focus:outline-none" placeholder="Write execution notes..."></div>
+ </div>
+
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Attach Picture (Optional)</label>
+ <input type="file" id="journalImage" accept="image/*" class="w-full text-xs text-purple-200 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-purple-900/40 file:text-purple-200 hover:file:bg-purple-800/60 cursor-pointer">
+ <div id="journalImgPreviewContainer" class="hidden mt-2 relative">
+ <img id="journalImgPreview" class="w-full max-h-32 object-cover rounded-xl border border-white/10" alt="Preview">
+ <button type="button" onclick="clearJournalFormImage()" class="absolute top-1.5 right-1.5 px-2 py-0.5 rounded-lg bg-black/70 text-rose-400 text-[10px] font-bold">Remove</button>
+ </div>
+ </div>
+
+ <div class="flex gap-3 pt-2">
+ <button type="submit" class="flex-grow py-3 rounded-xl liquid-glass-btn-primary text-white font-bold text-[13px] transition active:scale-95">Save Entry</button>
+ </div>
+ </form>
+ </div>
+
+ <div class="liquid-glass p-6 rounded-3xl lg:col-span-2 space-y-4">
+ <div class="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
+ <h3 class="font-bold text-white text-base drop-shadow-sm">Journal Entries</h3>
+ <div class="flex items-center gap-3">
+ <button id="btnToggleSelectJournal" onclick="toggleSelectMode('journal')" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95">Select</button>
+ <button id="btnBatchDeleteJournal" onclick="deleteSelectedJournal()" class="hidden px-3 py-1.5 rounded-xl bg-rose-600/80 text-white text-xs font-bold hover:bg-rose-500 transition active:scale-95">Delete Selected (<span id="countSelectedJournal">0</span>)</button>
+
+ <div class="flex items-center gap-1.5 ml-1">
+ <label class="text-[11px] text-purple-300 font-semibold">Show:</label>
+ <select id="journalPageSize" onchange="changePageSize('journal', this.value)" class="px-2 py-1 rounded-lg liquid-glass-input text-xs font-semibold cursor-pointer">
+ <option value="10">10</option>
+ <option value="25">25</option>
+ <option value="50">50</option>
+ <option value="all">ALL</option>
+ </select>
+ </div>
+ </div>
+ </div>
+ <div class="overflow-x-auto custom-scrollbar pb-2">
+ <table class="w-full text-left text-[13px] text-purple-100 min-w-[500px]">
+ <thead>
+ <tr class="text-purple-300 opacity-80 text-[10px] uppercase tracking-wider select-none border-b border-white/10">
+ <th class="py-3 px-2 w-8 hidden col-select-journal text-center"><input type="checkbox" id="chkSelectAllJournal" onchange="toggleSelectAll('journal', this.checked)"></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('journal', 'date')">Date <span id="sort-journal-date"></span></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold text-center w-16" onclick="toggleSort('journal', 'mood')">Mood <span id="sort-journal-mood"></span></th>
+ <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('journal', 'subject')">Subject <span id="sort-journal-subject"></span></th>
+ <th class="py-3 px-3 text-center font-semibold">Image</th>
+ <th class="py-3 px-3 text-right font-semibold">Action</th>
+ </tr>
+ </thead>
+ <tbody id="tblJournalList" class="divide-y divide-white/5"></tbody>
+ </table>
+ </div>
+ <div class="flex items-center justify-end gap-1.5 pt-4 border-t border-white/10" id="journalPagination"></div>
+ </div>
+ </div>
+ </section>
+
  <!-- ================= CONSISTENCY CALCULATOR TAB ================= -->
  <section id="tabContent-consistency" class="hidden space-y-6">
  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -623,6 +758,35 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  </section>
 
  </main>
+
+ <!-- VIEW JOURNAL ENTRY MODAL -->
+ <div id="viewJournalModal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-lg flex items-center justify-center p-4 hidden">
+ <div class="liquid-glass w-full max-w-xl rounded-3xl p-7 relative shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
+ <button onclick="closeViewJournalModal()" class="absolute top-5 right-5 text-purple-300 hover:text-white transition">
+ <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+ </button>
+
+ <div class="flex items-center gap-3 border-b border-white/10 pb-3 pr-8">
+ <span id="modalJournalMoodOrb" class="mood-orb"></span>
+ <div>
+ <h3 id="modalJournalSubject" class="text-lg font-bold text-white leading-tight"></h3>
+ <p id="modalJournalDate" class="text-xs text-purple-300 font-mono"></p>
+ </div>
+ </div>
+
+ <div class="flex-grow overflow-y-auto custom-scrollbar space-y-4 pr-1">
+ <div id="modalJournalBody" class="text-sm text-purple-100 leading-relaxed bg-black/25 p-4 rounded-2xl border border-white/5 whitespace-pre-wrap"></div>
+ <div id="modalJournalImageContainer" class="hidden">
+ <p class="text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1">Attached Image</p>
+ <img id="modalJournalImage" class="w-full rounded-2xl border border-white/10 max-h-96 object-contain bg-black/40" alt="Journal Attachment">
+ </div>
+ </div>
+
+ <div class="pt-3 border-t border-white/10 flex justify-end">
+ <button onclick="closeViewJournalModal()" class="px-5 py-2.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition">Close</button>
+ </div>
+ </div>
+ </div>
 
  <!-- EDIT EVALUATION MODAL -->
  <div id="editEvalModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-lg flex items-center justify-center p-4 hidden">
@@ -903,23 +1067,27 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <script>
  let evaluations = [];
  let payouts = [];
+ let journals = [];
+ let tempJournalImageBase64 = null;
+
  let financeChart = null;
  let dailyProfits = ['', '', ''];
 
- let pageSizes = { evals: 10, payouts: 10 };
- let currentPage = { evals: 1, payouts: 1 };
+ let pageSizes = { evals: 10, payouts: 10, journal: 10 };
+ let currentPage = { evals: 1, payouts: 1, journal: 1 };
  
 let sortConfig = {
  evals: { column: 'date', direction: 'desc' },
- payouts: { column: 'date', direction: 'desc' }
+ payouts: { column: 'date', direction: 'desc' },
+ journal: { column: 'date', direction: 'desc' }
  };
 
- let selectMode = { evals: false, payouts: false };
- let selectedIds = { evals: new Set(), payouts: new Set() };
+ let selectMode = { evals: false, payouts: false, journal: false };
+ let selectedIds = { evals: new Set(), payouts: new Set(), journal: new Set() };
 
  let calCurrentDate = new Date();
 
- // Google Drive Sync States & Token Caching (Using localStorage for persistence)
+ // Google Drive Sync States & Token Caching
  const driveClientId = '473412055368-1kmi3j378bccjcgc1j28r1hpluhscbnh.apps.googleusercontent.com';
  let driveAccessToken = localStorage.getItem('proptracker_gdrive_access_token') || null;
  let driveTokenExpiresAt = parseInt(localStorage.getItem('proptracker_gdrive_token_expires') || '0', 10);
@@ -932,6 +1100,11 @@ let sortConfig = {
  let currentBrowsingFolder = { id: 'root', name: 'My Drive' };
 
  function formatCurrency(val) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val || 0); }
+
+ function formatDoc(cmd, value = null) {
+ document.execCommand(cmd, false, value);
+ document.getElementById('journalBody').focus();
+ }
 
  function getEvalDisplayDetails(e) {
  if (e.accountDetails) return e.accountDetails;
@@ -1018,7 +1191,7 @@ let sortConfig = {
  }
 
  function switchTab(tabName) {
- const tabs = ['dashboard', 'evaluations', 'payouts', 'consistency', 'target'];
+ const tabs = ['dashboard', 'evaluations', 'payouts', 'journal', 'consistency', 'target'];
  tabs.forEach(t => {
  const btn = document.getElementById(`tabBtn-${t}`);
  const cnt = document.getElementById(`tabContent-${t}`);
@@ -1044,6 +1217,7 @@ let sortConfig = {
  renderDashboardCalendar();
  renderEvaluationsTable();
  renderPayoutsTable();
+ renderJournalTable();
  runConsistencySolver();
  runProgressTrackerCalc();
  runSimpleTargetCalc();
@@ -1186,9 +1360,9 @@ let sortConfig = {
 
  function toggleSelectMode(type) {
  selectMode[type] = !selectMode[type];
- const btn = document.getElementById(type === 'evals' ? 'btnToggleSelectEvals' : 'btnToggleSelectPayouts');
- const batchBtn = document.getElementById(type === 'evals' ? 'btnBatchDeleteEvals' : 'btnBatchDeletePayouts');
- const colSelects = document.querySelectorAll(type === 'evals' ? '.col-select-evals' : '.col-select-payouts');
+ const btn = document.getElementById(type === 'evals' ? 'btnToggleSelectEvals' : (type === 'payouts' ? 'btnToggleSelectPayouts' : 'btnToggleSelectJournal'));
+ const batchBtn = document.getElementById(type === 'evals' ? 'btnBatchDeleteEvals' : (type === 'payouts' ? 'btnBatchDeletePayouts' : 'btnBatchDeleteJournal'));
+ const colSelects = document.querySelectorAll(type === 'evals' ? '.col-select-evals' : (type === 'payouts' ? '.col-select-payouts' : '.col-select-journal'));
 
  if (selectMode[type]) {
  btn.innerText = 'Cancel Select';
@@ -1201,11 +1375,13 @@ let sortConfig = {
  batchBtn.classList.add('hidden');
  colSelects.forEach(el => el.classList.add('hidden'));
  selectedIds[type].clear();
- const masterChk = document.getElementById(type === 'evals' ? 'chkSelectAllEvals' : 'chkSelectAllPayouts');
+ const masterChk = document.getElementById(type === 'evals' ? 'chkSelectAllEvals' : (type === 'payouts' ? 'chkSelectAllPayouts' : 'chkSelectAllJournal'));
  if (masterChk) masterChk.checked = false;
  updateSelectedCount(type);
  }
- type === 'evals' ? renderEvaluationsTable() : renderPayoutsTable();
+ if (type === 'evals') renderEvaluationsTable();
+ else if (type === 'payouts') renderPayoutsTable();
+ else renderJournalTable();
  }
 
  function toggleSelectItem(type, id, isChecked) {
@@ -1215,7 +1391,11 @@ let sortConfig = {
  }
 
  function toggleSelectAll(type, isChecked) {
- const items = type === 'evals' ? sortDataset(evaluations, sortConfig.evals) : sortDataset(payouts, sortConfig.payouts);
+ let items = [];
+ if (type === 'evals') items = sortDataset(evaluations, sortConfig.evals);
+ else if (type === 'payouts') items = sortDataset(payouts, sortConfig.payouts);
+ else items = sortDataset(journals, sortConfig.journal);
+
  const size = pageSizes[type];
  const page = currentPage[type];
  const start = (page - 1) * size;
@@ -1227,11 +1407,13 @@ let sortConfig = {
  });
 
  updateSelectedCount(type);
- type === 'evals' ? renderEvaluationsTable() : renderPayoutsTable();
+ if (type === 'evals') renderEvaluationsTable();
+ else if (type === 'payouts') renderPayoutsTable();
+ else renderJournalTable();
  }
 
  function updateSelectedCount(type) {
- const countEl = document.getElementById(type === 'evals' ? 'countSelectedEvals' : 'countSelectedPayouts');
+ const countEl = document.getElementById(type === 'evals' ? 'countSelectedEvals' : (type === 'payouts' ? 'countSelectedPayouts' : 'countSelectedJournal'));
  if (countEl) countEl.innerText = selectedIds[type].size;
  }
 
@@ -1259,19 +1441,35 @@ let sortConfig = {
  });
  }
 
+ function deleteSelectedJournal() {
+ const count = selectedIds.journal.size;
+ if (count === 0) return showToast("No Selection", "Please check entries to delete.", "rose");
+ askConfirmation(`Permanently erase ${count} selected journal entry(ies)?`, () => {
+ journals = journals.filter(j => !selectedIds.journal.has(j.id));
+ selectedIds.journal.clear();
+ updateSelectedCount('journal');
+ onDataChanged();
+ showToast("Batch Delete", `${count} journal entries deleted.`, "rose");
+ });
+ }
+
  function changePageSize(type, size) {
  pageSizes[type] = size === 'all' ? 999999 : parseInt(size);
  currentPage[type] = 1;
- type === 'evals' ? renderEvaluationsTable() : renderPayoutsTable();
+ if (type === 'evals') renderEvaluationsTable();
+ else if (type === 'payouts') renderPayoutsTable();
+ else renderJournalTable();
  }
 
  function setPage(type, page) {
  currentPage[type] = page;
- type === 'evals' ? renderEvaluationsTable() : renderPayoutsTable();
+ if (type === 'evals') renderEvaluationsTable();
+ else if (type === 'payouts') renderPayoutsTable();
+ else renderJournalTable();
  }
 
  function renderPaginationControls(type, totalItems) {
- const containerId = type === 'evals' ? 'evalsPagination' : 'payoutsPagination';
+ const containerId = type === 'evals' ? 'evalsPagination' : (type === 'payouts' ? 'payoutsPagination' : 'journalPagination');
  const container = document.getElementById(containerId);
  if(!container) return;
  container.innerHTML = '';
@@ -1326,11 +1524,17 @@ const limit = pageSizes[type];
  const cfg = sortConfig[tableType];
  if (cfg.column === columnName) cfg.direction = cfg.direction === 'asc' ? 'desc' : 'asc';
  else { cfg.column = columnName; cfg.direction = 'asc'; }
- tableType === 'evals' ? renderEvaluationsTable() : renderPayoutsTable();
+ if (tableType === 'evals') renderEvaluationsTable();
+ else if (tableType === 'payouts') renderPayoutsTable();
+ else renderJournalTable();
  }
 
  function updateSortIndicators(tableType) {
- const columns = tableType === 'evals' ? ['date', 'firm', 'accountDetails', 'reference', 'cost'] : ['date', 'firm', 'accountDetails', 'reference', 'net'];
+ let columns = [];
+ if (tableType === 'evals') columns = ['date', 'firm', 'accountDetails', 'reference', 'cost'];
+ else if (tableType === 'payouts') columns = ['date', 'firm', 'accountDetails', 'reference', 'net'];
+ else columns = ['date', 'mood', 'subject'];
+
  const cfg = sortConfig[tableType];
  columns.forEach(col => {
  const el = document.getElementById(`sort-${tableType}-${col}`);
@@ -1416,6 +1620,125 @@ renderPaginationControls('payouts', 0);
  }).join('');
 
  renderPaginationControls('payouts', items.length);
+ }
+
+ function getMoodOrbHtml(mood) {
+ const cls = mood === 'green' ? 'mood-green' : (mood === 'yellow' ? 'mood-yellow' : 'mood-red');
+ return `<span class="mood-orb ${cls}"></span>`;
+ }
+
+ function renderJournalTable() {
+ const tbody = document.getElementById('tblJournalList');
+ if (!tbody) return;
+ updateSortIndicators('journal');
+ const items = sortDataset(journals, sortConfig.journal);
+
+ if (items.length === 0) {
+ tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-sm text-purple-300">No journal logs recorded yet.</td></tr>`;
+ renderPaginationControls('journal', 0);
+ return;
+ }
+
+ const size = pageSizes.journal;
+ const page = currentPage.journal;
+ const start = (page - 1) * size;
+ const paginated = items.slice(start, start + size);
+
+ tbody.innerHTML = paginated.map(j => `
+ <tr class="hover:bg-white/[0.04] transition-colors text-[13px]">
+ <td class="py-3.5 px-2 text-center ${selectMode.journal ? '' : 'hidden'} col-select-journal">
+ <input type="checkbox" ${selectedIds.journal.has(j.id) ? 'checked' : ''} onchange="toggleSelectItem('journal', '${j.id}', this.checked)">
+ </td>
+ <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px]">${j.date}</td>
+ <td class="py-3.5 px-3 text-center">${getMoodOrbHtml(j.mood)}</td>
+ <td class="py-3.5 px-3 font-bold text-white cursor-pointer hover:text-purple-300 transition underline underline-offset-2 decoration-purple-500/40" onclick="viewJournalEntry('${j.id}')">${j.subject}</td>
+ <td class="py-3.5 px-3 text-center">${j.image ? '🖼️' : '-'}</td>
+ <td class="py-3.5 px-3 text-right">
+ <div class="flex items-center justify-end gap-3 text-[11px]">
+ <button onclick="viewJournalEntry('${j.id}')" class="text-purple-300 hover:text-white font-bold transition px-2 py-1 rounded hover:bg-white/5 active:scale-95">View</button>
+ <button onclick="deleteJournal('${j.id}')" class="text-rose-400/80 hover:text-rose-400 font-bold transition px-2 py-1 rounded hover:bg-rose-500/10 active:scale-95">Del</button>
+ </div>
+ </td>
+ </tr>`).join('');
+
+ renderPaginationControls('journal', items.length);
+ }
+
+ document.getElementById('journalImage')?.addEventListener('change', function(e) {
+ const file = e.target.files[0];
+ if (!file) return;
+ const reader = new FileReader();
+ reader.onload = function(evt) {
+ tempJournalImageBase64 = evt.target.result;
+ const preview = document.getElementById('journalImgPreview');
+ const container = document.getElementById('journalImgPreviewContainer');
+ preview.src = tempJournalImageBase64;
+ container.classList.remove('hidden');
+ };
+ reader.readAsDataURL(file);
+ });
+
+ function clearJournalFormImage() {
+ tempJournalImageBase64 = null;
+ document.getElementById('journalImage').value = '';
+ document.getElementById('journalImgPreview').src = '';
+ document.getElementById('journalImgPreviewContainer').classList.add('hidden');
+ }
+
+ function handleJournalSubmit(e) {
+ e.preventDefault();
+ const data = {
+ id: Date.now().toString(),
+ subject: document.getElementById('journalSubject').value,
+ date: document.getElementById('journalDate').value,
+ mood: document.getElementById('journalMood').value,
+ content: document.getElementById('journalBody').innerHTML,
+ image: tempJournalImageBase64 || null
+ };
+ journals.push(data);
+ showToast("Journal Saved", "Trading entry recorded.");
+ document.getElementById('frmJournal').reset();
+ document.getElementById('journalBody').innerHTML = '';
+ clearJournalFormImage();
+ onDataChanged();
+ }
+
+ function viewJournalEntry(id) {
+ const item = journals.find(j => j.id === id);
+ if (!item) return;
+
+ document.getElementById('modalJournalSubject').innerText = item.subject;
+ document.getElementById('modalJournalDate').innerText = item.date;
+
+ const orb = document.getElementById('modalJournalMoodOrb');
+ orb.className = `mood-orb ${item.mood === 'green' ? 'mood-green' : (item.mood === 'yellow' ? 'mood-yellow' : 'mood-red')}`;
+
+ const body = document.getElementById('modalJournalBody');
+ body.innerHTML = item.content || '<span class="opacity-50 italic">No notes logged.</span>';
+
+ const imgContainer = document.getElementById('modalJournalImageContainer');
+ const img = document.getElementById('modalJournalImage');
+ if (item.image) {
+ img.src = item.image;
+ imgContainer.classList.remove('hidden');
+ } else {
+ img.src = '';
+ imgContainer.classList.add('hidden');
+ }
+
+ document.getElementById('viewJournalModal').classList.remove('hidden');
+ }
+
+ function closeViewJournalModal() {
+ document.getElementById('viewJournalModal').classList.add('hidden');
+ }
+
+ function deleteJournal(id) {
+ askConfirmation("Permanently delete this journal log?", () => {
+ journals = journals.filter(j => j.id !== id);
+ onDataChanged();
+ showToast("Removed", "Journal entry deleted.", "rose");
+ });
  }
 
  function handleEvalSubmit(e) {
@@ -1821,7 +2144,7 @@ const pctEl = document.getElementById('simplePct');
 
  function handleExportBackup() {
  const todayDate = new Date().toISOString().substring(0, 10);
- const blob = new Blob([JSON.stringify({ evaluations, payouts }, null, 2)], { type: 'application/json' });
+ const blob = new Blob([JSON.stringify({ evaluations, payouts, journals }, null, 2)], { type: 'application/json' });
  const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `proptracker_backup_${todayDate}.json`; link.click();
  showToast("Backup Saved", "JSON schema file downloaded successfully.");
  }
@@ -1833,9 +2156,10 @@ const pctEl = document.getElementById('simplePct');
  try { 
 const parsed = JSON.parse(evt.target.result);
  
-if (Array.isArray(parsed.evaluations) || Array.isArray(parsed.payouts) || Array.isArray(parsed.evals)) {
+if (Array.isArray(parsed.evaluations) || Array.isArray(parsed.payouts) || Array.isArray(parsed.evals) || Array.isArray(parsed.journals)) {
  evaluations = parsed.evaluations || parsed.evals || [];
  payouts = parsed.payouts || [];
+ journals = parsed.journals || [];
  onDataChanged(); 
 showToast("Success", "Workspace metrics populated from backup.");
  } else {
@@ -1849,6 +2173,7 @@ catch (err) { showToast("Import Failed", "Invalid JSON template layout.", "rose"
  function saveToLocalStorage() { 
 localStorage.setItem('proptracker_evaluations', JSON.stringify(evaluations)); 
 localStorage.setItem('proptracker_payouts', JSON.stringify(payouts)); 
+localStorage.setItem('proptracker_journals', JSON.stringify(journals));
 }
 
  function loadCalculatorsFromLocalStorage() {
@@ -1884,8 +2209,10 @@ localStorage.setItem('proptracker_payouts', JSON.stringify(payouts));
  }
 
  function loadFromLocalStorage() {
- const evs = localStorage.getItem('proptracker_evaluations'), pays = localStorage.getItem('proptracker_payouts');
- evaluations = evs ? JSON.parse(evs) : []; payouts = pays ? JSON.parse(pays) : [];
+ const evs = localStorage.getItem('proptracker_evaluations'), pays = localStorage.getItem('proptracker_payouts'), jrn = localStorage.getItem('proptracker_journals');
+ evaluations = evs ? JSON.parse(evs) : []; 
+ payouts = pays ? JSON.parse(pays) : [];
+ journals = jrn ? JSON.parse(jrn) : [];
  loadCalculatorsFromLocalStorage();
  initDailyInputs();
  onDataChanged();
@@ -2064,7 +2391,7 @@ if (data.files && data.files.length > 0) {
 
  updateSyncIndicator('syncing');
 
- const payload = JSON.stringify({ evaluations, payouts, lastUpdated: new Date().toISOString() }, null, 2);
+ const payload = JSON.stringify({ evaluations, payouts, journals, lastUpdated: new Date().toISOString() }, null, 2);
  
 try {
  if (!driveFileId) {
@@ -2150,14 +2477,16 @@ try {
  headers: { Authorization: `Bearer ${driveAccessToken}` }
  });
  const data = await fileRes.json();
- if (Array.isArray(data.evaluations) || Array.isArray(data.payouts)) {
+ if (Array.isArray(data.evaluations) || Array.isArray(data.payouts) || Array.isArray(data.journals)) {
  evaluations = data.evaluations || [];
  payouts = data.payouts || [];
+ journals = data.journals || [];
  saveToLocalStorage();
  updateSummaryMetrics();
  renderDashboardCalendar();
  renderEvaluationsTable();
  renderPayoutsTable();
+ renderJournalTable();
  showToast("Cloud Loaded", "Data auto-synced from Google Drive.");
  }
  }
