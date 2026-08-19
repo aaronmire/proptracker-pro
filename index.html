@@ -594,7 +594,7 @@
  <button type="button" onclick="formatDoc('bold')" class="editor-btn" title="Bold"><b>B</b></button>
  <button type="button" onclick="formatDoc('italic')" class="editor-btn" title="Italic"><i>I</i></button>
  <button type="button" onclick="formatDoc('underline')" class="editor-btn" title="Underline"><u>U</u></button>
- <button type="button" onclick="formatDoc('hiliteColor', '#a855f7')" class="editor-btn text-purple-300" title="Highlight">HL</button>
+ <button type="button" onclick="toggleHighlight('journalBody')" class="editor-btn text-purple-300" title="Highlight Toggle">HL</button>
  <select onchange="formatDoc('fontSize', this.value); this.selectedIndex=0;" class="editor-select">
  <option value="" disabled selected>Size</option>
  <option value="2">Small</option>
@@ -645,6 +645,7 @@
  <th class="py-3 px-2 w-8 hidden col-select-journal text-center"><input type="checkbox" id="chkSelectAllJournal" onchange="toggleSelectAll('journal', this.checked)"></th>
  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold w-28 whitespace-nowrap" onclick="toggleSort('journal', 'date')">Date <span id="sort-journal-date"></span></th>
  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold w-20 whitespace-nowrap" onclick="toggleSort('journal', 'mood')">Mood <span id="sort-journal-mood"></span></th>
+ <th class="py-3 px-2 text-center w-8 select-none"><span title="Attachment">📎</span></th>
  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('journal', 'subject')">Subject <span id="sort-journal-subject"></span></th>
  <th class="py-3 px-3 text-right font-semibold w-36 whitespace-nowrap">Action</th>
  </tr>
@@ -862,7 +863,7 @@
  <button type="button" onclick="formatEditModalDoc('bold')" class="editor-btn" title="Bold"><b>B</b></button>
  <button type="button" onclick="formatEditModalDoc('italic')" class="editor-btn" title="Italic"><i>I</i></button>
  <button type="button" onclick="formatEditModalDoc('underline')" class="editor-btn" title="Underline"><u>U</u></button>
- <button type="button" onclick="formatEditModalDoc('hiliteColor', '#a855f7')" class="editor-btn text-purple-300" title="Highlight">HL</button>
+ <button type="button" onclick="toggleHighlight('modalJournalEditBody')" class="editor-btn text-purple-300" title="Highlight Toggle">HL</button>
  <select onchange="formatEditModalDoc('fontSize', this.value); this.selectedIndex=0;" class="editor-select">
  <option value="" disabled selected>Size</option>
  <option value="2">Small</option>
@@ -1207,6 +1208,36 @@
  function formatEditModalDoc(cmd, value = null) {
  document.execCommand(cmd, false, value);
  document.getElementById('modalJournalEditBody').focus();
+ }
+
+ function toggleHighlight(editorId) {
+ const targetEl = document.getElementById(editorId);
+ if (!targetEl) return;
+ targetEl.focus();
+
+ const sel = window.getSelection();
+ if (!sel || sel.rangeCount === 0) return;
+
+ let isHighlighted = false;
+ let node = sel.anchorNode;
+ if (node) {
+ if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
+ while (node && node !== targetEl) {
+ const bg = window.getComputedStyle(node).backgroundColor;
+ if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') {
+ isHighlighted = true;
+ break;
+ }
+ node = node.parentElement;
+ }
+ }
+
+ if (isHighlighted) {
+ document.execCommand('hiliteColor', false, 'transparent');
+ document.execCommand('backColor', false, 'transparent');
+ } else {
+ document.execCommand('hiliteColor', false, '#a855f7');
+ }
  }
 
  function getEvalDisplayDetails(e) {
@@ -1741,7 +1772,7 @@
  const items = sortDataset(journals, sortConfig.journal);
 
  if (items.length === 0) {
- tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-sm text-purple-300">No journal logs recorded yet.</td></tr>`;
+ tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-sm text-purple-300">No journal logs recorded yet.</td></tr>`;
  renderPaginationControls('journal', 0);
  return;
  }
@@ -1753,20 +1784,18 @@
 
  tbody.innerHTML = paginated.map(j => {
  const hasAttachment = entryHasImage(j);
- const paperclipHtml = hasAttachment ? `<span class="text-purple-300 mr-1.5 inline-flex items-center align-middle" title="Has image attachment"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg></span>` : '';
+ const paperclipHtml = hasAttachment ? `<span class="text-purple-300 inline-flex items-center justify-center" title="Has image attachment"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg></span>` : '<span class="opacity-20 text-purple-400 text-xs">-</span>';
 
  return `
  <tr class="hover:bg-white/[0.04] transition-colors text-[13px]">
  <td class="py-3.5 px-2 text-center ${selectMode.journal ? '' : 'hidden'} col-select-journal">
  <input type="checkbox" ${selectedIds.journal.has(j.id) ? 'checked' : ''} onchange="toggleSelectItem('journal', '${j.id}', this.checked)">
  </td>
- <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px]">${j.date}</td>
+ <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px] whitespace-nowrap">${j.date}</td>
  <td class="py-3.5 px-3 text-left pl-4">${getMoodOrbHtml(j.mood)}</td>
+ <td class="py-3.5 px-2 text-center">${paperclipHtml}</td>
  <td class="py-3.5 px-3 font-bold text-white">
- <div class="flex items-center">
- ${paperclipHtml}
  <span class="cursor-pointer hover:text-purple-300 transition underline underline-offset-2 decoration-purple-500/40" onclick="viewJournalEntry('${j.id}')">${j.subject}</span>
- </div>
  </td>
  <td class="py-3.5 px-3 text-right">
  <div class="flex items-center justify-end gap-2 text-[11px]">
@@ -1947,13 +1976,13 @@
 
  function handleEvalSubmit(e) {
  e.preventDefault();
- const data = {
- id: Date.now().toString(),
+ const data = { 
+ id: Date.now().toString(), 
  firm: document.getElementById('evalFirm').value, 
- accountDetails: document.getElementById('evalAccountDetails').value,
- cost: parseFloat(document.getElementById('evalCost').value) || 0,
+ accountDetails: document.getElementById('evalAccountDetails').value, 
+ cost: parseFloat(document.getElementById('evalCost').value) || 0, 
  date: document.getElementById('evalDate').value, 
- reference: document.getElementById('evalRef').value || 'N/A'
+ reference: document.getElementById('evalRef').value || 'N/A' 
  };
  evaluations.push(data);
  showToast("Created", "Evaluation added to ledger.");
@@ -2005,7 +2034,7 @@
  accountDetails: document.getElementById('payoutAccountDetails').value, 
  date: document.getElementById('payoutDate').value, 
  net: parseFloat(document.getElementById('payoutNet').value) || 0,
- reference: document.getElementById('payoutRef').value || 'N/A'
+ reference: document.getElementById('payoutRef').value || 'N/A' 
  };
  payouts.push(data);
  showToast("Logged", "Income payout recorded.");
