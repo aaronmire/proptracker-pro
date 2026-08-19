@@ -5,7 +5,7 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <title>PropTracker Pro</title>
  
-<!-- Custom Purple Flame Favicon -->
+ <!-- Custom Purple Flame Favicon -->
  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230b0314'/><path d='M50 12 C58 28 80 38 80 62 C80 78 66 88 50 88 C34 88 20 78 20 62 C20 38 42 28 50 12 Z' fill='%239333ea'/><path d='M50 32 C56 44 70 52 70 68 C70 79 61 85 50 85 C30 52 44 44 50 32 Z' fill='%23ec4899'/><path d='M50 48 C53 56 62 62 62 72 C62 79 56 83 50 83 C44 83 38 79 38 72 C38 62 47 56 50 48 Z' fill='%23f472b6'/><path d='M50 60 C51 65 56 68 56 74 C56 78 53 80 50 80 C47 80 44 78 44 74 C44 68 49 65 50 60 Z' fill='%23fbcfe8'/></svg>">
 
  <!-- Tailwind CSS -->
@@ -30,7 +30,7 @@
  color: #f8fafc;
  }
  
-.ambient-bg {
+ .ambient-bg {
  position: fixed;
  top: 0; left: 0; width: 100vw; height: 100vh;
  z-index: -1;
@@ -107,7 +107,7 @@
  .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 9999px; }
  .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
  
-input[type="date"]::-webkit-calendar-picker-indicator {
+ input[type="date"]::-webkit-calendar-picker-indicator {
  filter: invert(1);
  cursor: pointer;
  opacity: 0.5;
@@ -159,18 +159,40 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
  }
 
+ .mood-radio:checked + label {
+ border-color: rgba(168, 85, 247, 0.8);
+ background: rgba(147, 51, 234, 0.2);
+ box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+ }
+
  .editor-btn {
- padding: 4px 8px;
- border-radius: 6px;
- background: rgba(255,255,255,0.05);
- border: 1px solid rgba(255,255,255,0.1);
+ padding: 5px 9px;
+ border-radius: 8px;
+ background: rgba(255,255,255,0.06);
+ border: 1px solid rgba(255,255,255,0.12);
  font-size: 11px;
  font-weight: bold;
- color: #d8b4fe;
+ color: #e9d5ff;
  transition: all 0.2s;
  }
  .editor-btn:hover {
- background: rgba(255,255,255,0.15);
+ background: rgba(255,255,255,0.16);
+ color: #ffffff;
+ }
+
+ .editor-select {
+ padding: 4px 8px;
+ border-radius: 8px;
+ background: #1e1035;
+ border: 1px solid rgba(255,255,255,0.2);
+ font-size: 11px;
+ font-weight: bold;
+ color: #ffffff;
+ cursor: pointer;
+ outline: none;
+ }
+ .editor-select option {
+ background: #150928;
  color: #ffffff;
  }
  </style>
@@ -304,7 +326,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <div class="flex items-center gap-1.5 sm:gap-2">
  <button onclick="changeCalendarMonth(-1)" class="px-2.5 py-1 rounded-lg liquid-glass-btn text-xs font-bold text-purple-200 hover:text-white transition active:scale-95">◀</button>
  
-<!-- Centered Date Picker Button -->
+ <!-- Centered Date Picker Button -->
  <button onclick="openCalPickerModal()" id="btnCalPickerLabel" class="px-3.5 py-1.5 rounded-xl liquid-glass-btn text-xs font-bold text-white hover:text-purple-200 transition active:scale-95 flex items-center gap-1.5">
  Loading...
  </button>
@@ -426,7 +448,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <button id="btnToggleSelectEvals" onclick="toggleSelectMode('evals')" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95">Select</button>
  <button id="btnBatchDeleteEvals" onclick="deleteSelectedEvals()" class="hidden px-3 py-1.5 rounded-xl bg-rose-600/80 text-white text-xs font-bold hover:bg-rose-500 transition active:scale-95">Delete Selected (<span id="countSelectedEvals">0</span>)</button>
  
-<div class="flex items-center gap-1.5 ml-1">
+ <div class="flex items-center gap-1.5 ml-1">
  <label class="text-[11px] text-purple-300 font-semibold">Show:</label>
  <select id="evalPageSize" onchange="changePageSize('evals', this.value)" class="px-2 py-1 rounded-lg liquid-glass-input text-xs font-semibold cursor-pointer">
  <option value="10">10</option>
@@ -539,7 +561,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <form id="frmJournal" onsubmit="handleJournalSubmit(event)" class="space-y-4">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Subject</label>
- <input type="text" id="journalSubject" required placeholder="e.g. NQ London Session Breakout" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ <input type="text" id="journalSubject" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
 
  <div class="grid grid-cols-2 gap-4">
@@ -548,31 +570,42 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <input type="date" id="journalDate" required class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div>
- <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Mood / Sentiment</label>
- <select id="journalMood" required class="w-full px-3 py-2.5 rounded-xl liquid-glass-input text-xs font-semibold cursor-pointer">
- <option value="green">🟢 Bullish / Great</option>
- <option value="yellow">🟡 Neutral / Balanced</option>
- <option value="red">🔴 Bearish / Rough</option>
- </select>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Mood</label>
+ <div class="flex items-center justify-around py-2 px-1 rounded-xl liquid-glass-input">
+ <input type="radio" id="moodGreen" name="journalMood" value="green" checked class="hidden mood-radio">
+ <label for="moodGreen" class="p-1.5 rounded-xl border border-transparent cursor-pointer flex items-center justify-center transition hover:bg-white/10" title="Green">
+ <span class="mood-orb mood-green"></span>
+ </label>
+
+ <input type="radio" id="moodYellow" name="journalMood" value="yellow" class="hidden mood-radio">
+ <label for="moodYellow" class="p-1.5 rounded-xl border border-transparent cursor-pointer flex items-center justify-center transition hover:bg-white/10" title="Yellow">
+ <span class="mood-orb mood-yellow"></span>
+ </label>
+
+ <input type="radio" id="moodRed" name="journalMood" value="red" class="hidden mood-radio">
+ <label for="moodRed" class="p-1.5 rounded-xl border border-transparent cursor-pointer flex items-center justify-center transition hover:bg-white/10" title="Red">
+ <span class="mood-orb mood-red"></span>
+ </label>
+ </div>
  </div>
  </div>
 
  <!-- Basic Text Editing Toolbar -->
  <div>
- <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Notes &amp; Reflection</label>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Notes</label>
  <div class="flex items-center gap-1.5 mb-1.5 flex-wrap">
  <button type="button" onclick="formatDoc('bold')" class="editor-btn" title="Bold"><b>B</b></button>
  <button type="button" onclick="formatDoc('italic')" class="editor-btn" title="Italic"><i>I</i></button>
  <button type="button" onclick="formatDoc('underline')" class="editor-btn" title="Underline"><u>U</u></button>
  <button type="button" onclick="formatDoc('hiliteColor', '#a855f7')" class="editor-btn text-purple-300" title="Highlight">HL</button>
- <select onchange="formatDoc('fontSize', this.value); this.selectedIndex=0;" class="editor-btn cursor-pointer">
+ <select onchange="formatDoc('fontSize', this.value); this.selectedIndex=0;" class="editor-select">
  <option value="" disabled selected>Size</option>
  <option value="2">Small</option>
  <option value="3">Normal</option>
  <option value="5">Large</option>
  </select>
  </div>
- <div id="journalBody" contenteditable="true" class="w-full min-h-[110px] max-h-[220px] overflow-y-auto px-3 py-2.5 rounded-xl liquid-glass-input text-xs leading-relaxed custom-scrollbar focus:outline-none" placeholder="Write execution notes..."></div>
+ <div id="journalBody" contenteditable="true" class="w-full min-h-[110px] max-h-[220px] overflow-y-auto px-3 py-2.5 rounded-xl liquid-glass-input text-xs leading-relaxed custom-scrollbar focus:outline-none"></div>
  </div>
 
  <div>
@@ -616,7 +649,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('journal', 'date')">Date <span id="sort-journal-date"></span></th>
  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold text-center w-16" onclick="toggleSort('journal', 'mood')">Mood <span id="sort-journal-mood"></span></th>
  <th class="py-3 px-3 cursor-pointer hover:text-white transition font-semibold" onclick="toggleSort('journal', 'subject')">Subject <span id="sort-journal-subject"></span></th>
- <th class="py-3 px-3 text-center font-semibold">Image</th>
  <th class="py-3 px-3 text-right font-semibold">Action</th>
  </tr>
  </thead>
@@ -697,7 +729,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  </div>
  </div>
  
-<div id="dailyInputsContainer" class="space-y-2"></div>
+ <div id="dailyInputsContainer" class="space-y-2"></div>
 
  <button onclick="addDailyInputRow()" class="w-full py-2.5 liquid-glass-btn text-purple-200 rounded-xl text-xs font-bold transition active:scale-95">
  + Add Trading Day
@@ -729,7 +761,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  </div>
  </div>
  
-<div class="space-y-4">
+ <div class="space-y-4">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Target Profit ($)</label>
  <input type="number" id="simpleTarget" placeholder="3000" step="0.01" oninput="runSimpleTargetCalc()" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
@@ -980,7 +1012,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  </button>
  <input type="file" id="fileBackup" accept=".json" class="hidden" onchange="handleImportBackup(event)">
  
-<button onclick="handleExportBackup()" class="py-2.5 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-xs hover:text-white transition active:scale-95">
+ <button onclick="handleExportBackup()" class="py-2.5 rounded-xl liquid-glass-btn text-purple-200 font-semibold text-xs hover:text-white transition active:scale-95">
  Export Backup
  </button>
  </div>
@@ -1076,7 +1108,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
  let pageSizes = { evals: 10, payouts: 10, journal: 10 };
  let currentPage = { evals: 1, payouts: 1, journal: 1 };
  
-let sortConfig = {
+ let sortConfig = {
  evals: { column: 'date', direction: 'desc' },
  payouts: { column: 'date', direction: 'desc' },
  journal: { column: 'date', direction: 'desc' }
@@ -1474,7 +1506,7 @@ let sortConfig = {
  if(!container) return;
  container.innerHTML = '';
  
-const limit = pageSizes[type];
+ const limit = pageSizes[type];
  if (limit >= 999999 || totalItems === 0) return;
 
  const totalPages = Math.ceil(totalItems / limit) || 1;
@@ -1540,7 +1572,7 @@ const limit = pageSizes[type];
  const el = document.getElementById(`sort-${tableType}-${col}`);
  if (!el) return;
  if (cfg.column === col) { el.innerText = cfg.direction === 'asc' ? ' ▲' : ' ▼'; el.className = "text-emerald-400 text-[9px] drop-shadow-sm"; } 
-else { el.innerText = ' ↕'; el.className = "text-purple-400 text-[9px]"; }
+ else { el.innerText = ' ↕'; el.className = "text-purple-400 text-[9px]"; }
  });
  }
 
@@ -1549,11 +1581,11 @@ else { el.innerText = ' ↕'; el.className = "text-purple-400 text-[9px]"; }
  if (!tbody) return; updateSortIndicators('evals');
  const items = sortDataset(evaluations, sortConfig.evals);
  
-if (items.length === 0) { 
-tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">No logs saved in workspace.</td></tr>`; 
-renderPaginationControls('evals', 0);
+ if (items.length === 0) { 
+ tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">No logs saved in workspace.</td></tr>`; 
+ renderPaginationControls('evals', 0);
  return; 
-}
+ }
 
  const size = pageSizes.evals;
  const page = currentPage.evals;
@@ -1587,10 +1619,10 @@ renderPaginationControls('evals', 0);
  const items = sortDataset(payouts, sortConfig.payouts);
 
  if (items.length === 0) { 
-tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">No payouts logged yet.</td></tr>`; 
-renderPaginationControls('payouts', 0);
+ tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">No payouts logged yet.</td></tr>`; 
+ renderPaginationControls('payouts', 0);
  return; 
-}
+ }
 
  const size = pageSizes.payouts;
  const page = currentPage.payouts;
@@ -1634,7 +1666,7 @@ renderPaginationControls('payouts', 0);
  const items = sortDataset(journals, sortConfig.journal);
 
  if (items.length === 0) {
- tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-sm text-purple-300">No journal logs recorded yet.</td></tr>`;
+ tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-sm text-purple-300">No journal logs recorded yet.</td></tr>`;
  renderPaginationControls('journal', 0);
  return;
  }
@@ -1652,7 +1684,6 @@ renderPaginationControls('payouts', 0);
  <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px]">${j.date}</td>
  <td class="py-3.5 px-3 text-center">${getMoodOrbHtml(j.mood)}</td>
  <td class="py-3.5 px-3 font-bold text-white cursor-pointer hover:text-purple-300 transition underline underline-offset-2 decoration-purple-500/40" onclick="viewJournalEntry('${j.id}')">${j.subject}</td>
- <td class="py-3.5 px-3 text-center">${j.image ? '🖼️' : '-'}</td>
  <td class="py-3.5 px-3 text-right">
  <div class="flex items-center justify-end gap-3 text-[11px]">
  <button onclick="viewJournalEntry('${j.id}')" class="text-purple-300 hover:text-white font-bold transition px-2 py-1 rounded hover:bg-white/5 active:scale-95">View</button>
@@ -1680,18 +1711,22 @@ renderPaginationControls('payouts', 0);
 
  function clearJournalFormImage() {
  tempJournalImageBase64 = null;
- document.getElementById('journalImage').value = '';
- document.getElementById('journalImgPreview').src = '';
- document.getElementById('journalImgPreviewContainer').classList.add('hidden');
+ const input = document.getElementById('journalImage');
+ if (input) input.value = '';
+ const preview = document.getElementById('journalImgPreview');
+ if (preview) preview.src = '';
+ const container = document.getElementById('journalImgPreviewContainer');
+ if (container) container.classList.add('hidden');
  }
 
  function handleJournalSubmit(e) {
  e.preventDefault();
+ const moodEl = document.querySelector('input[name="journalMood"]:checked');
  const data = {
  id: Date.now().toString(),
  subject: document.getElementById('journalSubject').value,
  date: document.getElementById('journalDate').value,
- mood: document.getElementById('journalMood').value,
+ mood: moodEl ? moodEl.value : 'green',
  content: document.getElementById('journalBody').innerHTML,
  image: tempJournalImageBase64 || null
  };
@@ -1922,10 +1957,10 @@ renderPaginationControls('payouts', 0);
 
  document.getElementById('trackTotalProfit').innerText = formatCurrency(total);
  
-const pctEl = document.getElementById('trackBestDayPct');
+ const pctEl = document.getElementById('trackBestDayPct');
  pctEl.innerText = bestPct.toFixed(1) + '%';
  
-const msgEl = document.getElementById('trackStatusMsg');
+ const msgEl = document.getElementById('trackStatusMsg');
 
  if(bestPct > capPct) {
  pctEl.className = 'text-xl font-extrabold text-rose-400 mt-1';
@@ -1970,7 +2005,7 @@ const msgEl = document.getElementById('trackStatusMsg');
 
  document.getElementById('simpleRemaining').innerText = formatCurrency(remaining);
  
-const pctEl = document.getElementById('simplePct');
+ const pctEl = document.getElementById('simplePct');
  const barEl = document.getElementById('simpleProgressBar');
 
  pctEl.innerText = rawPct.toFixed(1) + '%';
@@ -2154,27 +2189,27 @@ const pctEl = document.getElementById('simplePct');
  const reader = new FileReader();
  reader.onload = function(evt) {
  try { 
-const parsed = JSON.parse(evt.target.result);
+ const parsed = JSON.parse(evt.target.result);
  
-if (Array.isArray(parsed.evaluations) || Array.isArray(parsed.payouts) || Array.isArray(parsed.evals) || Array.isArray(parsed.journals)) {
+ if (Array.isArray(parsed.evaluations) || Array.isArray(parsed.payouts) || Array.isArray(parsed.evals) || Array.isArray(parsed.journals)) {
  evaluations = parsed.evaluations || parsed.evals || [];
  payouts = parsed.payouts || [];
  journals = parsed.journals || [];
  onDataChanged(); 
-showToast("Success", "Workspace metrics populated from backup.");
+ showToast("Success", "Workspace metrics populated from backup.");
  } else {
  showToast("Import Failed", "Invalid JSON template layout.", "rose");
  }
  } 
-catch (err) { showToast("Import Failed", "Invalid JSON template layout.", "rose"); }
+ catch (err) { showToast("Import Failed", "Invalid JSON template layout.", "rose"); }
  }; reader.readAsText(file);
  }
 
  function saveToLocalStorage() { 
-localStorage.setItem('proptracker_evaluations', JSON.stringify(evaluations)); 
-localStorage.setItem('proptracker_payouts', JSON.stringify(payouts)); 
-localStorage.setItem('proptracker_journals', JSON.stringify(journals));
-}
+ localStorage.setItem('proptracker_evaluations', JSON.stringify(evaluations)); 
+ localStorage.setItem('proptracker_payouts', JSON.stringify(payouts)); 
+ localStorage.setItem('proptracker_journals', JSON.stringify(journals));
+ }
 
  function loadCalculatorsFromLocalStorage() {
  const savedProj = localStorage.getItem('proptracker_calc_proj');
@@ -2350,7 +2385,7 @@ localStorage.setItem('proptracker_journals', JSON.stringify(journals));
  });
  const data = await res.json();
  
-if (data.files && data.files.length > 0) {
+ if (data.files && data.files.length > 0) {
  listEl.innerHTML = data.files.map(f => `
  <div onclick="navDriveFolder('${f.id}', '${f.name.replace(/'/g, "\\'")}')" class="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] transition flex items-center justify-between cursor-pointer group">
  <div class="flex items-center gap-2.5">
@@ -2393,7 +2428,7 @@ if (data.files && data.files.length > 0) {
 
  const payload = JSON.stringify({ evaluations, payouts, journals, lastUpdated: new Date().toISOString() }, null, 2);
  
-try {
+ try {
  if (!driveFileId) {
  const query = encodeURIComponent(`name = 'proptracker_data.json' and trashed = false`);
  const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,parents)`, {
