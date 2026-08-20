@@ -35,3 +35,9 @@
 
 ----- <b><i>v3.0</b></i> -----
 - New Journal tab
+
+----- <b><i>v3.1</b></i> -----
+- Added Pull-Before-Push method so JSON files pull from Google Drive and no longer overwrites on auth
+  - Blocks premature writes and debounces sync triggers on login until cloud data is fetched and verified
+  - When syncing between devices, evaluations, payouts, and journal entries are combined by unique id, and ties/updates are resolved using an explicit lastModified timestamp on every object
+  - Mobile logins will pull the laptop's newer entries from Google Drive rather than pushing stale localStorage over the cloud file
