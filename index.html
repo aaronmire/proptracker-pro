@@ -207,7 +207,7 @@
  <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5 sm:gap-2 drop-shadow-md truncate">
  <span>PropTracker</span>
  <span class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm shrink-0">PRO</span>
- <span class="text-[11px] font-medium tracking-normal text-purple-300/60 shrink-0 pr-1 select-none">v3.0</span>
+ <span class="text-[11px] font-medium tracking-normal text-purple-300/60 shrink-0 pr-1 select-none">v3.1</span>
  </h1>
  </div>
 
@@ -220,7 +220,7 @@
  </div>
 
  <!-- Manual Cloud Upload/Update Button -->
- <button onclick="triggerManualSync()" class="p-2 rounded-xl liquid-glass-btn text-purple-200 hover:text-white transition active:scale-95 flex items-center justify-center" title="Push latest changes to proptracker_data.json">
+ <button onclick="triggerManualSync()" class="p-2 rounded-xl liquid-glass-btn text-purple-200 hover:text-white transition active:scale-95 flex items-center justify-center" title="Push latest changes to Google Drive">
  <svg id="manualSyncIcon" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
  <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
  </svg>
@@ -1133,6 +1133,10 @@
 
  <!-- CORE SCRIPT -->
  <script>
+ const APP_VERSION = "3.1";
+ let isInitialSyncDone = false;
+ let autoSaveTimeout = null;
+
  let evaluations = [];
  let payouts = [];
  let journals = [];
@@ -1227,12 +1231,12 @@
  if (!isTokenValid()) {
  showToast("Sign In Required", "Authenticating with Google...", "rose");
  handleAuthDrive(false, () => {
- showToast("Uploading Data", "Saving to proptracker_data.json...");
+ showToast("Uploading Data", "Saving to Google Drive...");
  syncToGoogleDrive();
  });
  return;
  }
- showToast("Uploading Data", "Pushing latest changes to proptracker_data.json...");
+ showToast("Uploading Data", "Pushing latest changes to Google Drive...");
  syncToGoogleDrive();
  }
 
@@ -1296,7 +1300,16 @@
  runProgressTrackerCalc();
  runSimpleTargetCalc();
  rebuildGraphs();
+
+ // Guarded Debounced Cloud Sync: Never overwrite cloud data before initial sync is complete
+ if (!isInitialSyncDone) {
+ return;
+ }
+
+ if (autoSaveTimeout) clearTimeout(autoSaveTimeout);
+ autoSaveTimeout = setTimeout(() => {
  syncToGoogleDrive();
+ }, 1500);
  }
 
  function updateSummaryMetrics() {
@@ -1807,7 +1820,8 @@
  date: document.getElementById('journalDate').value,
  mood: moodEl ? moodEl.value : 'green',
  content: document.getElementById('journalBody').innerHTML,
- image: tempJournalImageBase64 || null
+ image: tempJournalImageBase64 || null,
+ lastModified: new Date().toISOString()
  };
  journals.push(data);
  showToast("Journal Saved", "Trading entry recorded.");
@@ -1898,7 +1912,8 @@
  date: document.getElementById('modalJournalEditDate').value,
  mood: moodEl ? moodEl.value : 'green',
  content: document.getElementById('modalJournalEditBody').innerHTML,
- image: tempModalJournalEditImageBase64 || null
+ image: tempModalJournalEditImageBase64 || null,
+ lastModified: new Date().toISOString()
  };
  showToast("Success", "Journal entry updated.");
  }
@@ -1922,7 +1937,8 @@
  accountDetails: document.getElementById('evalAccountDetails').value, 
  cost: parseFloat(document.getElementById('evalCost').value) || 0, 
  date: document.getElementById('evalDate').value, 
- reference: document.getElementById('evalRef').value || 'N/A' 
+ reference: document.getElementById('evalRef').value || 'N/A',
+ lastModified: new Date().toISOString()
  };
  evaluations.push(data);
  showToast("Created", "Evaluation added to ledger.");
@@ -1956,7 +1972,8 @@
  accountDetails: document.getElementById('modalEvalAccountDetails').value,
  cost: parseFloat(document.getElementById('modalEvalCost').value) || 0,
  date: document.getElementById('modalEvalDate').value,
- reference: document.getElementById('modalEvalRef').value || 'N/A'
+ reference: document.getElementById('modalEvalRef').value || 'N/A',
+ lastModified: new Date().toISOString()
  };
  showToast("Success", "Evaluation record updated.");
  }
@@ -1974,7 +1991,8 @@
  accountDetails: document.getElementById('payoutAccountDetails').value, 
  date: document.getElementById('payoutDate').value, 
  net: parseFloat(document.getElementById('payoutNet').value) || 0,
- reference: document.getElementById('payoutRef').value || 'N/A' 
+ reference: document.getElementById('payoutRef').value || 'N/A',
+ lastModified: new Date().toISOString()
  };
  payouts.push(data);
  showToast("Logged", "Income payout recorded.");
@@ -2008,7 +2026,8 @@
  accountDetails: document.getElementById('modalPayoutAccountDetails').value,
  date: document.getElementById('modalPayoutDate').value,
  net: parseFloat(document.getElementById('modalPayoutNet').value) || 0,
- reference: document.getElementById('modalPayoutRef').value || 'N/A'
+ reference: document.getElementById('modalPayoutRef').value || 'N/A',
+ lastModified: new Date().toISOString()
  };
  showToast("Success", "Payout updated.");
  }
@@ -2317,7 +2336,7 @@
 
  function handleExportBackup() {
  const todayDate = new Date().toISOString().substring(0, 10);
- const blob = new Blob([JSON.stringify({ evaluations, payouts, journals }, null, 2)], { type: 'application/json' });
+ const blob = new Blob([JSON.stringify({ version: APP_VERSION, evaluations, payouts, journals, lastUpdated: new Date().toISOString() }, null, 2)], { type: 'application/json' });
  const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `proptracker_backup_${todayDate}.json`; link.click();
  showToast("Backup Saved", "JSON schema file downloaded successfully.");
  }
@@ -2330,11 +2349,17 @@
  const parsed = JSON.parse(evt.target.result);
  
  if (Array.isArray(parsed.evaluations) || Array.isArray(parsed.payouts) || Array.isArray(parsed.evals) || Array.isArray(parsed.journals)) {
- evaluations = parsed.evaluations || parsed.evals || [];
- payouts = parsed.payouts || [];
- journals = parsed.journals || [];
+ const incomingEvals = parsed.evaluations || parsed.evals || [];
+ const incomingPayouts = parsed.payouts || [];
+ const incomingJournals = parsed.journals || [];
+
+ // Smart Record-level Merge
+ evaluations = mergeList(evaluations, incomingEvals);
+ payouts = mergeList(payouts, incomingPayouts);
+ journals = mergeList(journals, incomingJournals);
+
  onDataChanged(); 
- showToast("Success", "Workspace metrics populated from backup.");
+ showToast("Success", "Workspace metrics merged from backup file.");
  } else {
  showToast("Import Failed", "Invalid JSON template layout.", "rose");
  }
@@ -2347,6 +2372,7 @@
  localStorage.setItem('proptracker_evaluations', JSON.stringify(evaluations)); 
  localStorage.setItem('proptracker_payouts', JSON.stringify(payouts)); 
  localStorage.setItem('proptracker_journals', JSON.stringify(journals));
+ localStorage.setItem('proptracker_last_modified', new Date().toISOString());
  }
 
  function loadCalculatorsFromLocalStorage() {
@@ -2388,7 +2414,40 @@
  journals = jrn ? JSON.parse(jrn) : [];
  loadCalculatorsFromLocalStorage();
  initDailyInputs();
- onDataChanged();
+ updateSummaryMetrics();
+ renderDashboardCalendar();
+ renderEvaluationsTable();
+ renderPayoutsTable();
+ renderJournalTable();
+ runConsistencySolver();
+ runProgressTrackerCalc();
+ runSimpleTargetCalc();
+ rebuildGraphs();
+ }
+
+ /* ================= DATA MERGING & SMART CONFLICT RESOLUTION ================= */
+ function mergeList(localList, cloudList) {
+ const map = new Map();
+ 
+ (cloudList || []).forEach(item => {
+ if (item && item.id) map.set(item.id, item);
+ });
+
+ (localList || []).forEach(item => {
+ if (!item || !item.id) return;
+ if (!map.has(item.id)) {
+ map.set(item.id, item);
+ } else {
+ const existing = map.get(item.id);
+ const existingTime = new Date(existing.lastModified || 0).getTime();
+ const itemTime = new Date(item.lastModified || 0).getTime();
+ if (itemTime >= existingTime) {
+ map.set(item.id, item);
+ }
+ }
+ });
+
+ return Array.from(map.values());
  }
 
  /* ================= GOOGLE DRIVE API & PERSISTENT SESSION INTEGRATION ================= */
@@ -2564,7 +2623,13 @@
 
  updateSyncIndicator('syncing');
 
- const payload = JSON.stringify({ evaluations, payouts, journals, lastUpdated: new Date().toISOString() }, null, 2);
+ const payload = JSON.stringify({ 
+ version: APP_VERSION,
+ evaluations, 
+ payouts, 
+ journals, 
+ lastUpdated: new Date().toISOString() 
+ }, null, 2);
  
  try {
  if (!driveFileId) {
@@ -2623,7 +2688,10 @@
  async function fetchRemoteDriveData() {
  if (!isTokenValid()) {
  const renewed = await ensureValidDriveToken();
- if (!renewed) return;
+ if (!renewed) {
+ isInitialSyncDone = true;
+ return;
+ }
  }
 
  updateSyncIndicator('syncing');
@@ -2651,22 +2719,45 @@
  });
  const data = await fileRes.json();
  if (Array.isArray(data.evaluations) || Array.isArray(data.payouts) || Array.isArray(data.journals)) {
- evaluations = data.evaluations || [];
- payouts = data.payouts || [];
- journals = data.journals || [];
+ const cloudEvals = data.evaluations || [];
+ const cloudPayouts = data.payouts || [];
+ const cloudJournals = data.journals || [];
+
+ // Smart non-destructive merge with local cache
+ const mergedEvals = mergeList(evaluations, cloudEvals);
+ const mergedPayouts = mergeList(payouts, cloudPayouts);
+ const mergedJournals = mergeList(journals, cloudJournals);
+
+ evaluations = mergedEvals;
+ payouts = mergedPayouts;
+ journals = mergedJournals;
+
  saveToLocalStorage();
  updateSummaryMetrics();
  renderDashboardCalendar();
  renderEvaluationsTable();
  renderPayoutsTable();
  renderJournalTable();
- showToast("Cloud Loaded", "Data auto-synced from Google Drive.");
+ runConsistencySolver();
+ runProgressTrackerCalc();
+ runSimpleTargetCalc();
+ rebuildGraphs();
+
+ showToast("Cloud Loaded", "Data synced from Google Drive.");
+
+ // If local had unmerged items that updated the cloud representation, push the merged set back up
+ const hasLocalAdditions = (mergedEvals.length > cloudEvals.length) || (mergedPayouts.length > cloudPayouts.length) || (mergedJournals.length > cloudJournals.length);
+ if (hasLocalAdditions) {
+ syncToGoogleDrive();
+ }
  }
  }
  updateSyncIndicator('synced');
  } catch(e) {
  console.error("Error fetching Google Drive remote file:", e);
  updateSyncIndicator('local');
+ } finally {
+ isInitialSyncDone = true;
  }
  }
 
@@ -2693,6 +2784,8 @@
  fetchRemoteDriveData();
  } else if (driveAccessToken || localStorage.getItem('proptracker_gdrive_folder_id')) {
  handleAuthDrive(true, fetchRemoteDriveData);
+ } else {
+ isInitialSyncDone = true;
  }
  }, 600);
  });
