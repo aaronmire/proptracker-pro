@@ -207,7 +207,7 @@
  <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5 sm:gap-2 drop-shadow-md truncate">
  <span>PropTracker</span>
  <span class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm shrink-0">PRO</span>
- <span class="text-[11px] font-medium tracking-normal text-purple-300/60 shrink-0 pr-1 select-none">v3.1</span>
+ <span class="text-[11px] font-medium tracking-normal text-purple-300/60 shrink-0 pr-1 select-none">v3.2</span>
  </h1>
  </div>
 
@@ -250,6 +250,9 @@
  </button>
  <button onclick="switchTab('journal')" id="tabBtn-journal" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
  Journal
+ </button>
+ <button onclick="switchTab('payoutsplit')" id="tabBtn-payoutsplit" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
+ Payout Split
  </button>
  <button onclick="switchTab('consistency')" id="tabBtn-consistency" class="px-4 py-2 rounded-xl text-[13px] font-semibold transition whitespace-nowrap text-purple-300 hover:bg-white/5 hover:text-white active:scale-95 border border-transparent">
  Consistency Calculator
@@ -623,6 +626,41 @@
  </table>
  </div>
  <div class="flex items-center justify-end gap-1.5 pt-4 border-t border-white/10" id="journalPagination"></div>
+ </div>
+ </div>
+ </section>
+
+ <!-- PAYOUT SPLIT TAB -->
+ <section id="tabContent-payoutsplit" class="hidden space-y-6">
+ <div class="liquid-glass p-6 rounded-3xl max-w-xl mx-auto space-y-5">
+ <div class="flex items-center justify-between border-b border-white/10 pb-3">
+ <h3 class="font-bold text-white text-base drop-shadow-sm">Payout Split Calculator</h3>
+ <div class="flex gap-2">
+ <button onclick="savePayoutSplitCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn-primary text-white text-xs font-bold transition active:scale-95">Save</button>
+ <button onclick="resetPayoutSplitCalc()" class="px-3 py-1 rounded-xl liquid-glass-btn text-purple-200 hover:text-white text-xs font-semibold transition active:scale-95">Reset</button>
+ </div>
+ </div>
+ 
+ <div class="space-y-4">
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Payout Amount ($)</label>
+ <input type="number" id="payoutSplitAmount" placeholder="2000" step="0.01" oninput="runPayoutSplitCalc()" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Split Percentage (%)</label>
+ <input type="number" id="payoutSplitPct" placeholder="90" step="0.01" oninput="runPayoutSplitCalc()" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ </div>
+
+ <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+ <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
+ <span class="text-[9px] font-bold uppercase text-purple-300">Payout Total</span>
+ <div id="payoutSplitTotal" class="text-2xl font-extrabold text-emerald-400 mt-1">$0.00</div>
+ </div>
+ <div class="bg-black/25 p-4 rounded-2xl border border-white/5 text-center">
+ <span class="text-[9px] font-bold uppercase text-purple-300">Prop Total</span>
+ <div id="propSplitTotal" class="text-2xl font-extrabold text-purple-300 mt-1">$0.00</div>
+ </div>
+ </div>
  </div>
  </div>
  </section>
@@ -1125,7 +1163,7 @@
 
  <!-- CORE SCRIPT -->
  <script>
- const APP_VERSION = "3.1";
+ const APP_VERSION = "3.2";
  let isInitialSyncDone = false;
  let autoSaveTimeout = null;
 
@@ -1261,7 +1299,7 @@
  }
 
  function switchTab(tabName) {
- const tabs = ['dashboard', 'evaluations', 'payouts', 'journal', 'consistency', 'target'];
+ const tabs = ['dashboard', 'evaluations', 'payouts', 'journal', 'payoutsplit', 'consistency', 'target'];
  tabs.forEach(t => {
  const btn = document.getElementById(`tabBtn-${t}`);
  const cnt = document.getElementById(`tabContent-${t}`);
@@ -1288,6 +1326,7 @@
  renderEvaluationsTable();
  renderPayoutsTable();
  renderJournalTable();
+ runPayoutSplitCalc();
  runConsistencySolver();
  runProgressTrackerCalc();
  runSimpleTargetCalc();
@@ -2022,6 +2061,37 @@
 
  function deletePayout(id) { askConfirmation("Erase this cash-out distribution entry?", () => { payouts = payouts.filter(p => p.id !== id); onDataChanged(); showToast("Removed", "Payout log deleted.", "rose"); }); }
 
+ function runPayoutSplitCalc() {
+ const amountVal = document.getElementById('payoutSplitAmount').value;
+ const pctVal = document.getElementById('payoutSplitPct').value;
+
+ const amount = amountVal !== '' ? parseFloat(amountVal) : 2000;
+ const pct = pctVal !== '' ? parseFloat(pctVal) : 90;
+
+ const userShare = amount * (pct / 100);
+ const propShare = amount - userShare;
+
+ document.getElementById('payoutSplitTotal').innerText = formatCurrency(userShare);
+ document.getElementById('propSplitTotal').innerText = formatCurrency(propShare);
+ }
+
+ function savePayoutSplitCalc() {
+ const splitState = {
+ amount: document.getElementById('payoutSplitAmount').value,
+ pct: document.getElementById('payoutSplitPct').value
+ };
+ localStorage.setItem('proptracker_calc_payoutsplit', JSON.stringify(splitState));
+ showToast("Saved", "Payout Split Calculator state saved.");
+ }
+
+ function resetPayoutSplitCalc() {
+ document.getElementById('payoutSplitAmount').value = '';
+ document.getElementById('payoutSplitPct').value = '';
+ localStorage.removeItem('proptracker_calc_payoutsplit');
+ runPayoutSplitCalc();
+ showToast("Reset", "Payout Split Calculator restored to defaults.");
+ }
+
  function runConsistencySolver() {
  const targetVal = document.getElementById('consTargetProfit').value;
  const capVal = document.getElementById('consCapPct').value;
@@ -2283,7 +2353,7 @@
  };
  evaluations.forEach(e => { if (filter(e.date)) records.push({ date: e.date, type: 'Expense', category: 'Evaluation Fee', firm: e.firm, reference: getEvalDisplayDetails(e) || e.reference || 'N/A', amount: -parseFloat(e.cost) }); });
  payouts.forEach(p => { if (filter(p.date)) records.push({ date: p.date, type: 'Income', category: 'Payout Split', firm: p.firm, reference: p.accountDetails || p.details || 'N/A', amount: parseFloat(p.net !== undefined ? p.net : p.amount) }); });
- records.sort((a,b) => new Date(a.date) - new Date(a.date));
+ records.sort((a,b) => new Date(a.date) - new Date(b.date));
  let income = 0, expense = 0; records.forEach(r => r.type === 'Income' ? income += r.amount : expense += Math.abs(r.amount));
  const title = `Tax_Report_${timeframe}_${Date.now()}`;
  if (format === 'csv') compileCsv(records, income, expense, `${title}.csv`);
@@ -2356,6 +2426,15 @@
  }
 
  function loadCalculatorsFromLocalStorage() {
+ const savedSplit = localStorage.getItem('proptracker_calc_payoutsplit');
+ if (savedSplit) {
+ try {
+ const s = JSON.parse(savedSplit);
+ if (s.amount !== undefined) document.getElementById('payoutSplitAmount').value = s.amount;
+ if (s.pct !== undefined) document.getElementById('payoutSplitPct').value = s.pct;
+ } catch(e){}
+ }
+
  const savedProj = localStorage.getItem('proptracker_calc_proj');
  if (savedProj) {
  try {
@@ -2399,6 +2478,7 @@
  renderEvaluationsTable();
  renderPayoutsTable();
  renderJournalTable();
+ runPayoutSplitCalc();
  runConsistencySolver();
  runProgressTrackerCalc();
  runSimpleTargetCalc();
@@ -2688,6 +2768,7 @@
  renderEvaluationsTable();
  renderPayoutsTable();
  renderJournalTable();
+ runPayoutSplitCalc();
  runConsistencySolver();
  runProgressTrackerCalc();
  runSimpleTargetCalc();
