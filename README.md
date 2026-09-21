@@ -41,3 +41,6 @@
   - Blocks premature writes and debounces sync triggers on login until cloud data is fetched and verified
   - When syncing between devices, evaluations, payouts, and journal entries are combined by unique id, and ties/updates are resolved using an explicit lastModified timestamp on every object
   - Mobile logins will pull the laptop's newer entries from Google Drive rather than pushing stale localStorage over the cloud file
+
+----- <b><i>v3.2</b></i> -----
+- Added Payout Split Calculator
