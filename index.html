@@ -133,6 +133,16 @@
  box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
  }
  .page-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+ .page-btn { min-width: 34px; }
+ .page-ellipsis { color: #a78bfa; opacity: 0.6; font-size: 12px; font-weight: 700; padding: 0 2px; user-select: none; }
+ .filter-chip {
+ display: inline-flex; align-items: center; gap: 6px;
+ padding: 5px 10px; border-radius: 9999px; cursor: pointer;
+ background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.15);
+ color: #e9d5ff; font-size: 12px; font-weight: 600; transition: all 0.2s; user-select: none;
+ }
+ .filter-chip:hover { background: rgba(255,255,255,0.12); }
+ .filter-chip.on { background: rgba(147,51,234,0.45); border-color: #a855f7; color: #fff; }
 
  input[type="checkbox"] {
  accent-color: #9333ea;
@@ -207,7 +217,7 @@
  <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5 sm:gap-2 drop-shadow-md truncate">
  <span>PropTracker</span>
  <span class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm shrink-0">PRO</span>
- <span class="text-[11px] font-medium tracking-normal text-purple-300/60 shrink-0 pr-1 select-none">v3.2</span>
+ <span class="text-[11px] font-medium tracking-normal text-purple-300/60 shrink-0 pr-1 select-none">v3.3</span>
  </h1>
  </div>
 
@@ -425,6 +435,7 @@
  <div class="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
  <h3 class="font-bold text-white text-base drop-shadow-sm">Evaluations History</h3>
  <div class="flex items-center gap-3">
+ <button id="btnFilterEvals" onclick="toggleFilterPanel('evals')" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95">Filter<span id="filterBadgeEvals" class="hidden ml-1.5 px-1.5 py-0.5 rounded-full bg-purple-600 text-white text-[10px]"></span></button>
  <button id="btnToggleSelectEvals" onclick="toggleSelectMode('evals')" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95">Select</button>
  <button id="btnBatchDeleteEvals" onclick="deleteSelectedEvals()" class="hidden px-3 py-1.5 rounded-xl bg-rose-600/80 text-white text-xs font-bold hover:bg-rose-500 transition active:scale-95">Delete Selected (<span id="countSelectedEvals">0</span>)</button>
  <div class="flex items-center gap-1.5 ml-1">
@@ -438,6 +449,16 @@
  </div>
  </div>
  </div>
+ <div id="filterPanelEvals" class="hidden rounded-2xl border border-white/10 bg-black/20 p-3 space-y-2">
+ <div class="flex items-center justify-between gap-2 flex-wrap">
+ <span class="text-[10px] font-bold uppercase tracking-wider text-purple-300/80">Filter by Firm</span>
+ <div class="flex items-center gap-3">
+ <span id="filterCountEvals" class="text-[11px] text-purple-300/70"></span>
+ <button onclick="clearFirmFilter('evals')" class="text-[11px] font-bold text-purple-300 hover:text-white transition">Clear</button>
+ </div>
+ </div>
+ <div id="filterChipsEvals" class="flex flex-wrap gap-2"></div>
+</div>
  <div class="overflow-x-auto custom-scrollbar pb-2">
  <table class="w-full text-left text-[13px] text-purple-100 min-w-[500px]">
  <thead>
@@ -454,7 +475,7 @@
  <tbody id="tblEvaluationsList" class="divide-y divide-white/5"></tbody>
  </table>
  </div>
- <div class="flex items-center justify-end gap-1.5 pt-4 border-t border-white/10" id="evalsPagination"></div>
+ <div class="flex flex-wrap items-center justify-center sm:justify-end gap-1.5 pt-4 border-t border-white/10 max-w-full" id="evalsPagination"></div>
  </div>
  </div>
  </section>
@@ -497,6 +518,7 @@
  <div class="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
  <h3 class="font-bold text-white text-base drop-shadow-sm">Payout Records</h3>
  <div class="flex items-center gap-3">
+ <button id="btnFilterPayouts" onclick="toggleFilterPanel('payouts')" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95">Filter<span id="filterBadgePayouts" class="hidden ml-1.5 px-1.5 py-0.5 rounded-full bg-purple-600 text-white text-[10px]"></span></button>
  <button id="btnToggleSelectPayouts" onclick="toggleSelectMode('payouts')" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95">Select</button>
  <button id="btnBatchDeletePayouts" onclick="deleteSelectedPayouts()" class="hidden px-3 py-1.5 rounded-xl bg-rose-600/80 text-white text-xs font-bold hover:bg-rose-500 transition active:scale-95">Delete Selected (<span id="countSelectedPayouts">0</span>)</button>
  <div class="flex items-center gap-1.5 ml-1">
@@ -510,6 +532,16 @@
  </div>
  </div>
  </div>
+ <div id="filterPanelPayouts" class="hidden rounded-2xl border border-white/10 bg-black/20 p-3 space-y-2">
+ <div class="flex items-center justify-between gap-2 flex-wrap">
+ <span class="text-[10px] font-bold uppercase tracking-wider text-purple-300/80">Filter by Firm</span>
+ <div class="flex items-center gap-3">
+ <span id="filterCountPayouts" class="text-[11px] text-purple-300/70"></span>
+ <button onclick="clearFirmFilter('payouts')" class="text-[11px] font-bold text-purple-300 hover:text-white transition">Clear</button>
+ </div>
+ </div>
+ <div id="filterChipsPayouts" class="flex flex-wrap gap-2"></div>
+</div>
  <div class="overflow-x-auto custom-scrollbar pb-2">
  <table class="w-full text-left text-[13px] text-purple-100 min-w-[500px]">
  <thead>
@@ -526,7 +558,7 @@
  <tbody id="tblPayoutsList" class="divide-y divide-white/5"></tbody>
  </table>
  </div>
- <div class="flex items-center justify-end gap-1.5 pt-4 border-t border-white/10" id="payoutsPagination"></div>
+ <div class="flex flex-wrap items-center justify-center sm:justify-end gap-1.5 pt-4 border-t border-white/10 max-w-full" id="payoutsPagination"></div>
  </div>
  </div>
  </section>
@@ -625,7 +657,7 @@
  <tbody id="tblJournalList" class="divide-y divide-white/5"></tbody>
  </table>
  </div>
- <div class="flex items-center justify-end gap-1.5 pt-4 border-t border-white/10" id="journalPagination"></div>
+ <div class="flex flex-wrap items-center justify-center sm:justify-end gap-1.5 pt-4 border-t border-white/10 max-w-full" id="journalPagination"></div>
  </div>
  </div>
  </section>
@@ -1186,6 +1218,8 @@
  };
 
  let selectMode = { evals: false, payouts: false, journal: false };
+ let firmFilters = { evals: new Set(), payouts: new Set() };
+ let filterPanelOpen = { evals: false, payouts: false };
  let selectedIds = { evals: new Set(), payouts: new Set(), journal: new Set() };
 
  let calCurrentDate = new Date();
@@ -1508,10 +1542,7 @@
  }
 
  function toggleSelectAll(type, isChecked) {
- let items = [];
- if (type === 'evals') items = sortDataset(evaluations, sortConfig.evals);
- else if (type === 'payouts') items = sortDataset(payouts, sortConfig.payouts);
- else items = sortDataset(journals, sortConfig.journal);
+ const items = getFilteredSorted(type);
 
  const size = pageSizes[type];
  const page = currentPage[type];
@@ -1595,29 +1626,111 @@
  if (limit >= 999999 || totalItems === 0) return;
 
  const totalPages = Math.ceil(totalItems / limit) || 1;
+ if (currentPage[type] > totalPages) currentPage[type] = totalPages;
  const curr = currentPage[type];
 
- const prevBtn = document.createElement('button');
- prevBtn.className = 'page-btn';
- prevBtn.innerText = 'Prev';
- prevBtn.disabled = curr === 1;
- prevBtn.onclick = () => setPage(type, curr - 1);
- container.appendChild(prevBtn);
-
- for(let i = 1; i <= totalPages; i++) {
+ const addBtn = (label, page, opts = {}) => {
  const btn = document.createElement('button');
- btn.className = `page-btn ${i === curr ? 'active' : ''}`;
- btn.innerText = i;
- btn.onclick = () => setPage(type, i);
+ btn.className = `page-btn ${opts.active ? 'active' : ''}`;
+ btn.innerText = label;
+ btn.disabled = !!opts.disabled;
+ btn.onclick = () => setPage(type, page);
  container.appendChild(btn);
+ };
+ const addEllipsis = () => {
+ const span = document.createElement('span');
+ span.className = 'page-ellipsis';
+ span.innerText = '…';
+ container.appendChild(span);
+ };
+
+ addBtn('Prev', curr - 1, { disabled: curr === 1 });
+
+ // Windowed page list: always show first, last, and neighbours of the current page
+ const pages = new Set([1, totalPages, curr - 1, curr, curr + 1]);
+ if (curr <= 3) { pages.add(2); pages.add(3); }
+ if (curr >= totalPages - 2) { pages.add(totalPages - 1); pages.add(totalPages - 2); }
+ const list = [...pages].filter(p => p >= 1 && p <= totalPages).sort((a, b) => a - b);
+ let prev = 0;
+ list.forEach(p => {
+ if (p - prev === 2) addBtn(p - 1, p - 1, { active: (p - 1) === curr }); // fill single-page gaps instead of an ellipsis
+ else if (p - prev > 2) addEllipsis();
+ addBtn(p, p, { active: p === curr });
+ prev = p;
+ });
+
+ addBtn('Next', curr + 1, { disabled: curr === totalPages });
  }
 
- const nextBtn = document.createElement('button');
- nextBtn.className = 'page-btn';
- nextBtn.innerText = 'Next';
- nextBtn.disabled = curr === totalPages;
- nextBtn.onclick = () => setPage(type, curr + 1);
- container.appendChild(nextBtn);
+ // ---------- Firm filtering (Evaluations & Payouts) ----------
+ function firmKey(name) { return String(name || '').trim().toLowerCase(); }
+
+ function getFilteredSorted(type) {
+ const source = type === 'evals' ? evaluations : (type === 'payouts' ? payouts : journals);
+ let data = source;
+ if (type !== 'journal' && firmFilters[type].size > 0) {
+ data = source.filter(item => firmFilters[type].has(firmKey(item.firm)));
+ }
+ return sortDataset(data, sortConfig[type]);
+ }
+
+ function getFirmList(type) {
+ const source = type === 'evals' ? evaluations : payouts;
+ const map = new Map();
+ source.forEach(item => {
+ const key = firmKey(item.firm);
+ if (!key) return;
+ if (!map.has(key)) map.set(key, { label: String(item.firm).trim(), count: 0 });
+ map.get(key).count++;
+ });
+ return [...map.entries()].map(([key, v]) => ({ key, ...v })).sort((a, b) => a.label.localeCompare(b.label));
+ }
+
+ function filterIds(type) {
+ const T = type === 'evals' ? 'Evals' : 'Payouts';
+ return { T, btn: document.getElementById('btnFilter' + T), badge: document.getElementById('filterBadge' + T), panel: document.getElementById('filterPanel' + T), chips: document.getElementById('filterChips' + T), count: document.getElementById('filterCount' + T) };
+ }
+
+ function toggleFilterPanel(type) {
+ filterPanelOpen[type] = !filterPanelOpen[type];
+ renderFilterUI(type);
+ }
+
+ function toggleFirmFilter(type, key) {
+ if (firmFilters[type].has(key)) firmFilters[type].delete(key);
+ else firmFilters[type].add(key);
+ currentPage[type] = 1;
+ if (type === 'evals') renderEvaluationsTable(); else renderPayoutsTable();
+ }
+
+ function clearFirmFilter(type) {
+ firmFilters[type].clear();
+ currentPage[type] = 1;
+ if (type === 'evals') renderEvaluationsTable(); else renderPayoutsTable();
+ }
+
+ function renderFilterUI(type) {
+ const el = filterIds(type);
+ if (!el.btn) return;
+ const firms = getFirmList(type);
+ const validKeys = new Set(firms.map(f => f.key));
+ // drop filters for firms that no longer exist (e.g. after deleting their last entry)
+ [...firmFilters[type]].forEach(k => { if (!validKeys.has(k)) firmFilters[type].delete(k); });
+
+ const active = firmFilters[type].size;
+ el.badge.classList.toggle('hidden', active === 0);
+ el.badge.innerText = active;
+ el.btn.className = active > 0
+ ? 'px-3 py-1.5 rounded-xl bg-purple-600/40 text-white text-xs font-bold transition active:scale-95 border border-purple-500/40'
+ : 'px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95';
+ el.panel.classList.toggle('hidden', !filterPanelOpen[type]);
+
+ if (firms.length === 0) {
+ el.chips.innerHTML = '<span class="text-[12px] text-purple-300/70">No firms logged yet.</span>';
+ } else {
+ el.chips.innerHTML = firms.map(f => `<label class="filter-chip ${firmFilters[type].has(f.key) ? 'on' : ''}"><input type="checkbox" ${firmFilters[type].has(f.key) ? 'checked' : ''} onchange="toggleFirmFilter('${type}', this.dataset.key)" data-key="${f.key.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"><span>${f.label.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span><span class="opacity-60 text-[10px]">${f.count}</span></label>`).join('');
+ }
+ el.count.innerText = active === 0 ? 'Showing all firms' : `${active} firm${active > 1 ? 's' : ''} selected`;
  }
 
  function sortDataset(data, config) {
@@ -1663,16 +1776,19 @@
 
  function renderEvaluationsTable() {
  const tbody = document.getElementById('tblEvaluationsList');
- if (!tbody) return; updateSortIndicators('evals');
- const items = sortDataset(evaluations, sortConfig.evals);
+ if (!tbody) return; updateSortIndicators('evals'); renderFilterUI('evals');
+ const items = getFilteredSorted('evals');
  
  if (items.length === 0) { 
- tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">No logs saved in workspace.</td></tr>`; 
+ const msg = evaluations.length > 0 ? 'No evaluations match the selected firm filter.' : 'No logs saved in workspace.';
+ tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">${msg}</td></tr>`; 
  renderPaginationControls('evals', 0);
  return; 
  }
 
  const size = pageSizes.evals;
+ const maxPage = Math.max(1, Math.ceil(items.length / size));
+ if (currentPage.evals > maxPage) currentPage.evals = maxPage;
  const page = currentPage.evals;
  const start = (page - 1) * size;
  const paginated = items.slice(start, start + size);
@@ -1700,16 +1816,19 @@
 
  function renderPayoutsTable() {
  const tbody = document.getElementById('tblPayoutsList');
- if (!tbody) return; updateSortIndicators('payouts');
- const items = sortDataset(payouts, sortConfig.payouts);
+ if (!tbody) return; updateSortIndicators('payouts'); renderFilterUI('payouts');
+ const items = getFilteredSorted('payouts');
 
  if (items.length === 0) { 
- tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">No payouts logged yet.</td></tr>`; 
+ const msg = payouts.length > 0 ? 'No payouts match the selected firm filter.' : 'No payouts logged yet.';
+ tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">${msg}</td></tr>`; 
  renderPaginationControls('payouts', 0);
  return; 
  }
 
  const size = pageSizes.payouts;
+ const maxPage = Math.max(1, Math.ceil(items.length / size));
+ if (currentPage.payouts > maxPage) currentPage.payouts = maxPage;
  const page = currentPage.payouts;
  const start = (page - 1) * size;
  const paginated = items.slice(start, start + size);
