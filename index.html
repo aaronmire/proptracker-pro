@@ -119,13 +119,11 @@
  background: rgba(0, 0, 0, 0.4);
  border: 1px solid rgba(255, 255, 255, 0.15);
  color: #e2e8f0;
- padding: 6px 10px;
+ padding: 6px 12px;
  border-radius: 8px;
- font-size: 11px;
+ font-size: 12px;
  font-weight: 700;
  transition: all 0.2s;
- min-width: 32px;
- text-align: center;
  }
  .page-btn:hover { background: rgba(255, 255, 255, 0.15); }
  .page-btn.active {
@@ -209,7 +207,7 @@
  <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5 sm:gap-2 drop-shadow-md truncate">
  <span>PropTracker</span>
  <span class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm shrink-0">PRO</span>
- <span class="text-[11px] font-medium tracking-normal text-purple-300/60 shrink-0 pr-1 select-none">v3.3</span>
+ <span class="text-[11px] font-medium tracking-normal text-purple-300/60 shrink-0 pr-1 select-none">v3.2</span>
  </h1>
  </div>
 
@@ -426,26 +424,7 @@
  <div class="liquid-glass p-6 rounded-3xl lg:col-span-2 space-y-4">
  <div class="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
  <h3 class="font-bold text-white text-base drop-shadow-sm">Evaluations History</h3>
- <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
- <!-- Firm Filter Dropdown -->
- <div class="relative" id="filterDropdownContainer-evals">
- <button id="btnFilterEvals" onclick="toggleFilterMenu('evals', event)" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95 flex items-center gap-1.5">
- <svg class="w-3.5 h-3.5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
- <span>Filter</span>
- <span id="filterBadge-evals" class="hidden text-[9px] px-1.5 py-0.2 rounded-full bg-purple-600 text-white font-black">0</span>
- </button>
- <div id="filterMenu-evals" class="hidden absolute right-0 mt-2 w-56 rounded-2xl liquid-glass bg-[#120624]/95 border border-purple-500/30 p-3 shadow-2xl z-30 space-y-2 backdrop-blur-2xl">
- <div class="flex items-center justify-between pb-1.5 border-b border-white/10">
- <span class="text-[10px] font-bold uppercase tracking-wider text-purple-300">Filter by Firm</span>
- <div class="flex gap-2">
- <button onclick="selectAllFilters('evals')" class="text-[10px] text-emerald-400 hover:underline">All</button>
- <button onclick="clearAllFilters('evals')" class="text-[10px] text-rose-400 hover:underline">Clear</button>
- </div>
- </div>
- <div id="filterOptions-evals" class="max-h-48 overflow-y-auto custom-scrollbar space-y-1.5 text-xs text-purple-100 pr-1"></div>
- </div>
- </div>
-
+ <div class="flex items-center gap-3">
  <button id="btnToggleSelectEvals" onclick="toggleSelectMode('evals')" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95">Select</button>
  <button id="btnBatchDeleteEvals" onclick="deleteSelectedEvals()" class="hidden px-3 py-1.5 rounded-xl bg-rose-600/80 text-white text-xs font-bold hover:bg-rose-500 transition active:scale-95">Delete Selected (<span id="countSelectedEvals">0</span>)</button>
  <div class="flex items-center gap-1.5 ml-1">
@@ -475,7 +454,7 @@
  <tbody id="tblEvaluationsList" class="divide-y divide-white/5"></tbody>
  </table>
  </div>
- <div class="flex items-center justify-end flex-wrap gap-1.5 pt-4 border-t border-white/10" id="evalsPagination"></div>
+ <div class="flex items-center justify-end gap-1.5 pt-4 border-t border-white/10" id="evalsPagination"></div>
  </div>
  </div>
  </section>
@@ -517,26 +496,7 @@
  <div class="liquid-glass p-6 rounded-3xl lg:col-span-2 space-y-4">
  <div class="flex items-center justify-between border-b border-white/10 pb-3 flex-wrap gap-2">
  <h3 class="font-bold text-white text-base drop-shadow-sm">Payout Records</h3>
- <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
- <!-- Firm Filter Dropdown -->
- <div class="relative" id="filterDropdownContainer-payouts">
- <button id="btnFilterPayouts" onclick="toggleFilterMenu('payouts', event)" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95 flex items-center gap-1.5">
- <svg class="w-3.5 h-3.5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
- <span>Filter</span>
- <span id="filterBadge-payouts" class="hidden text-[9px] px-1.5 py-0.2 rounded-full bg-purple-600 text-white font-black">0</span>
- </button>
- <div id="filterMenu-payouts" class="hidden absolute right-0 mt-2 w-56 rounded-2xl liquid-glass bg-[#120624]/95 border border-purple-500/30 p-3 shadow-2xl z-30 space-y-2 backdrop-blur-2xl">
- <div class="flex items-center justify-between pb-1.5 border-b border-white/10">
- <span class="text-[10px] font-bold uppercase tracking-wider text-purple-300">Filter by Firm</span>
- <div class="flex gap-2">
- <button onclick="selectAllFilters('payouts')" class="text-[10px] text-emerald-400 hover:underline">All</button>
- <button onclick="clearAllFilters('payouts')" class="text-[10px] text-rose-400 hover:underline">Clear</button>
- </div>
- </div>
- <div id="filterOptions-payouts" class="max-h-48 overflow-y-auto custom-scrollbar space-y-1.5 text-xs text-purple-100 pr-1"></div>
- </div>
- </div>
-
+ <div class="flex items-center gap-3">
  <button id="btnToggleSelectPayouts" onclick="toggleSelectMode('payouts')" class="px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95">Select</button>
  <button id="btnBatchDeletePayouts" onclick="deleteSelectedPayouts()" class="hidden px-3 py-1.5 rounded-xl bg-rose-600/80 text-white text-xs font-bold hover:bg-rose-500 transition active:scale-95">Delete Selected (<span id="countSelectedPayouts">0</span>)</button>
  <div class="flex items-center gap-1.5 ml-1">
@@ -566,7 +526,7 @@
  <tbody id="tblPayoutsList" class="divide-y divide-white/5"></tbody>
  </table>
  </div>
- <div class="flex items-center justify-end flex-wrap gap-1.5 pt-4 border-t border-white/10" id="payoutsPagination"></div>
+ <div class="flex items-center justify-end gap-1.5 pt-4 border-t border-white/10" id="payoutsPagination"></div>
  </div>
  </div>
  </section>
@@ -665,7 +625,7 @@
  <tbody id="tblJournalList" class="divide-y divide-white/5"></tbody>
  </table>
  </div>
- <div class="flex items-center justify-end flex-wrap gap-1.5 pt-4 border-t border-white/10" id="journalPagination"></div>
+ <div class="flex items-center justify-end gap-1.5 pt-4 border-t border-white/10" id="journalPagination"></div>
  </div>
  </div>
  </section>
@@ -1203,7 +1163,7 @@
 
  <!-- CORE SCRIPT -->
  <script>
- const APP_VERSION = "3.3";
+ const APP_VERSION = "3.2";
  let isInitialSyncDone = false;
  let autoSaveTimeout = null;
 
@@ -1227,9 +1187,6 @@
 
  let selectMode = { evals: false, payouts: false, journal: false };
  let selectedIds = { evals: new Set(), payouts: new Set(), journal: new Set() };
-
- // Multi-Firm Filter Sets
- let selectedFirmFilters = { evals: new Set(), payouts: new Set() };
 
  let calCurrentDate = new Date();
 
@@ -1518,107 +1475,6 @@
  }
  }
 
- /* FIRM FILTER IMPLEMENTATION */
- function getUniqueFirms(type) {
- const dataset = type === 'evals' ? evaluations : payouts;
- const firms = new Set();
- dataset.forEach(item => {
- if (item.firm && item.firm.trim()) {
- firms.add(item.firm.trim());
- }
- });
- return Array.from(firms).sort((a,b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
- }
-
- function toggleFilterMenu(type, event) {
- if (event) event.stopPropagation();
- const menu = document.getElementById(`filterMenu-${type}`);
- const isHidden = menu.classList.contains('hidden');
- 
- document.getElementById('filterMenu-evals')?.classList.add('hidden');
- document.getElementById('filterMenu-payouts')?.classList.add('hidden');
-
- if (isHidden) {
- renderFilterOptions(type);
- menu.classList.remove('hidden');
- }
- }
-
- function renderFilterOptions(type) {
- const container = document.getElementById(`filterOptions-${type}`);
- if (!container) return;
- const firms = getUniqueFirms(type);
- if (firms.length === 0) {
- container.innerHTML = `<div class="py-2 text-center text-[11px] text-purple-300/50 italic">No firms logged yet</div>`;
- return;
- }
- container.innerHTML = firms.map(f => {
- const isChecked = selectedFirmFilters[type].has(f);
- return `
- <label class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/5 cursor-pointer select-none transition">
- <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleFirmFilter('${type}', '${f.replace(/'/g, "\\'")}', this.checked)" class="rounded">
- <span class="truncate text-xs font-medium text-purple-100">${f}</span>
- </label>
- `;
- }).join('');
- }
-
- function toggleFirmFilter(type, firm, isChecked) {
- if (isChecked) {
- selectedFirmFilters[type].add(firm);
- } else {
- selectedFirmFilters[type].delete(firm);
- }
- updateFilterBadge(type);
- currentPage[type] = 1;
- if (type === 'evals') renderEvaluationsTable();
- else renderPayoutsTable();
- }
-
- function selectAllFilters(type) {
- const firms = getUniqueFirms(type);
- firms.forEach(f => selectedFirmFilters[type].add(f));
- updateFilterBadge(type);
- renderFilterOptions(type);
- currentPage[type] = 1;
- if (type === 'evals') renderEvaluationsTable();
- else renderPayoutsTable();
- }
-
- function clearAllFilters(type) {
- selectedFirmFilters[type].clear();
- updateFilterBadge(type);
- renderFilterOptions(type);
- currentPage[type] = 1;
- if (type === 'evals') renderEvaluationsTable();
- else renderPayoutsTable();
- }
-
- function updateFilterBadge(type) {
- const badge = document.getElementById(`filterBadge-${type}`);
- const btn = document.getElementById(type === 'evals' ? 'btnFilterEvals' : 'btnFilterPayouts');
- const count = selectedFirmFilters[type].size;
- if (count > 0) {
- badge.innerText = count;
- badge.classList.remove('hidden');
- btn.classList.add('border-purple-500/60', 'bg-purple-900/30');
- } else {
- badge.classList.add('hidden');
- btn.classList.remove('border-purple-500/60', 'bg-purple-900/30');
- }
- }
-
- document.addEventListener('click', (e) => {
- const evalContainer = document.getElementById('filterDropdownContainer-evals');
- if (evalContainer && !evalContainer.contains(e.target)) {
- document.getElementById('filterMenu-evals')?.classList.add('hidden');
- }
- const payoutContainer = document.getElementById('filterDropdownContainer-payouts');
- if (payoutContainer && !payoutContainer.contains(e.target)) {
- document.getElementById('filterMenu-payouts')?.classList.add('hidden');
- }
- });
-
  function toggleSelectMode(type) {
  selectMode[type] = !selectMode[type];
  const btn = document.getElementById(type === 'evals' ? 'btnToggleSelectEvals' : (type === 'payouts' ? 'btnToggleSelectPayouts' : 'btnToggleSelectJournal'));
@@ -1652,17 +1508,10 @@
  }
 
  function toggleSelectAll(type, isChecked) {
- let dataset = type === 'evals' ? evaluations : (type === 'payouts' ? payouts : journals);
- if (type === 'evals' && selectedFirmFilters.evals.size > 0) {
- dataset = dataset.filter(item => selectedFirmFilters.evals.has(item.firm?.trim()));
- } else if (type === 'payouts' && selectedFirmFilters.payouts.size > 0) {
- dataset = dataset.filter(item => selectedFirmFilters.payouts.has(item.firm?.trim()));
- }
-
  let items = [];
- if (type === 'evals') items = sortDataset(dataset, sortConfig.evals);
- else if (type === 'payouts') items = sortDataset(dataset, sortConfig.payouts);
- else items = sortDataset(dataset, sortConfig.journal);
+ if (type === 'evals') items = sortDataset(evaluations, sortConfig.evals);
+ else if (type === 'payouts') items = sortDataset(payouts, sortConfig.payouts);
+ else items = sortDataset(journals, sortConfig.journal);
 
  const size = pageSizes[type];
  const page = currentPage[type];
@@ -1736,7 +1585,6 @@
  else renderJournalTable();
  }
 
- /* FIXED PAGINATION CONTROLS (FLEX-WRAP & WINDOWED PAGINATION) */
  function renderPaginationControls(type, totalItems) {
  const containerId = type === 'evals' ? 'evalsPagination' : (type === 'payouts' ? 'payoutsPagination' : 'journalPagination');
  const container = document.getElementById(containerId);
@@ -1756,38 +1604,12 @@
  prevBtn.onclick = () => setPage(type, curr - 1);
  container.appendChild(prevBtn);
 
- const addPageBtn = (p) => {
+ for(let i = 1; i <= totalPages; i++) {
  const btn = document.createElement('button');
- btn.className = `page-btn ${p === curr ? 'active' : ''}`;
- btn.innerText = p;
- btn.onclick = () => setPage(type, p);
+ btn.className = `page-btn ${i === curr ? 'active' : ''}`;
+ btn.innerText = i;
+ btn.onclick = () => setPage(type, i);
  container.appendChild(btn);
- };
-
- const addEllipsis = () => {
- const span = document.createElement('span');
- span.className = 'px-1 text-xs text-purple-300/50 select-none';
- span.innerText = '...';
- container.appendChild(span);
- };
-
- if (totalPages <= 7) {
- for (let i = 1; i <= totalPages; i++) {
- addPageBtn(i);
- }
- } else {
- addPageBtn(1);
- if (curr > 3) addEllipsis();
-
- const start = Math.max(2, curr - 1);
- const end = Math.min(totalPages - 1, curr + 1);
-
- for (let i = start; i <= end; i++) {
- addPageBtn(i);
- }
-
- if (curr < totalPages - 2) addEllipsis();
- addPageBtn(totalPages);
  }
 
  const nextBtn = document.createElement('button');
@@ -1842,16 +1664,10 @@
  function renderEvaluationsTable() {
  const tbody = document.getElementById('tblEvaluationsList');
  if (!tbody) return; updateSortIndicators('evals');
- 
- let dataToDisplay = [...evaluations];
- if (selectedFirmFilters.evals.size > 0) {
- dataToDisplay = dataToDisplay.filter(e => selectedFirmFilters.evals.has(e.firm?.trim()));
- }
-
- const items = sortDataset(dataToDisplay, sortConfig.evals);
+ const items = sortDataset(evaluations, sortConfig.evals);
  
  if (items.length === 0) { 
- tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">No logs matching criteria.</td></tr>`; 
+ tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">No logs saved in workspace.</td></tr>`; 
  renderPaginationControls('evals', 0);
  return; 
  }
@@ -1885,16 +1701,10 @@
  function renderPayoutsTable() {
  const tbody = document.getElementById('tblPayoutsList');
  if (!tbody) return; updateSortIndicators('payouts');
- 
- let dataToDisplay = [...payouts];
- if (selectedFirmFilters.payouts.size > 0) {
- dataToDisplay = dataToDisplay.filter(p => selectedFirmFilters.payouts.has(p.firm?.trim()));
- }
-
- const items = sortDataset(dataToDisplay, sortConfig.payouts);
+ const items = sortDataset(payouts, sortConfig.payouts);
 
  if (items.length === 0) { 
- tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">No payouts matching criteria.</td></tr>`; 
+ tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">No payouts logged yet.</td></tr>`; 
  renderPaginationControls('payouts', 0);
  return; 
  }
@@ -2682,4 +2492,330 @@
 
  function openSettingsModal() {
  updateSettingsModalUI();
- document.getElementById('settingsModal').
+ document.getElementById('settingsModal').classList.remove('hidden');
+ }
+
+ function closeSettingsModal() {
+ document.getElementById('settingsModal').classList.add('hidden');
+ }
+
+ function updateSettingsModalUI() {
+ const statusEl = document.getElementById('gdriveAccountStatus');
+ const folderEl = document.getElementById('gdriveFolderName');
+ const btnPicker = document.getElementById('btnPickFolder');
+ const authBtnText = document.getElementById('btnHeaderAuthText');
+
+ if (isTokenValid() || driveAccessToken) {
+ statusEl.innerText = "Connected";
+ statusEl.className = "font-bold text-emerald-400";
+ btnPicker.disabled = false;
+ if (authBtnText) authBtnText.innerText = "Connected";
+ updateSyncIndicator('synced');
+ } else {
+ statusEl.innerText = "Not Connected";
+ statusEl.className = "font-bold text-rose-400";
+ btnPicker.disabled = true;
+ if (authBtnText) authBtnText.innerText = "Connect Google Drive";
+ updateSyncIndicator('local');
+ }
+
+ folderEl.innerText = driveFolderName || "Auto-Detecting...";
+ }
+
+ function getOrCreateTokenClient(callback) {
+ if (!tokenClient && typeof google !== 'undefined' && google.accounts && google.accounts.oauth2) {
+ tokenClient = google.accounts.oauth2.initTokenClient({
+ client_id: driveClientId,
+ scope: 'https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.metadata.readonly',
+ callback: (response) => {
+ if (response.access_token) {
+ driveAccessToken = response.access_token;
+ const expiresIn = (parseInt(response.expires_in, 10) || 3599) * 1000;
+ driveTokenExpiresAt = Date.now() + expiresIn;
+ localStorage.setItem('proptracker_gdrive_access_token', driveAccessToken);
+ localStorage.setItem('proptracker_gdrive_token_expires', driveTokenExpiresAt.toString());
+ updateSettingsModalUI();
+ if (typeof callback === 'function') callback();
+ } else {
+ updateSyncIndicator('local');
+ }
+ },
+ });
+ }
+ return tokenClient;
+ }
+
+ function handleAuthDrive(isSilent = false, onSuccess = null) {
+ if (typeof google === 'undefined' || !google.accounts || !google.accounts.oauth2) {
+ if (!isSilent) showToast("API Loading", "Google Identity Services is initializing... try again in a moment.", "rose");
+ return;
+ }
+
+ const client = getOrCreateTokenClient(onSuccess);
+ if (!client) return;
+
+ updateSyncIndicator('syncing');
+
+ if (isSilent) {
+ client.requestAccessToken({ prompt: '' });
+ } else {
+ client.requestAccessToken({ prompt: 'select_account' });
+ }
+ }
+
+ async function ensureValidDriveToken() {
+ if (isTokenValid()) return true;
+ return new Promise((resolve) => {
+ if (typeof google === 'undefined' || !google.accounts || !google.accounts.oauth2) {
+ resolve(false);
+ return;
+ }
+ const client = getOrCreateTokenClient(() => resolve(true));
+ try {
+ client.requestAccessToken({ prompt: '' });
+ } catch (e) {
+ resolve(false);
+ }
+ });
+ }
+
+ function openDrivePicker() {
+ if (!driveAccessToken) return;
+ customDrivePickerStack = [{ id: 'root', name: 'My Drive' }];
+ navDriveFolder('root', 'My Drive');
+ document.getElementById('customDrivePickerModal').classList.remove('hidden');
+ }
+
+ function closeCustomDrivePickerModal() {
+ document.getElementById('customDrivePickerModal').classList.add('hidden');
+ }
+
+ async function navDriveFolder(folderId, folderName) {
+ currentBrowsingFolder = { id: folderId, name: folderName };
+ document.getElementById('currentSelectedFolderName').innerText = folderName;
+
+ const listEl = document.getElementById('driveFolderList');
+ listEl.innerHTML = `<div class="text-center py-8 text-xs text-purple-300/60">Loading folders...</div>`;
+
+ const crumbIndex = customDrivePickerStack.findIndex(item => item.id === folderId);
+ if (crumbIndex !== -1) {
+ customDrivePickerStack = customDrivePickerStack.slice(0, crumbIndex + 1);
+ } else {
+ customDrivePickerStack.push({ id: folderId, name: folderName });
+ }
+
+ const breadcrumbEl = document.getElementById('driveBreadcrumbs');
+ breadcrumbEl.innerHTML = customDrivePickerStack.map((item, idx) => `
+ <span class="hover:text-white cursor-pointer font-semibold" onclick="navDriveFolder('${item.id}', '${item.name}')">${item.name}</span>
+ ${idx < customDrivePickerStack.length - 1 ? '<span class="opacity-40">/</span>' : ''}
+ `).join('');
+
+ try {
+ const q = encodeURIComponent(`'${folderId}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`);
+ const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)&pageSize=50`, {
+ headers: { Authorization: `Bearer ${driveAccessToken}` }
+ });
+ const data = await res.json();
+ 
+ if (data.files && data.files.length > 0) {
+ listEl.innerHTML = data.files.map(f => `
+ <div onclick="navDriveFolder('${f.id}', '${f.name.replace(/'/g, "\\'")}')" class="p-2.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] transition flex items-center justify-between cursor-pointer group">
+ <div class="flex items-center gap-2.5">
+ <svg class="w-4 h-4 text-purple-400 group-hover:text-purple-300 transition" fill="currentColor" viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h4l2 2h8a2 2 0 012 v10a2 2 0 01-2 2z"/></svg>
+ <span class="text-xs font-semibold text-purple-100 group-hover:text-white transition">${f.name}</span>
+ </div>
+ <svg class="w-4 h-4 text-purple-300/40 group-hover:text-purple-200 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+ </div>
+ `).join('');
+ } else {
+ listEl.innerHTML = `<div class="text-center py-8 text-xs text-purple-300/50">No subfolders inside this location.</div>`;
+ }
+ } catch (e) {
+ console.error("Error listing Drive folders:", e);
+ listEl.innerHTML = `<div class="text-center py-8 text-xs text-rose-400">Failed to fetch folders.</div>`;
+ }
+ }
+
+ function confirmSelectedDriveFolder() {
+ driveFolderId = currentBrowsingFolder.id;
+ driveFolderName = currentBrowsingFolder.name;
+ localStorage.setItem('proptracker_gdrive_folder_id', driveFolderId);
+ localStorage.setItem('proptracker_gdrive_folder_name', driveFolderName);
+ updateSettingsModalUI();
+ closeCustomDrivePickerModal();
+ showToast("Folder Picked", `Selected "${driveFolderName}" as target folder.`);
+ syncToGoogleDrive();
+ }
+
+ async function syncToGoogleDrive() {
+ if (!isTokenValid()) {
+ const renewed = await ensureValidDriveToken();
+ if (!renewed) {
+ updateSyncIndicator('local');
+ return;
+ }
+ }
+
+ updateSyncIndicator('syncing');
+
+ const payload = JSON.stringify({ 
+ version: APP_VERSION,
+ evaluations, 
+ payouts, 
+ journals, 
+ lastUpdated: new Date().toISOString() 
+ }, null, 2);
+ 
+ try {
+ if (!driveFileId) {
+ const query = encodeURIComponent(`name = 'proptracker_data.json' and trashed = false`);
+ const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,parents)`, {
+ headers: { Authorization: `Bearer ${driveAccessToken}` }
+ });
+ const searchData = await res.json();
+ if (searchData.files && searchData.files.length > 0) {
+ driveFileId = searchData.files[0].id;
+ if (searchData.files[0].parents && searchData.files[0].parents.length > 0) {
+ driveFolderId = searchData.files[0].parents[0];
+ localStorage.setItem('proptracker_gdrive_folder_id', driveFolderId);
+ }
+ localStorage.setItem('proptracker_gdrive_file_id', driveFileId);
+ }
+ }
+
+ if (driveFileId) {
+ await fetch(`https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=media`, {
+ method: 'PATCH',
+ headers: {
+ Authorization: `Bearer ${driveAccessToken}`,
+ 'Content-Type': 'application/json'
+ },
+ body: payload
+ });
+ } else if (driveFolderId) {
+ const metadata = {
+ name: 'proptracker_data.json',
+ parents: [driveFolderId],
+ mimeType: 'application/json'
+ };
+ const form = new FormData();
+ form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+ form.append('file', new Blob([payload], { type: 'application/json' }));
+
+ const createRes = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+ method: 'POST',
+ headers: { Authorization: `Bearer ${driveAccessToken}` },
+ body: form
+ });
+ const newFile = await createRes.json();
+ if (newFile.id) {
+ driveFileId = newFile.id;
+ localStorage.setItem('proptracker_gdrive_file_id', driveFileId);
+ }
+ }
+ updateSyncIndicator('synced');
+ } catch (e) {
+ console.error("Google Drive sync error:", e);
+ updateSyncIndicator('local');
+ }
+ }
+
+ async function fetchRemoteDriveData() {
+ if (!isTokenValid()) {
+ const renewed = await ensureValidDriveToken();
+ if (!renewed) {
+ isInitialSyncDone = true;
+ return;
+ }
+ }
+
+ updateSyncIndicator('syncing');
+ try {
+ if (!driveFileId) {
+ const query = encodeURIComponent(`name = 'proptracker_data.json' and trashed = false`);
+ const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${query}&fields=files(id,parents)`, {
+ headers: { Authorization: `Bearer ${driveAccessToken}` }
+ });
+ const searchData = await res.json();
+ if (searchData.files && searchData.files.length > 0) {
+ driveFileId = searchData.files[0].id;
+ if (searchData.files[0].parents && searchData.files[0].parents.length > 0) {
+ driveFolderId = searchData.files[0].parents[0];
+ localStorage.setItem('proptracker_gdrive_folder_id', driveFolderId);
+ fetchFolderName(driveFolderId);
+ }
+ localStorage.setItem('proptracker_gdrive_file_id', driveFileId);
+ }
+ }
+
+ if (driveFileId) {
+ const fileRes = await fetch(`https://www.googleapis.com/drive/v3/files/${driveFileId}?alt=media`, {
+ headers: { Authorization: `Bearer ${driveAccessToken}` }
+ });
+ const cloudData = await fileRes.json();
+
+ const localTime = new Date(localStorage.getItem('proptracker_last_modified') || 0).getTime();
+ const cloudTime = new Date(cloudData.lastUpdated || 0).getTime();
+
+ if (cloudTime >= localTime) {
+ evaluations = cloudData.evaluations || [];
+ payouts = cloudData.payouts || [];
+ journals = cloudData.journals || [];
+
+ saveToLocalStorage();
+ updateSummaryMetrics();
+ renderDashboardCalendar();
+ renderEvaluationsTable();
+ renderPayoutsTable();
+ renderJournalTable();
+ runPayoutSplitCalc();
+ runConsistencySolver();
+ runProgressTrackerCalc();
+ runSimpleTargetCalc();
+ rebuildGraphs();
+
+ showToast("Cloud Loaded", "Workspace updated from Google Drive.");
+ } else {
+ await syncToGoogleDrive();
+ }
+ }
+ updateSyncIndicator('synced');
+ } catch(e) {
+ console.error("Error fetching Google Drive remote file:", e);
+ updateSyncIndicator('local');
+ } finally {
+ isInitialSyncDone = true;
+ }
+ }
+
+ async function fetchFolderName(folderId) {
+ try {
+ const res = await fetch(`https://www.googleapis.com/drive/v3/files/${folderId}?fields=name`, {
+ headers: { Authorization: `Bearer ${driveAccessToken}` }
+ });
+ const data = await res.json();
+ if (data.name) {
+ driveFolderName = data.name;
+ localStorage.setItem('proptracker_gdrive_folder_name', driveFolderName);
+ updateSettingsModalUI();
+ }
+ } catch(e){}
+ }
+
+ window.addEventListener('load', () => { 
+ loadFromLocalStorage();
+ updateSettingsModalUI();
+ 
+ setTimeout(() => {
+ if (isTokenValid()) {
+ fetchRemoteDriveData();
+ } else if (driveAccessToken || localStorage.getItem('proptracker_gdrive_folder_id')) {
+ handleAuthDrive(true, fetchRemoteDriveData);
+ } else {
+ isInitialSyncDone = true;
+ }
+ }, 600);
+ });
+ </script>
+</body>
+</html>
