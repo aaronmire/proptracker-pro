@@ -45,6 +45,6 @@
 ----- <b><i>v3.2</b></i> -----
 - Added Payout Split Calculator
 
-- ----- <b><i>v3.3</b></i> -----
+----- <b><i>v3.3</b></i> -----
 - Fix for page flex-wrapping
 - Added 'Filter' button to  Evaluation Accounts and Payout logs
