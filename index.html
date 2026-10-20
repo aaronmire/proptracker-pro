@@ -217,7 +217,7 @@
  <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5 sm:gap-2 drop-shadow-md truncate">
  <span>PropTracker</span>
  <span class="text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full bg-purple-600/30 text-purple-300 border border-purple-500/40 tracking-wider shadow-sm shrink-0">PRO</span>
- <span class="text-[11px] font-medium tracking-normal text-purple-300/60 shrink-0 pr-1 select-none">v3.3</span>
+ <span class="text-[11px] font-medium tracking-normal text-purple-300/60 shrink-0 pr-1 select-none">v3.4</span>
  </h1>
  </div>
 
@@ -405,7 +405,7 @@
  <form id="frmEvaluation" onsubmit="handleEvalSubmit(event)" class="space-y-4">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
- <input type="text" id="evalFirm" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ <input type="text" id="evalFirm" list="firmSuggestions" autocomplete="off" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size/Type</label>
@@ -449,16 +449,25 @@
  </div>
  </div>
  </div>
- <div id="filterPanelEvals" class="hidden rounded-2xl border border-white/10 bg-black/20 p-3 space-y-2">
+ <div id="filterPanelEvals" class="hidden rounded-2xl border border-white/10 bg-black/20 p-3 space-y-3">
  <div class="flex items-center justify-between gap-2 flex-wrap">
- <span class="text-[10px] font-bold uppercase tracking-wider text-purple-300/80">Filter by Firm</span>
+ <span class="text-[10px] font-bold uppercase tracking-wider text-purple-300/80">Filters</span>
  <div class="flex items-center gap-3">
  <span id="filterCountEvals" class="text-[11px] text-purple-300/70"></span>
- <button onclick="clearFirmFilter('evals')" class="text-[11px] font-bold text-purple-300 hover:text-white transition">Clear</button>
+ <button onclick="clearFilters('evals')" class="text-[11px] font-bold text-purple-300 hover:text-white transition">Clear all</button>
  </div>
  </div>
+ <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+ <div><label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1 ml-1">Search</label><input type="text" id="filterSearchEvals" oninput="setFilterField('evals', 'search', this.value)" placeholder="Firm, size, ref/ID, date..." autocomplete="off" class="w-full px-3 py-2 rounded-xl liquid-glass-input text-xs"></div>
+ <div><label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1 ml-1">From</label><input type="date" id="filterFromEvals" onchange="setFilterField('evals', 'from', this.value)" style="color-scheme: dark" class="w-full px-3 py-2 rounded-xl liquid-glass-input text-xs"></div>
+ <div><label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1 ml-1">To</label><input type="date" id="filterToEvals" onchange="setFilterField('evals', 'to', this.value)" style="color-scheme: dark" class="w-full px-3 py-2 rounded-xl liquid-glass-input text-xs"></div>
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1 ml-1">Firms</label>
  <div id="filterChipsEvals" class="flex flex-wrap gap-2"></div>
-</div>
+ </div>
+ </div>
+ <div id="summaryEvals" class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-1 text-[12px] text-purple-300/80"></div>
  <div class="overflow-x-auto custom-scrollbar pb-2">
  <table class="w-full text-left text-[13px] text-purple-100 min-w-[500px]">
  <thead>
@@ -488,7 +497,7 @@
  <form id="frmPayout" onsubmit="handlePayoutSubmit(event)" class="space-y-4">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
- <input type="text" id="payoutFirm" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ <input type="text" id="payoutFirm" list="firmSuggestions" autocomplete="off" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size/Type</label>
@@ -532,16 +541,25 @@
  </div>
  </div>
  </div>
- <div id="filterPanelPayouts" class="hidden rounded-2xl border border-white/10 bg-black/20 p-3 space-y-2">
+ <div id="filterPanelPayouts" class="hidden rounded-2xl border border-white/10 bg-black/20 p-3 space-y-3">
  <div class="flex items-center justify-between gap-2 flex-wrap">
- <span class="text-[10px] font-bold uppercase tracking-wider text-purple-300/80">Filter by Firm</span>
+ <span class="text-[10px] font-bold uppercase tracking-wider text-purple-300/80">Filters</span>
  <div class="flex items-center gap-3">
  <span id="filterCountPayouts" class="text-[11px] text-purple-300/70"></span>
- <button onclick="clearFirmFilter('payouts')" class="text-[11px] font-bold text-purple-300 hover:text-white transition">Clear</button>
+ <button onclick="clearFilters('payouts')" class="text-[11px] font-bold text-purple-300 hover:text-white transition">Clear all</button>
  </div>
  </div>
+ <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+ <div><label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1 ml-1">Search</label><input type="text" id="filterSearchPayouts" oninput="setFilterField('payouts', 'search', this.value)" placeholder="Firm, size, ref/ID, date..." autocomplete="off" class="w-full px-3 py-2 rounded-xl liquid-glass-input text-xs"></div>
+ <div><label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1 ml-1">From</label><input type="date" id="filterFromPayouts" onchange="setFilterField('payouts', 'from', this.value)" style="color-scheme: dark" class="w-full px-3 py-2 rounded-xl liquid-glass-input text-xs"></div>
+ <div><label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1 ml-1">To</label><input type="date" id="filterToPayouts" onchange="setFilterField('payouts', 'to', this.value)" style="color-scheme: dark" class="w-full px-3 py-2 rounded-xl liquid-glass-input text-xs"></div>
+ </div>
+ <div>
+ <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1 ml-1">Firms</label>
  <div id="filterChipsPayouts" class="flex flex-wrap gap-2"></div>
-</div>
+ </div>
+ </div>
+ <div id="summaryPayouts" class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-1 text-[12px] text-purple-300/80"></div>
  <div class="overflow-x-auto custom-scrollbar pb-2">
  <table class="w-full text-left text-[13px] text-purple-100 min-w-[500px]">
  <thead>
@@ -934,7 +952,7 @@
  <input type="hidden" id="modalEvalEditId">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
- <input type="text" id="modalEvalFirm" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ <input type="text" id="modalEvalFirm" list="firmSuggestions" autocomplete="off" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size/Type</label>
@@ -973,7 +991,7 @@
  <input type="hidden" id="modalPayoutEditId">
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Prop Firm</label>
- <input type="text" id="modalPayoutFirm" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
+ <input type="text" id="modalPayoutFirm" list="firmSuggestions" autocomplete="off" required placeholder="e.g. Lucid, Topstep" class="w-full px-4 py-2.5 rounded-xl liquid-glass-input text-sm">
  </div>
  <div>
  <label class="block text-[10px] font-bold uppercase tracking-wider text-purple-300/80 mb-1.5 ml-1">Account Size/Type</label>
@@ -1182,6 +1200,8 @@
  </div>
 
  <!-- REMOVAL MODAL -->
+ <datalist id="firmSuggestions"></datalist>
+
  <div id="confirmModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-lg flex items-center justify-center p-4 hidden">
  <div class="liquid-glass w-full max-w-sm rounded-3xl p-7 space-y-4 shadow-2xl">
  <h3 class="text-base font-bold text-white drop-shadow-sm">Confirm Deletion</h3>
@@ -1218,7 +1238,10 @@
  };
 
  let selectMode = { evals: false, payouts: false, journal: false };
- let firmFilters = { evals: new Set(), payouts: new Set() };
+ let tableFilters = {
+ evals: { firms: new Set(), search: '', from: '', to: '' },
+ payouts: { firms: new Set(), search: '', from: '', to: '' }
+ };
  let filterPanelOpen = { evals: false, payouts: false };
  let selectedIds = { evals: new Set(), payouts: new Set(), journal: new Set() };
 
@@ -1235,6 +1258,8 @@
  let tokenClient = null;
  let customDrivePickerStack = [];
  let currentBrowsingFolder = { id: 'root', name: 'My Drive' };
+
+ function esc(v) { return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
 
  function formatCurrency(val) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val || 0); }
 
@@ -1396,12 +1421,12 @@
  const sortedEvals = [...evaluations].sort((a,b) => new Date(b.date) - new Date(a.date));
  const activeBody = document.getElementById('tblActiveSummary');
  if (sortedEvals.length === 0) activeBody.innerHTML = `<tr><td colspan="3" class="py-5 text-center text-xs text-purple-300">No evaluations tracked.</td></tr>`;
- else activeBody.innerHTML = sortedEvals.slice(0, 5).map(e => `<tr class="text-xs hover:bg-white/[0.04] transition"><td class="py-3 px-2 text-purple-200 font-mono">${e.date}</td><td class="py-3 font-semibold text-white">${e.firm} <span class="opacity-70 text-[11px] font-normal ml-1">(${getEvalDisplayDetails(e)})</span></td><td class="py-3 px-2 text-right text-rose-400 font-bold drop-shadow-sm">${formatCurrency(e.cost)}</td></tr>`).join('');
+ else activeBody.innerHTML = sortedEvals.slice(0, 5).map(e => `<tr class="text-xs hover:bg-white/[0.04] transition"><td class="py-3 px-2 text-purple-200 font-mono">${e.date}</td><td class="py-3 font-semibold text-white">${esc(e.firm)} <span class="opacity-70 text-[11px] font-normal ml-1">(${esc(getEvalDisplayDetails(e))})</span></td><td class="py-3 px-2 text-right text-rose-400 font-bold drop-shadow-sm">${formatCurrency(e.cost)}</td></tr>`).join('');
 
  const sortedPayouts = [...payouts].sort((a,b) => new Date(b.date) - new Date(a.date));
  const pendingBody = document.getElementById('tblPendingSummary');
  if (sortedPayouts.length === 0) pendingBody.innerHTML = `<tr><td colspan="3" class="py-5 text-center text-xs text-purple-300">No payouts logged.</td></tr>`;
- else pendingBody.innerHTML = sortedPayouts.slice(0, 5).map(p => `<tr class="text-xs hover:bg-white/[0.04] transition"><td class="py-3 px-2 text-purple-200 font-mono">${p.date}</td><td class="py-3 font-semibold text-white">${p.firm} <span class="opacity-70 text-[11px] font-normal ml-1">(${p.accountDetails || p.details || 'N/A'})</span></td><td class="py-3 px-2 text-right text-emerald-400 font-bold drop-shadow-sm">${formatCurrency(p.net !== undefined ? p.net : p.amount)}</td></tr>`).join('');
+ else pendingBody.innerHTML = sortedPayouts.slice(0, 5).map(p => `<tr class="text-xs hover:bg-white/[0.04] transition"><td class="py-3 px-2 text-purple-200 font-mono">${p.date}</td><td class="py-3 font-semibold text-white">${esc(p.firm)} <span class="opacity-70 text-[11px] font-normal ml-1">(${esc(p.accountDetails || p.details || 'N/A')})</span></td><td class="py-3 px-2 text-right text-emerald-400 font-bold drop-shadow-sm">${formatCurrency(p.net !== undefined ? p.net : p.amount)}</td></tr>`).join('');
  }
 
  function changeCalendarMonth(delta) {
@@ -1662,15 +1687,41 @@
  addBtn('Next', curr + 1, { disabled: curr === totalPages });
  }
 
- // ---------- Firm filtering (Evaluations & Payouts) ----------
- function firmKey(name) { return String(name || '').trim().toLowerCase(); }
+ // ---------- Filtering (Evaluations & Payouts): firm, search, date range ----------
+ function firmKey(name) { return String(name || '').trim().replace(/\s+/g, ' ').toLowerCase(); }
+
+ // Reuse the existing spelling/capitalisation of a firm so "lucid" and "Lucid" never split into two firms
+ function canonicalFirm(raw, excludeId) {
+ const clean = String(raw || '').trim().replace(/\s+/g, ' ');
+ const key = clean.toLowerCase();
+ const match = [...evaluations, ...payouts].find(x => x.id !== excludeId && firmKey(x.firm) === key);
+ return match ? String(match.firm).trim() : clean;
+ }
+
+ function refreshFirmSuggestions() {
+ const dl = document.getElementById('firmSuggestions');
+ if (!dl) return;
+ const names = new Map();
+ [...evaluations, ...payouts].forEach(x => { const k = firmKey(x.firm); if (k && !names.has(k)) names.set(k, String(x.firm).trim()); });
+ dl.innerHTML = [...names.values()].sort((a, b) => a.localeCompare(b)).map(n => `<option value="${esc(n)}"></option>`).join('');
+ }
 
  function getFilteredSorted(type) {
- const source = type === 'evals' ? evaluations : (type === 'payouts' ? payouts : journals);
- let data = source;
- if (type !== 'journal' && firmFilters[type].size > 0) {
- data = source.filter(item => firmFilters[type].has(firmKey(item.firm)));
+ if (type === 'journal') return sortDataset(journals, sortConfig.journal);
+ const source = type === 'evals' ? evaluations : payouts;
+ const f = tableFilters[type];
+ const q = f.search.trim().toLowerCase();
+ const data = source.filter(item => {
+ if (f.firms.size > 0 && !f.firms.has(firmKey(item.firm))) return false;
+ if (f.from && String(item.date) < f.from) return false;
+ if (f.to && String(item.date) > f.to) return false;
+ if (q) {
+ const details = type === 'evals' ? getEvalDisplayDetails(item) : (item.accountDetails || item.details || '');
+ const hay = [item.firm, details, item.reference, item.date].join(' ').toLowerCase();
+ if (!hay.includes(q)) return false;
  }
+ return true;
+ });
  return sortDataset(data, sortConfig[type]);
  }
 
@@ -1686,9 +1737,15 @@
  return [...map.entries()].map(([key, v]) => ({ key, ...v })).sort((a, b) => a.label.localeCompare(b.label));
  }
 
- function filterIds(type) {
+ function filterEls(type) {
  const T = type === 'evals' ? 'Evals' : 'Payouts';
- return { T, btn: document.getElementById('btnFilter' + T), badge: document.getElementById('filterBadge' + T), panel: document.getElementById('filterPanel' + T), chips: document.getElementById('filterChips' + T), count: document.getElementById('filterCount' + T) };
+ const g = id => document.getElementById(id + T);
+ return { btn: g('btnFilter'), badge: g('filterBadge'), panel: g('filterPanel'), chips: g('filterChips'), count: g('filterCount'), summary: g('summary') };
+ }
+
+ function activeFilterGroups(type) {
+ const f = tableFilters[type];
+ return (f.firms.size > 0 ? 1 : 0) + (f.search.trim() ? 1 : 0) + ((f.from || f.to) ? 1 : 0);
  }
 
  function toggleFilterPanel(type) {
@@ -1696,31 +1753,41 @@
  renderFilterUI(type);
  }
 
- function toggleFirmFilter(type, key) {
- if (firmFilters[type].has(key)) firmFilters[type].delete(key);
- else firmFilters[type].add(key);
+ function rerenderFilteredTable(type) {
  currentPage[type] = 1;
  if (type === 'evals') renderEvaluationsTable(); else renderPayoutsTable();
  }
 
- function clearFirmFilter(type) {
- firmFilters[type].clear();
- currentPage[type] = 1;
- if (type === 'evals') renderEvaluationsTable(); else renderPayoutsTable();
+ function toggleFirmFilter(type, key) {
+ const set = tableFilters[type].firms;
+ if (set.has(key)) set.delete(key); else set.add(key);
+ rerenderFilteredTable(type);
+ }
+
+ function setFilterField(type, field, value) {
+ tableFilters[type][field] = value;
+ rerenderFilteredTable(type);
+ }
+
+ function clearFilters(type) {
+ const T = type === 'evals' ? 'Evals' : 'Payouts';
+ tableFilters[type] = { firms: new Set(), search: '', from: '', to: '' };
+ ['filterSearch', 'filterFrom', 'filterTo'].forEach(id => { const el = document.getElementById(id + T); if (el) el.value = ''; });
+ rerenderFilteredTable(type);
  }
 
  function renderFilterUI(type) {
- const el = filterIds(type);
+ const el = filterEls(type);
  if (!el.btn) return;
+ const f = tableFilters[type];
  const firms = getFirmList(type);
- const validKeys = new Set(firms.map(f => f.key));
- // drop filters for firms that no longer exist (e.g. after deleting their last entry)
- [...firmFilters[type]].forEach(k => { if (!validKeys.has(k)) firmFilters[type].delete(k); });
+ const validKeys = new Set(firms.map(x => x.key));
+ [...f.firms].forEach(k => { if (!validKeys.has(k)) f.firms.delete(k); });
 
- const active = firmFilters[type].size;
- el.badge.classList.toggle('hidden', active === 0);
- el.badge.innerText = active;
- el.btn.className = active > 0
+ const groups = activeFilterGroups(type);
+ el.badge.classList.toggle('hidden', groups === 0);
+ el.badge.innerText = groups;
+ el.btn.className = groups > 0
  ? 'px-3 py-1.5 rounded-xl bg-purple-600/40 text-white text-xs font-bold transition active:scale-95 border border-purple-500/40'
  : 'px-3 py-1.5 rounded-xl liquid-glass-btn text-purple-200 text-xs font-bold hover:text-white transition active:scale-95';
  el.panel.classList.toggle('hidden', !filterPanelOpen[type]);
@@ -1728,9 +1795,27 @@
  if (firms.length === 0) {
  el.chips.innerHTML = '<span class="text-[12px] text-purple-300/70">No firms logged yet.</span>';
  } else {
- el.chips.innerHTML = firms.map(f => `<label class="filter-chip ${firmFilters[type].has(f.key) ? 'on' : ''}"><input type="checkbox" ${firmFilters[type].has(f.key) ? 'checked' : ''} onchange="toggleFirmFilter('${type}', this.dataset.key)" data-key="${f.key.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"><span>${f.label.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span><span class="opacity-60 text-[10px]">${f.count}</span></label>`).join('');
+ el.chips.innerHTML = firms.map(x => {
+ const on = f.firms.has(x.key);
+ return `<label class="filter-chip ${on ? 'on' : ''}"><input type="checkbox" ${on ? 'checked' : ''} data-key="${esc(x.key)}" onchange="toggleFirmFilter('${type}', this.dataset.key)"><span>${esc(x.label)}</span><span class="opacity-60 text-[10px]">${x.count}</span></label>`;
+ }).join('');
  }
- el.count.innerText = active === 0 ? 'Showing all firms' : `${active} firm${active > 1 ? 's' : ''} selected`;
+ el.count.innerText = groups === 0 ? 'No filters active' : `${groups} filter${groups > 1 ? 's' : ''} active`;
+ }
+
+ // Totals for everything matching the current filters (all pages, not just the visible one)
+ function renderSummary(type, items) {
+ const el = filterEls(type);
+ if (!el.summary) return;
+ const total = items.reduce((sum, item) => {
+ const v = type === 'evals' ? item.cost : (item.net !== undefined ? item.net : item.amount);
+ return sum + (parseFloat(v) || 0);
+ }, 0);
+ const all = (type === 'evals' ? evaluations : payouts).length;
+ const filtered = activeFilterGroups(type) > 0;
+ const label = type === 'evals' ? 'Total cost' : 'Total payouts';
+ const colour = type === 'evals' ? 'text-rose-400' : 'text-emerald-400';
+ el.summary.innerHTML = `<span>${filtered ? `Showing <b class="text-white">${items.length}</b> of ${all} entries` : `<b class="text-white">${all}</b> ${all === 1 ? 'entry' : 'entries'}`}</span><span>${label}${filtered ? ' (filtered)' : ''}: <b class="${colour} font-black">${formatCurrency(total)}</b></span>`;
  }
 
  function sortDataset(data, config) {
@@ -1776,11 +1861,11 @@
 
  function renderEvaluationsTable() {
  const tbody = document.getElementById('tblEvaluationsList');
- if (!tbody) return; updateSortIndicators('evals'); renderFilterUI('evals');
- const items = getFilteredSorted('evals');
+ if (!tbody) return; updateSortIndicators('evals'); renderFilterUI('evals'); refreshFirmSuggestions();
+ const items = getFilteredSorted('evals'); renderSummary('evals', items);
  
  if (items.length === 0) { 
- const msg = evaluations.length > 0 ? 'No evaluations match the selected firm filter.' : 'No logs saved in workspace.';
+ const msg = evaluations.length > 0 ? 'No evaluations match the current filters.' : 'No logs saved in workspace.';
  tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">${msg}</td></tr>`; 
  renderPaginationControls('evals', 0);
  return; 
@@ -1799,9 +1884,9 @@
  <input type="checkbox" ${selectedIds.evals.has(e.id) ? 'checked' : ''} onchange="toggleSelectItem('evals', '${e.id}', this.checked)">
  </td>
  <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px]">${e.date}</td>
- <td class="py-3.5 px-3 font-bold text-white">${e.firm}</td>
- <td class="py-3.5 px-3 text-purple-100 font-mono text-[12px] opacity-90">${getEvalDisplayDetails(e)}</td>
- <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px] opacity-80">${e.reference || 'N/A'}</td>
+ <td class="py-3.5 px-3 font-bold text-white">${esc(e.firm)}</td>
+ <td class="py-3.5 px-3 text-purple-100 font-mono text-[12px] opacity-90">${esc(getEvalDisplayDetails(e))}</td>
+ <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px] opacity-80">${esc(e.reference || 'N/A')}</td>
  <td class="py-3.5 px-3 text-right font-black text-rose-400 drop-shadow-sm">${formatCurrency(e.cost)}</td>
  <td class="py-3.5 px-3 text-right">
  <div class="flex items-center justify-end gap-3 text-[11px]">
@@ -1816,11 +1901,11 @@
 
  function renderPayoutsTable() {
  const tbody = document.getElementById('tblPayoutsList');
- if (!tbody) return; updateSortIndicators('payouts'); renderFilterUI('payouts');
- const items = getFilteredSorted('payouts');
+ if (!tbody) return; updateSortIndicators('payouts'); renderFilterUI('payouts'); refreshFirmSuggestions();
+ const items = getFilteredSorted('payouts'); renderSummary('payouts', items);
 
  if (items.length === 0) { 
- const msg = payouts.length > 0 ? 'No payouts match the selected firm filter.' : 'No payouts logged yet.';
+ const msg = payouts.length > 0 ? 'No payouts match the current filters.' : 'No payouts logged yet.';
  tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-sm text-purple-300">${msg}</td></tr>`; 
  renderPaginationControls('payouts', 0);
  return; 
@@ -1842,9 +1927,9 @@
  <input type="checkbox" ${selectedIds.payouts.has(p.id) ? 'checked' : ''} onchange="toggleSelectItem('payouts', '${p.id}', this.checked)">
  </td>
  <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px]">${p.date}</td>
- <td class="py-3.5 px-3 font-bold text-white">${p.firm}</td>
- <td class="py-3.5 px-3 text-purple-100 font-mono text-[12px] opacity-90">${details}</td>
- <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px] opacity-80">${p.reference || 'N/A'}</td>
+ <td class="py-3.5 px-3 font-bold text-white">${esc(p.firm)}</td>
+ <td class="py-3.5 px-3 text-purple-100 font-mono text-[12px] opacity-90">${esc(details)}</td>
+ <td class="py-3.5 px-3 text-purple-200 font-mono text-[12px] opacity-80">${esc(p.reference || 'N/A')}</td>
  <td class="py-3.5 px-3 text-right font-black text-emerald-400 drop-shadow-sm">${formatCurrency(amount)}</td>
  <td class="py-3.5 px-3 text-right">
  <div class="flex items-center justify-end gap-3 text-[11px]">
@@ -1897,7 +1982,7 @@
  <td class="py-3.5 px-3 text-left pl-4">${getMoodOrbHtml(j.mood)}</td>
  <td class="py-3.5 px-2 text-center">${paperclipHtml}</td>
  <td class="py-3.5 px-3 font-bold text-white">
- <span class="cursor-pointer hover:text-purple-300 transition underline underline-offset-2 decoration-purple-500/40" onclick="viewJournalEntry('${j.id}')">${j.subject}</span>
+ <span class="cursor-pointer hover:text-purple-300 transition underline underline-offset-2 decoration-purple-500/40" onclick="viewJournalEntry('${j.id}')">${esc(j.subject)}</span>
  </td>
  <td class="py-3.5 px-3 text-right">
  <div class="flex items-center justify-end gap-2 text-[11px]">
@@ -2080,7 +2165,7 @@
  e.preventDefault();
  const data = { 
  id: Date.now().toString(), 
- firm: document.getElementById('evalFirm').value, 
+ firm: canonicalFirm(document.getElementById('evalFirm').value), 
  accountDetails: document.getElementById('evalAccountDetails').value, 
  cost: parseFloat(document.getElementById('evalCost').value) || 0, 
  date: document.getElementById('evalDate').value, 
@@ -2114,7 +2199,7 @@
  if (idx !== -1) {
  evaluations[idx] = {
  id: id,
- firm: document.getElementById('modalEvalFirm').value,
+ firm: canonicalFirm(document.getElementById('modalEvalFirm').value, id),
  accountDetails: document.getElementById('modalEvalAccountDetails').value,
  cost: parseFloat(document.getElementById('modalEvalCost').value) || 0,
  date: document.getElementById('modalEvalDate').value,
@@ -2132,7 +2217,7 @@
  e.preventDefault();
  const data = { 
  id: Date.now().toString(), 
- firm: document.getElementById('payoutFirm').value, 
+ firm: canonicalFirm(document.getElementById('payoutFirm').value), 
  accountDetails: document.getElementById('payoutAccountDetails').value, 
  date: document.getElementById('payoutDate').value, 
  net: parseFloat(document.getElementById('payoutNet').value) || 0,
@@ -2166,7 +2251,7 @@
  if (idx !== -1) {
  payouts[idx] = {
  id: id,
- firm: document.getElementById('modalPayoutFirm').value,
+ firm: canonicalFirm(document.getElementById('modalPayoutFirm').value, id),
  accountDetails: document.getElementById('modalPayoutAccountDetails').value,
  date: document.getElementById('modalPayoutDate').value,
  net: parseFloat(document.getElementById('modalPayoutNet').value) || 0,
@@ -2483,7 +2568,7 @@
 
  function compileCsv(records, income, expense, filename) {
  let csv = "Date,Type,Category,Prop Firm,Detail Reference,Amount ($)\n";
- records.forEach(r => csv += `${r.date},${r.type},${r.category},"${r.firm}","${r.reference}",${r.amount}\n`);
+ records.forEach(r => csv += `${r.date},${r.type},${r.category},"${String(r.firm).replace(/"/g, '""')}","${String(r.reference).replace(/"/g, '""')}",${r.amount}\n`);
  csv += `\nSUMMARY,Total Income:,${income}\nSUMMARY,Total Expenses:,${expense}\nSUMMARY,Net Profit:,${income - expense}\n`;
  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = filename; document.body.appendChild(link); link.click(); document.body.removeChild(link);
  showToast("Report Exported", "CSV downloaded successfully.");
