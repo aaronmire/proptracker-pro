@@ -48,3 +48,7 @@
 ----- <b><i>v3.3</b></i> -----
 - Fix for page flex-wrapping
 - Added 'Filter' button to  Evaluation Accounts and Payout logs
+
+----- <b><i>v3.4</b></i> -----
+- Cleaned up Filter issues
+- Added dropdown for previously entered "prop firms" to help with filtering
